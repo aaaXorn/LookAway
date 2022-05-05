@@ -1,0 +1,14 @@
+CM FreeLook1
+
+Axis Control
+	Y Axis
+		Value 0.5
+		Speed 2 Max Speed
+		Accel 0.2 Decel 0.1
+		Input Axis Name Mouse Y
+
+	X Axis
+		Value 0
+		Speed 300 Max Speed
+		Accel 0.1 Decel 0.1
+		Input Axis Name Mouse X
