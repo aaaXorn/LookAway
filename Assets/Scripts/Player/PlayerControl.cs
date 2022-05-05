@@ -11,13 +11,15 @@ public class PlayerControl : MonoBehaviour
 	//referência do joystick de movimento
 	private MovementJoystick MoveJ;
 	
+	[Header("Movement")]
+	
     public Rigidbody rdb;
     public Animator anim;
     private Vector3 movaxis, turnaxis;
     public GameObject currentCamera;
     public float jumpspeed = 8;
     public float gravity = 20;
-
+	
     public float jumptime;
     private float flyvelocity = 3;
     public GameObject wing;
@@ -27,6 +29,8 @@ public class PlayerControl : MonoBehaviour
     private bool jumpbtnrelease = false;
     private GameObject closeThing;
     private float weight;
+	
+	public bool attackbtndown = false;
 	
 	void Awake()
 	{
@@ -57,7 +61,8 @@ public class PlayerControl : MonoBehaviour
     }
     private void Update()
     {
-        /*if(Input.GetButtonDown("Jump"))
+		#if UNITY_EDITOR
+        if(Input.GetButtonDown("Jump"))
         {
             jumpbtn = true;
             jumpbtndown = true;
@@ -67,9 +72,15 @@ public class PlayerControl : MonoBehaviour
             jumpbtn = false;
             jumptime = 0;
         }
-        movaxis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));*/
+		if(Input.GetButtonDown("Fire1"))
+		{
+			attackbtndown = true;
+		}
+		#endif
+        //movaxis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 		
-		//input de pulo está no script de JumpButton
+		//input de pulo está no script JumpButton
+		//input de ataque está no script AttackButton
 		
 		//movimento com o joystick
 		//.normalized garante que o jogador sempre ande na mesma velocidade
@@ -120,7 +131,9 @@ public class PlayerControl : MonoBehaviour
             Quaternion rottogo = Quaternion.LookRotation(relativeDirectionWOy * 2 + transform.forward);
             transform.rotation = Quaternion.Lerp(transform.rotation, rottogo, Time.fixedDeltaTime * 50);
         }
-        if (Input.GetButtonDown("Fire1"))
+		
+		//se o botão de ataque foi pressionado
+        if (attackbtndown)
         {
             anim.SetTrigger("PunchA");
         }
@@ -163,7 +176,7 @@ public class PlayerControl : MonoBehaviour
         }
 
         jumpbtndown = false;
-
+		attackbtndown = false;
     }
 
 
