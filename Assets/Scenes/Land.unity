@@ -910,7 +910,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 416977900}
-  m_LocalRotation: {x: 0.114214934, y: -0.27433434, z: 0.032834627, w: 0.9542628}
+  m_LocalRotation: {x: 0.11421494, y: -0.27433434, z: 0.032834627, w: 0.9542628}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -6019,7 +6019,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0.114214905, y: -0.27433434, z: 0.03283475, w: 0.9542628}
+  m_LocalRotation: {x: 0.114214905, y: -0.27433437, z: 0.032834753, w: 0.9542628}
   m_LocalPosition: {x: 99.371574, y: 41.372414, z: -134.10681}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -6519,7 +6519,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5158
+  m_Name: pb_Mesh-5160
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7218,7 +7218,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1024307418}
-  m_LocalRotation: {x: 0.114214905, y: -0.27433434, z: 0.03283475, w: 0.9542628}
+  m_LocalRotation: {x: 0.114214905, y: -0.27433437, z: 0.032834753, w: 0.9542628}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -7958,7 +7958,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5174
+  m_Name: pb_Mesh-5176
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8793,7 +8793,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5130
+  m_Name: pb_Mesh-5132
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9754,6 +9754,18 @@ PrefabInstance:
     - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
       propertyPath: AtkList.Array.data[1].id
       value: L2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
+      propertyPath: AtkList.Array.data[0].hit_count
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
+      propertyPath: AtkList.Array.data[0].dmg.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
+      propertyPath: AtkList.Array.data[0].dmg.Array.data[0]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6035953435347524289, guid: 67f1910acec3c97419389992804d29c4,
         type: 3}

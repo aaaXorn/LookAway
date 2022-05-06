@@ -1125,6 +1125,7 @@ MonoBehaviour:
   rdb: {fileID: 3018380865899209501}
   anim: {fileID: 6035953435338536257}
   currentCamera: {fileID: 0}
+  movespeed: 6
   jumpspeed: 20000
   gravity: 20
   jumptime: 0
@@ -1134,7 +1135,7 @@ MonoBehaviour:
   jumpbtn: 0
   jumpbtndown: 0
   attackbtndown: 0
-  idle_anim_name: Unarmed-Idle
+  AtkList: []
 --- !u!114 &5087033714714069245
 MonoBehaviour:
   m_ObjectHideFlags: 0

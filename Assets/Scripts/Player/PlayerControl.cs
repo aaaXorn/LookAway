@@ -26,6 +26,7 @@ public class PlayerControl : MonoBehaviour
     public Animator anim;
     private Vector3 movaxis, turnaxis;
     public GameObject currentCamera;
+	public float movespeed = 5;
     public float jumpspeed = 8;
     public float gravity = 20;
 	
@@ -46,16 +47,32 @@ public class PlayerControl : MonoBehaviour
 	//ID do hit, usado pra mesma hitbox não acertar várias vezes
 	private int hit_id;
 	private string atk_type;//tipo do ataque
-	private int atk_dmg, atk_duration, atk_size;//dano, duração e tamanho do ataque
+	private int atk_hits;//número de hits do ataque
+	//dano, duração e tamanho do ataque
+	private int[] atk_dmg = new int[5], atk_duration = new int[5], atk_size = new int[5];
+	//se o ataque pode ser cancelado (geralmente após um hit)
+	private bool atk_cancel;
+	//se o jogador está atacando
+	private bool attacking;
 	
 	[System.Serializable]
 	//informações dos tipos de ataque
 	public class Attack
 	{
+		[Tooltip("Attack's name")]
 		public string id;
 		
+		[Tooltip("Attack properties")]
 		public string type;
-		public int dmg, duration, size;
+		[Tooltip("How many hits the attack has")]
+		public int hit_count;
+		
+		[Tooltip("Attack damage per hit")]
+		public int[] dmg;
+		[Tooltip("Hitbox duration in frames (24 FPS physics)")]
+		public int[] duration;
+		[Tooltip("Hitbox size")]
+		public int[] size;
 	}
 	
 	//lista com os ataques
@@ -140,15 +157,16 @@ public class PlayerControl : MonoBehaviour
 				Vector3 relativeDirectionWOy = relativedirection;
 				relativeDirectionWOy = new Vector3(relativedirection.x,0, relativedirection.z);
 				
-				anim.SetFloat("Speed", rdb.velocity.magnitude);
+				//* 5 / movespeed mantém a animação do jeito que tava antes de aumentar o movespeed
+				anim.SetFloat("Speed", rdb.velocity.magnitude * 5 / movespeed);
 				
 				//movimento com o glider
 				if (wing.activeSelf)
 				{
 					float velocity = Mathf.Abs(rdb.velocity.x)+ Mathf.Abs(rdb.velocity.z);
-					velocity = Mathf.Clamp(velocity, 0, 10);
+					velocity = Mathf.Clamp(velocity, 0, 2 * movespeed);
 
-					rdb.AddRelativeForce(new Vector3(0, velocity*120, 1000));
+					rdb.AddRelativeForce(new Vector3(0, velocity * 120, 1000));
 					
 					 Vector3 movfly = new Vector3(Vector3.forward.x* flyvelocity, 0, Vector3.forward.z* flyvelocity);
 
@@ -163,13 +181,13 @@ public class PlayerControl : MonoBehaviour
 
 					 flyvelocity -= angx*0.01f;
 					 flyvelocity = Mathf.Lerp(flyvelocity, 3, Time.fixedDeltaTime);
-					 flyvelocity = Mathf.Clamp(flyvelocity,0,5);
+					 flyvelocity = Mathf.Clamp(flyvelocity, 0, movespeed);
 					 
 				}
 				//movimento sem o glider
 				else
 				{
-					rdb.velocity = relativeDirectionWOy*5 + new Vector3(0,rdb.velocity.y,0);
+					rdb.velocity = relativeDirectionWOy * movespeed + new Vector3(0,rdb.velocity.y,0);
 					//rdb.AddForce(relativeDirectionWOy * 1000);
 					Quaternion rottogo = Quaternion.LookRotation(relativeDirectionWOy * 2 + transform.forward);
 					transform.rotation = Quaternion.Lerp(transform.rotation, rottogo, Time.fixedDeltaTime * 50);
@@ -221,10 +239,30 @@ public class PlayerControl : MonoBehaviour
 			//ataque
 			case State.Attack:
 				#region attack
-				//se o botão de ataque foi pressionado
-				if (attackbtndown)
+				//propriedades do ataque
+				if(attacking)
 				{
-					anim.SetTrigger("PunchA");
+					
+				}
+				
+				//se o ataque pode ser cancelado
+				if(atk_cancel)
+				{
+					//se o botão de ataque foi pressionado
+					if (attackbtndown)
+					{
+						anim.SetTrigger("PunchA");
+					}
+					
+					//pulo
+					else if (jumpbtn)
+					{
+						//deixa o jogador pular, mesmo no ar (eu acho talvez)
+						jumptime = 0.25f;
+						
+						//volta pro estado normal
+						currentState = State.Free;
+					}
 				}
 				#endregion
 				break;
@@ -309,8 +347,31 @@ public class PlayerControl : MonoBehaviour
 	//define o dano, duração, tamanho e tipo da hitbox por ID
 	void AnimHit(string id)
 	{
+		//propriedades do ataque
 		Attack atk = AtkDictionary[id];
-		print(atk.id);
+		
+		atk_hits = atk.hit_count;
+		
+		for(int i = 0; i < atk_hits; i++)
+		{
+			atk_dmg[i] = atk.dmg[i];
+			atk_duration[i] = atk.duration[i];
+			atk_size[i] = atk.size[i];
+		}
+		
+		//inicia o ataque
+		attacking = true;
 	}
+	
+	//volta pro State Free
+	void AnimFree()
+	{
+		currentState = State.Free;
+		
+		attacking = false;
+		atk_cancel = false;
+	}
+	
+	
 	#endregion
 }
