@@ -11,6 +11,15 @@ public class PlayerControl : MonoBehaviour
 	//referência do joystick de movimento
 	private MovementJoystick MoveJ;
 	
+	private enum State
+	{
+		Free,
+		Attack
+	};
+	
+	[SerializeField]
+	private State currentState;
+	
 	[Header("Movement")]
 	
     public Rigidbody rdb;
@@ -32,12 +41,42 @@ public class PlayerControl : MonoBehaviour
 	
 	public bool attackbtndown = false;
 	
+	[Header("Attacks")]
+	
+	//ID do hit, usado pra mesma hitbox não acertar várias vezes
+	private int hit_id;
+	private string atk_type;//tipo do ataque
+	private int atk_dmg, atk_duration, atk_size;//dano, duração e tamanho do ataque
+	
+	[System.Serializable]
+	//informações dos tipos de ataque
+	public class Attack
+	{
+		public string id;
+		
+		public string type;
+		public int dmg, duration, size;
+	}
+	
+	//lista com os ataques
+	public List<Attack> AtkList;
+	//dicionário dos ataques
+	//usado para localizar os ataques por string
+	public Dictionary<string, Attack> AtkDictionary;
+	
 	void Awake()
 	{
 		//setta a referência global desse script
 		if(Instance == null) Instance = this;
 		//garante que só tem um dele na cena
 		else Destroy(gameObject);
+		
+		//cria o dicionário de ataques
+		AtkDictionary = new Dictionary<string, Attack>();
+		foreach(Attack atk in AtkList)
+		{
+			AtkDictionary.Add(atk.id, atk);
+		}
 	}
 	
     // Start is called before the first frame update
@@ -76,8 +115,8 @@ public class PlayerControl : MonoBehaviour
 		{
 			attackbtndown = true;
 		}
+		//movaxis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 		#endif
-        //movaxis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 		
 		//input de pulo está no script JumpButton
 		//input de ataque está no script AttackButton
@@ -89,92 +128,109 @@ public class PlayerControl : MonoBehaviour
 
     void FixedUpdate()
     {
+		switch(currentState)
+		{
+			//movimentação e pulo
+			case State.Free:
+				#region free
+				//define a direção relativa que o player vai andar
+				Vector3 relativedirection = currentCamera.transform.TransformVector(movaxis);
+				relativedirection = new Vector3(relativedirection.x, jumptime, relativedirection.z);
+				//mesma coisa só que sem a coordenada Y
+				Vector3 relativeDirectionWOy = relativedirection;
+				relativeDirectionWOy = new Vector3(relativedirection.x,0, relativedirection.z);
+				
+				anim.SetFloat("Speed", rdb.velocity.magnitude);
+				
+				//movimento com o glider
+				if (wing.activeSelf)
+				{
+					float velocity = Mathf.Abs(rdb.velocity.x)+ Mathf.Abs(rdb.velocity.z);
+					velocity = Mathf.Clamp(velocity, 0, 10);
 
-   
-        Vector3 relativedirection = currentCamera.transform.TransformVector(movaxis);
-        relativedirection = new Vector3(relativedirection.x, jumptime, relativedirection.z);
+					rdb.AddRelativeForce(new Vector3(0, velocity*120, 1000));
+					
+					 Vector3 movfly = new Vector3(Vector3.forward.x* flyvelocity, 0, Vector3.forward.z* flyvelocity);
 
-        Vector3 relativeDirectionWOy = relativedirection;
-        relativeDirectionWOy = new Vector3(relativedirection.x,0, relativedirection.z);
+					 float angz = Vector3.Dot(transform.right, Vector3.up);
+					 float angx = Vector3.Dot(transform.forward, Vector3.up);
+					 movfly = new Vector3(movaxis.z+ angx*2, -angz, -movaxis.x- angz);
 
-        
-        anim.SetFloat("Speed", rdb.velocity.magnitude);
+					 transform.Rotate(movfly);
 
-        if (wing.activeSelf)
-        {
-
-            float velocity = Mathf.Abs(rdb.velocity.x)+ Mathf.Abs(rdb.velocity.z);
-            velocity = Mathf.Clamp(velocity, 0, 10);
-
-            rdb.AddRelativeForce(new Vector3(0, velocity*120, 1000));
-            
-             Vector3 movfly = new Vector3(Vector3.forward.x* flyvelocity, 0, Vector3.forward.z* flyvelocity);
-
-             float angz = Vector3.Dot(transform.right, Vector3.up);
-             float angx = Vector3.Dot(transform.forward, Vector3.up);
-             movfly = new Vector3(movaxis.z+ angx*2, -angz, -movaxis.x- angz);
-
-             transform.Rotate(movfly);
-
-             wing.transform.localRotation = Quaternion.Euler(0, 0, angz*50);
+					 wing.transform.localRotation = Quaternion.Euler(0, 0, angz*50);
 
 
-             flyvelocity -= angx*0.01f;
-             flyvelocity = Mathf.Lerp(flyvelocity, 3, Time.fixedDeltaTime);
-             flyvelocity = Mathf.Clamp(flyvelocity,0,5);
-             
-        }
-        else
-        {
-            rdb.velocity = relativeDirectionWOy*5 + new Vector3(0,rdb.velocity.y,0);
-            //rdb.AddForce(relativeDirectionWOy * 1000);
-            Quaternion rottogo = Quaternion.LookRotation(relativeDirectionWOy * 2 + transform.forward);
-            transform.rotation = Quaternion.Lerp(transform.rotation, rottogo, Time.fixedDeltaTime * 50);
-        }
+					 flyvelocity -= angx*0.01f;
+					 flyvelocity = Mathf.Lerp(flyvelocity, 3, Time.fixedDeltaTime);
+					 flyvelocity = Mathf.Clamp(flyvelocity,0,5);
+					 
+				}
+				//movimento sem o glider
+				else
+				{
+					rdb.velocity = relativeDirectionWOy*5 + new Vector3(0,rdb.velocity.y,0);
+					//rdb.AddForce(relativeDirectionWOy * 1000);
+					Quaternion rottogo = Quaternion.LookRotation(relativeDirectionWOy * 2 + transform.forward);
+					transform.rotation = Quaternion.Lerp(transform.rotation, rottogo, Time.fixedDeltaTime * 50);
+				}
+				
+				//se o botão de ataque foi pressionado
+				if (attackbtndown)
+				{
+					anim.SetTrigger("PunchA");
+					
+					currentState = State.Attack;
+				}
+				
+				//checa se da pra pular
+				RaycastHit hit;
+				if (Physics.Raycast(transform.position-(transform.forward*0.1f)+transform.up*0.3f, Vector3.down,out hit, 1000))
+				{
+					anim.SetFloat("JumpHeight", hit.distance);
+					
+					//deixa o jogador começar o pulo / hold jump
+					if (hit.distance < 0.5f && jumpbtn)
+					{
+						jumptime = 0.25f;
+					}
+					
+					//ativa as asas
+					if (hit.distance > 0.5f && jumpbtndown && !wing.activeSelf)
+					{
+						wing.SetActive(true);
+						jumpbtndown = false;
+					}
+					//desativa as asas
+					else if (hit.distance > 0.5f && jumpbtndown && wing.activeSelf)
+					{
+					   wing.SetActive(false);
+					}
+				}
+				
+				//pulo
+				if (jumpbtn)
+				{
+					jumptime -= Time.fixedDeltaTime;
+					jumptime = Mathf.Clamp01(jumptime);
+					rdb.AddForce(Vector3.up * jumptime * jumpspeed);
+				}
+				#endregion
+				break;
+			
+			//ataque
+			case State.Attack:
+				#region attack
+				//se o botão de ataque foi pressionado
+				if (attackbtndown)
+				{
+					anim.SetTrigger("PunchA");
+				}
+				#endregion
+				break;
+		}
 		
-		//se o botão de ataque foi pressionado
-        if (attackbtndown)
-        {
-            anim.SetTrigger("PunchA");
-        }
-
-      
-
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position-(transform.forward*0.1f)+transform.up*0.3f, Vector3.down,out hit, 1000))
-        {
-            anim.SetFloat("JumpHeight", hit.distance);
-            if (hit.distance < 0.5f && jumpbtn)
-            {
-                jumptime = 0.25f;
-            }
-            if (hit.distance>0.5f && jumpbtndown && !wing.activeSelf)
-            {
-                
-                wing.SetActive(true);
-                jumpbtndown = false;
-                return;
-            }
-            if (hit.distance > 0.5f && jumpbtndown && wing.activeSelf)
-            {
-               wing.SetActive(false);
-                
-            }
-
-           
-
-        }
-
-        
-
-        if (jumpbtn)
-        {
-            jumptime -= Time.fixedDeltaTime;
-            jumptime = Mathf.Clamp01(jumptime);
-            rdb.AddForce(Vector3.up * jumptime * jumpspeed);
-
-        }
-
+		//reseta os button down
         jumpbtndown = false;
 		attackbtndown = false;
     }
@@ -243,9 +299,18 @@ public class PlayerControl : MonoBehaviour
         }
 
     }
+	
     private void OnCollisionExit(Collision collision)
     {
-
-
+		
     }
+	
+	#region attacks
+	//define o dano, duração, tamanho e tipo da hitbox por ID
+	void AnimHit(string id)
+	{
+		Attack atk = AtkDictionary[id];
+		print(atk.id);
+	}
+	#endregion
 }

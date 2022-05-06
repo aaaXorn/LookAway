@@ -1121,11 +1121,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3476a10561271047ad184fbe4bf59ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentState: 0
   rdb: {fileID: 3018380865899209501}
   anim: {fileID: 6035953435338536257}
   currentCamera: {fileID: 0}
   jumpspeed: 20000
   gravity: 20
+  jumptime: 0
   wing: {fileID: 6885324732456083844}
   rightHandObj: {fileID: 3018380866613360215}
   leftHandObj: {fileID: 3018380866440298883}
+  jumpbtn: 0
+  jumpbtndown: 0
+  attackbtndown: 0
+  idle_anim_name: Unarmed-Idle
+--- !u!114 &5087033714714069245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6035953435348010785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92a2bbc979401e747a21dc60c5ff9af6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  max_hp: 5

@@ -1,0 +1,2 @@
+coloquei as animações de ataque do player em Scripts -> Animations
+tecnicamente ta errado porque uma animação é uma animação (eu sei surpreendente), mas assim fica mais conveniente de arrumar os animation events pro script de ataque
