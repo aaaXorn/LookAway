@@ -1,9 +1,22 @@
 fileFormatVersion: 2
-guid: 4cbe4e576e18b8346944c926f12e21c9
+guid: 72a841ab98ef08847920ddf01448ce63
 ModelImporter:
   serializedVersion: 20200
-  internalIDToNameTable: []
-  externalObjects: {}
+  internalIDToNameTable:
+  - first:
+      74: -5187248419258813496
+    second: Plane|PlaneAction
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Frente_Madeira
+    second: {fileID: 2100000, guid: 41053981f6b8edc409d8921d72a8f39f, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: WhatsApp Image 2022-05-07 at 13.57.22
+    second: {fileID: 2800000, guid: e376bd3eb97573f4ba9889f3f354d7ca, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
