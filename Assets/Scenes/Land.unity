@@ -6166,7 +6166,7 @@ GameObject:
   - component: {fileID: 571979981}
   - component: {fileID: 571979980}
   - component: {fileID: 571979979}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9743,30 +9743,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[0].id
-      value: L1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[1].id
-      value: L2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[0].hit_count
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[0].dmg.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[0].dmg.Array.data[0]
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6035953435347524289, guid: 67f1910acec3c97419389992804d29c4,
         type: 3}
       propertyPath: m_RootOrder

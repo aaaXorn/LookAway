@@ -1059,6 +1059,8 @@ PrefabInstance:
     - {fileID: 8802130219483802528, guid: 40daa8e1b273a644f81288fa519caf50, type: 3}
     - {fileID: 5790005571329331577, guid: 40daa8e1b273a644f81288fa519caf50, type: 3}
     - {fileID: 1148787486195956976, guid: 40daa8e1b273a644f81288fa519caf50, type: 3}
+    - {fileID: 1706328697447157993, guid: 40daa8e1b273a644f81288fa519caf50, type: 3}
+    - {fileID: 2868425333747651147, guid: 40daa8e1b273a644f81288fa519caf50, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 40daa8e1b273a644f81288fa519caf50, type: 3}
 --- !u!1 &6035953435348010785 stripped
 GameObject:
@@ -1075,6 +1077,12 @@ Animator:
 --- !u!54 &3018380865899209501 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 566885336, guid: 40daa8e1b273a644f81288fa519caf50,
+    type: 3}
+  m_PrefabInstance: {fileID: 3018380866440911045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6035953435347524259 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8802130219495047782, guid: 40daa8e1b273a644f81288fa519caf50,
     type: 3}
   m_PrefabInstance: {fileID: 3018380866440911045}
   m_PrefabAsset: {fileID: 0}
@@ -1135,7 +1143,22 @@ MonoBehaviour:
   jumpbtn: 0
   jumpbtndown: 0
   attackbtndown: 0
-  AtkList: []
+  enemy_layer:
+    serializedVersion: 2
+    m_Bits: 64
+  AtkList:
+  - id: L1
+    type: 
+    hit_count: 1
+    dmg: 01000000
+    duration: 02000000
+    size:
+    - 0.3
+    length:
+    - 0
+    delay: 00000000
+    origin:
+    - {fileID: 6035953435347524259}
 --- !u!114 &5087033714714069245
 MonoBehaviour:
   m_ObjectHideFlags: 0
