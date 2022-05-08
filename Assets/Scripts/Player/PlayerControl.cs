@@ -431,9 +431,9 @@ public class PlayerControl : MonoBehaviour
 				//dano
 				foreach(var hit in hitCol)
 				{
-					//E_HP = GetComponent<EnemyHealth>();
-					//if(E_HP.hit_id != hit_id)
-					//E_HP.Damage(atk_dmg[curr_hit]);
+					E_HP = GetComponent<EnemyHealth>();
+					if(E_HP.hit_id != hit_id)
+						E_HP.TakeDamage(atk_dmg[curr_hit]);
 					
 					atk_cancel = true;
 					

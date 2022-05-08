@@ -2,12 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour
+public class EnemyHealth : MonoBehaviour
 {
-	//referência global do código do personagem
-	public static PlayerHealth Instance {get; set;}
-	
-	[SerializeField]
+    [SerializeField]
 	int max_hp;//vida máxima
 	int hp;//vida atual
 	
