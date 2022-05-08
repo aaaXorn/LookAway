@@ -171,8 +171,9 @@ public class PlayerControl : MonoBehaviour
 				Vector3 relativeDirectionWOy = relativedirection;
 				relativeDirectionWOy = new Vector3(relativedirection.x,0, relativedirection.z);
 				
-				//* 5 / movespeed mantém a animação do jeito que tava antes de aumentar o movespeed
-				anim.SetFloat("Speed", rdb.velocity.magnitude * 5 / movespeed);
+				//* 5/6 da uma suavizada na animação, necessário por causa da diminuição do FPS do FixedUpdate
+				//sem isso o jogador move as pernas rápido demais em comparação com o quanto ele anda
+				anim.SetFloat("Speed", rdb.velocity.magnitude * 5/6);
 				
 				//movimento com o glider
 				if (wing.activeSelf)
@@ -201,8 +202,11 @@ public class PlayerControl : MonoBehaviour
 				//movimento sem o glider
 				else
 				{
+					//versão com velocity
 					rdb.velocity = relativeDirectionWOy * movespeed + new Vector3(0,rdb.velocity.y,0);
-					//rdb.AddForce(relativeDirectionWOy * 1000);
+					//versão do commit do reinaldo, com addforce
+					//não utilizado por falta de precisão, o outro parece mais com o movimento do Monster Hunter
+					//rdb.AddForce(relativeDirectionWOy * 10000 * movespeed/(rdb.velocity.magnitude+1));
 					Quaternion rottogo = Quaternion.LookRotation(relativeDirectionWOy * 2 + transform.forward);
 					transform.rotation = Quaternion.Lerp(transform.rotation, rottogo, Time.fixedDeltaTime * 50);
 				}
@@ -431,7 +435,7 @@ public class PlayerControl : MonoBehaviour
 				//dano
 				foreach(var hit in hitCol)
 				{
-					E_HP = GetComponent<EnemyHealth>();
+					EnemyHealth E_HP = GetComponent<EnemyHealth>();
 					if(E_HP.hit_id != hit_id)
 						E_HP.TakeDamage(atk_dmg[curr_hit]);
 					
