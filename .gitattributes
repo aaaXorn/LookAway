@@ -1,0 +1,2 @@
+Assets/Scenes/Land/NavMesh.asset filter=lfs diff=lfs merge=lfs -text
+*.asset filter=lfs diff=lfs merge=lfs -text
