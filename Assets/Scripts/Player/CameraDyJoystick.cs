@@ -38,7 +38,7 @@ public class CameraDyJoystick : Joystick
 		cine = GameObject.FindWithTag("Cinemachine").GetComponent<CinemachineFreeLook>();
     }
 	
-	void Update()
+	private void Update()
 	{
 		//rotaciona a camera com base no input
 		if(Horizontal != 0 || Vertical != 0)

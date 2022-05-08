@@ -10,7 +10,7 @@ public class EnemyHealth : MonoBehaviour
 	
 	public int hit_id;
 	
-	void Start()
+	private void Start()
 	{
 		hp = max_hp;
 	}
@@ -21,5 +21,10 @@ public class EnemyHealth : MonoBehaviour
 		
 		if(hp > max_hp) hp = max_hp;
 		else if(hp <= 0) print("morreu");
+	}
+	
+	public void ResetHP()
+	{
+		hp = max_hp;
 	}
 }

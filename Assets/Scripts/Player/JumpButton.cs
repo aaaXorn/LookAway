@@ -12,7 +12,7 @@ public class JumpButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	//referência do código do player
 	private PlayerControl PlayerC;
 	
-    void Awake()
+    private void Awake()
 	{
 		//setta a referência global desse script
 		if(Instance == null) Instance = this;
@@ -20,7 +20,7 @@ public class JumpButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 		else Destroy(gameObject);
 	}
 	
-	void Start()
+	private void Start()
 	{
 		//pega o script de controle do jogador
 		if(PlayerControl.Instance != null) PlayerC = PlayerControl.Instance;

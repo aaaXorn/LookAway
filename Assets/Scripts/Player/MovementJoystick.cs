@@ -7,7 +7,7 @@ public class MovementJoystick : Joystick
 	//referência global do código do joystick
 	public static MovementJoystick Instance {get; set;}
 	
-    void Awake()
+    private void Awake()
 	{
 		//setta a referência global desse script
 		if(Instance == null) Instance = this;

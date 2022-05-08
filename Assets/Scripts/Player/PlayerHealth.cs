@@ -8,12 +8,12 @@ public class PlayerHealth : MonoBehaviour
 	public static PlayerHealth Instance {get; set;}
 	
 	[SerializeField]
-	int max_hp;//vida máxima
-	int hp;//vida atual
+	private int max_hp;//vida máxima
+	private int hp;//vida atual
 	
 	public int hit_id;
 	
-	void Awake()
+	private void Awake()
 	{
 		//setta a referência global desse script
 		if(Instance == null) Instance = this;
@@ -21,7 +21,7 @@ public class PlayerHealth : MonoBehaviour
 		else Destroy(gameObject);
 	}
 	
-	void Start()
+	private void Start()
 	{
 		hp = max_hp;
 	}

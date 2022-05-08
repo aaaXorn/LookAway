@@ -11,12 +11,14 @@ public class PlayerControl : MonoBehaviour
 	//referência do joystick de movimento
 	private MovementJoystick MoveJ;
 	
+	//enum com os states do player
 	private enum State
 	{
-		Free,
-		Attack
+		Free,//movimento e pulo
+		Attack//atacando
 	};
 	
+	//state atual do player
 	[SerializeField]
 	private State currentState;
 	
@@ -131,6 +133,7 @@ public class PlayerControl : MonoBehaviour
     }
     private void Update()
     {
+		//inputs de debugging
 		#if UNITY_EDITOR
         if(Input.GetButtonDown("Jump"))
         {
@@ -284,6 +287,10 @@ public class PlayerControl : MonoBehaviour
 				}
 				#endregion
 				break;
+			
+			default:
+				print("Player state machine error.");
+				break;
 		}
 		
 		//reseta os button down
@@ -363,7 +370,7 @@ public class PlayerControl : MonoBehaviour
 	
 	#region attacks
 	//define o dano, duração, tamanho e tipo da hitbox por ID
-	void AnimHit(string id)
+	private void AnimHit(string id)
 	{
 		//propriedades do ataque
 		Attack atk = AtkDictionary[id];
@@ -388,7 +395,7 @@ public class PlayerControl : MonoBehaviour
 	}
 	
 	//volta pro State Free
-	void AnimFree()
+	private void AnimFree()
 	{
 		currentState = State.Free;
 		
@@ -396,7 +403,7 @@ public class PlayerControl : MonoBehaviour
 		atk_cancel = false;
 	}
 	
-	void AttackEffect()
+	private void AttackEffect()
 	{
 		//gera um novo ID pro ataque
 		if(prev_hit != curr_hit)
@@ -458,7 +465,7 @@ public class PlayerControl : MonoBehaviour
 	#endregion
 	
 	#if UNITY_EDITOR
-	void OnDrawGizmos()
+	private void OnDrawGizmos()
 	{
 		if(atk_origin[curr_hit] != null)
 		{
