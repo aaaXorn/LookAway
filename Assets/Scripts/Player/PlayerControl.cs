@@ -394,15 +394,6 @@ public class PlayerControl : MonoBehaviour
 		attacking = true;
 	}
 	
-	//volta pro State Free
-	private void AnimFree()
-	{
-		currentState = State.Free;
-		
-		attacking = false;
-		atk_cancel = false;
-	}
-	
 	private void AttackEffect()
 	{
 		//gera um novo ID pro ataque
@@ -461,10 +452,25 @@ public class PlayerControl : MonoBehaviour
 		}
 		//diminui 1 frame do delay
 		else atk_delay[curr_hit]--;
+    }
+
+	//volta pro State Free
+	private void AnimFree()
+	{
+		currentState = State.Free;
+
+		attacking = false;
+		atk_cancel = false;
 	}
-	#endregion
-	
-	#if UNITY_EDITOR
+
+	//acontece quando o jogador cai no chão
+	private void AnimLand()
+    {
+		
+    }
+    #endregion
+
+#if UNITY_EDITOR
 	private void OnDrawGizmos()
 	{
 		if(atk_origin[curr_hit] != null)
@@ -508,5 +514,5 @@ public class PlayerControl : MonoBehaviour
 			}
 		}
 	}
-	#endif
+#endif
 }
