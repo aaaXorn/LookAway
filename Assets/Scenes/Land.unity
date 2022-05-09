@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.4435394, g: 0.49284565, b: 0.57243705, a: 1}
+  m_IndirectSpecularColor: {r: 0.4435391, g: 0.49284512, b: 0.57243615, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6174,7 +6174,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0.16402876, y: -0.27223852, z: 0.047155388, w: 0.9469726}
+  m_LocalRotation: {x: 0.16402876, y: -0.27223852, z: 0.04715539, w: 0.9469726}
   m_LocalPosition: {x: 99.371574, y: 41.372414, z: -134.10681}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -6450,6 +6450,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
+  player_layer:
+    serializedVersion: 2
+    m_Bits: 0
+  AtkList: []
 --- !u!195 &571979986
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -6586,7 +6590,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639064089}
-  m_LocalRotation: {x: 0.16402872, y: -0.27223855, z: 0.047155395, w: 0.9469726}
+  m_LocalRotation: {x: 0.16402873, y: -0.27223852, z: 0.047155395, w: 0.9469726}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -7127,7 +7131,7 @@ Terrain:
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: c641a123e23f40e48825b4291e493771, type: 2}
   m_TreeDistance: 800
-  m_TreeBillboardDistance: 468
+  m_TreeBillboardDistance: 800
   m_TreeCrossFadeLength: 36
   m_TreeMaximumFullLODCount: 524
   m_DetailObjectDistance: 72
@@ -7197,10 +7201,10 @@ MonoBehaviour:
   - 600
   - 800
   billb_start:
-  - 468
-  - 468
-  - 468
-  - 468
+  - 450
+  - 500
+  - 600
+  - 800
   fade_length:
   - 36
   - 36
@@ -7425,7 +7429,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1024307418}
-  m_LocalRotation: {x: 0.16402873, y: -0.27223855, z: 0.047155384, w: 0.9469726}
+  m_LocalRotation: {x: 0.16402873, y: -0.27223852, z: 0.047155384, w: 0.9469726}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
