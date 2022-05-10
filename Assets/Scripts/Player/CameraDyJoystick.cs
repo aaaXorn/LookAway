@@ -19,6 +19,9 @@ public class CameraDyJoystick : Joystick
 	//referência do cinemachine
 	private CinemachineFreeLook cine;
 
+	[SerializeField]
+	private float sensivity;
+
     protected override void Start()
     {
         MoveThreshold = moveThreshold;
@@ -43,8 +46,8 @@ public class CameraDyJoystick : Joystick
 		//rotaciona a camera com base no input
 		if(Horizontal != 0 || Vertical != 0)
 		{
-			cine.m_XAxis.Value += Horizontal * 1.5f;
-			cine.m_YAxis.Value += -Vertical / 30;
+			cine.m_XAxis.Value += Horizontal * 1.5f * sensivity;
+			cine.m_YAxis.Value += -Vertical / 30 * sensivity;
 		}
 	}
 	

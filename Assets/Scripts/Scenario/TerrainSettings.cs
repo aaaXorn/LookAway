@@ -13,8 +13,10 @@ public class TerrainSettings : MonoBehaviour
 	
 	//o que a qualidade gráfica do terreno muda
 	[SerializeField]
-	private float[] pixel_error, baseMap_dist, detail_dist,
+	private float[] pixel_error, baseMap_dist, detail_dist, detail_dens,
 					tree_dist, billb_start, fade_length, max_mesh_tree;
+	[SerializeField]
+	private bool[] bakeLP_tree;
 	
     void Start()
     {
@@ -24,9 +26,12 @@ public class TerrainSettings : MonoBehaviour
 		//muda as configurações
 		terrain.heightmapPixelError = pixel_error[terrain_quality];
 		terrain.basemapDistance = baseMap_dist[terrain_quality];
+		terrain.bakeLightProbesForTrees = bakeLP_tree[terrain_quality];
+		terrain.detailObjectDistance = detail_dist[terrain_quality];
+		terrain.detailObjectDensity = detail_dens[terrain_quality];
 		terrain.treeDistance = tree_dist[terrain_quality];
 		terrain.treeBillboardDistance = billb_start[terrain_quality];
 		terrain.treeCrossFadeLength = fade_length[terrain_quality];
 		terrain.treeMaximumFullLODCount = (int)max_mesh_tree[terrain_quality];
-    }
+	}
 }

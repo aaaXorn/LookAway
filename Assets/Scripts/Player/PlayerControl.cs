@@ -191,127 +191,12 @@ public class PlayerControl : MonoBehaviour
 		{
 			//movimentação e pulo
 			case State.Free:
-				#region free
-				//define a direção relativa que o player vai andar
-				Vector3 relativedirection = currentCamera.transform.TransformVector(movaxis);
-				relativedirection = new Vector3(relativedirection.x, jumptime, relativedirection.z);
-				//mesma coisa só que sem a coordenada Y
-				Vector3 relativeDirectionWOy = relativedirection;
-				relativeDirectionWOy = new Vector3(relativedirection.x,0, relativedirection.z);
-				
-				//* 5/6 da uma suavizada na animação, necessário por causa da diminuição do FPS do FixedUpdate
-				//sem isso o jogador move as pernas rápido demais em comparação com o quanto ele anda
-				anim.SetFloat("Speed", rdb.velocity.magnitude * 5/6);
-				
-				//movimento com o glider
-				if (wing.activeSelf)
-				{
-					float velocity = Mathf.Abs(rdb.velocity.x)+ Mathf.Abs(rdb.velocity.z);
-					velocity = Mathf.Clamp(velocity, 0, 2 * movespeed);
-
-					rdb.AddRelativeForce(new Vector3(0, velocity * 120, 1000));
-					
-					 Vector3 movfly = new Vector3(Vector3.forward.x* flyvelocity, 0, Vector3.forward.z* flyvelocity);
-
-					 float angz = Vector3.Dot(transform.right, Vector3.up);
-					 float angx = Vector3.Dot(transform.forward, Vector3.up);
-					 movfly = new Vector3(movaxis.z+ angx*2, -angz, -movaxis.x- angz);
-
-					 transform.Rotate(movfly);
-
-					 wing.transform.localRotation = Quaternion.Euler(0, 0, angz*50);
-
-
-					 flyvelocity -= angx*0.01f;
-					 flyvelocity = Mathf.Lerp(flyvelocity, 3, Time.fixedDeltaTime);
-					 flyvelocity = Mathf.Clamp(flyvelocity, 0, movespeed);
-					 
-				}
-				//movimento sem o glider
-				else
-				{
-					//versão com velocity
-					rdb.velocity = relativeDirectionWOy * movespeed + new Vector3(0,rdb.velocity.y,0);
-					//versão do commit do reinaldo, com addforce
-					//não utilizado por falta de precisão, o outro parece mais com o movimento do Monster Hunter
-					//rdb.AddForce(relativeDirectionWOy * 10000 * movespeed/(rdb.velocity.magnitude+1));
-					Quaternion rottogo = Quaternion.LookRotation(relativeDirectionWOy * 2 + transform.forward);
-					transform.rotation = Quaternion.Lerp(transform.rotation, rottogo, Time.fixedDeltaTime * 50);
-				}
-				
-				//se o botão de ataque foi pressionado
-				if (attackbtn)
-				{
-					anim.SetBool("Attack", true);
-					
-					//modificação da State Machine por animation event pro buffer funcionar
-					//função usada é AnimAttack
-				}
-				
-				//checa se da pra pular
-				RaycastHit hit;
-				if (Physics.Raycast(transform.position-(transform.forward*0.1f)+transform.up*0.3f, Vector3.down,out hit, 1000))
-				{
-					anim.SetFloat("JumpHeight", hit.distance);
-					
-					//deixa o jogador começar o pulo / hold jump
-					if (hit.distance < 0.5f && jumpbtn)
-					{
-						jumptime = 0.25f;
-					}
-					
-					//ativa as asas
-					if (hit.distance > 0.5f && jumpbtndown && !wing.activeSelf)
-					{
-						wing.SetActive(true);
-						jumpbtndown = false;
-					}
-					//desativa as asas
-					else if (hit.distance > 0.5f && jumpbtndown && wing.activeSelf)
-					{
-					   wing.SetActive(false);
-					}
-				}
-				
-				//pulo
-				if (jumpbtn)
-				{
-					jumptime -= Time.fixedDeltaTime;
-					jumptime = Mathf.Clamp01(jumptime);
-					rdb.AddForce(Vector3.up * jumptime * jumpspeed);
-				}
-				#endregion
+				StateFree();
 				break;
 			
 			//ataque
 			case State.Attack:
-				#region attack
-				//propriedades do ataque
-				if(attacking)
-				{
-					AttackEffect();
-				}
-				
-				//se o ataque pode ser cancelado
-				if(atk_cancel)
-				{
-					//se o botão de ataque foi pressionado
-					if (attackbtn)
-					{
-						anim.SetBool("Attack", true);
-					}
-					
-					//pulo
-					else if (jumpbtn)
-					{
-						//deixa o jogador pular, mesmo no ar (eu acho talvez)
-						jumptime = 0.25f;
-						
-						//volta pro estado normal
-						currentState = State.Free;
-					}
-				}
-				#endregion
+				StateAttack();
 				break;
 			
 			//bloqueio
@@ -356,9 +241,143 @@ public class PlayerControl : MonoBehaviour
 				anim.SetBool("Block", false);
 			rollbtn = false;
 				anim.SetBool("Roll", false);
-		}
+        }
     }
 
+    #region states
+    private void StateFree()
+    {
+        #region movement
+        //define a direção relativa que o player vai andar
+        Vector3 relativedirection = currentCamera.transform.TransformVector(movaxis);
+		relativedirection = new Vector3(relativedirection.x, jumptime, relativedirection.z);
+		//mesma coisa só que sem a coordenada Y
+		Vector3 relativeDirectionWOy = relativedirection;
+		relativeDirectionWOy = new Vector3(relativedirection.x, 0, relativedirection.z);
+
+		//* 5/6 da uma suavizada na animação, necessário por causa da diminuição do FPS do FixedUpdate
+		//sem isso o jogador move as pernas rápido demais em comparação com o quanto ele anda
+		anim.SetFloat("Speed", rdb.velocity.magnitude * 5 / 6);
+
+		//movimento com o glider
+		if (wing.activeSelf)
+		{
+			float velocity = Mathf.Abs(rdb.velocity.x) + Mathf.Abs(rdb.velocity.z);
+			velocity = Mathf.Clamp(velocity, 0, 2 * movespeed);
+
+			rdb.AddRelativeForce(new Vector3(0, velocity * 120, 1000));
+
+			Vector3 movfly = new Vector3(Vector3.forward.x * flyvelocity, 0, Vector3.forward.z * flyvelocity);
+
+			float angz = Vector3.Dot(transform.right, Vector3.up);
+			float angx = Vector3.Dot(transform.forward, Vector3.up);
+			movfly = new Vector3(movaxis.z + angx * 2, -angz, -movaxis.x - angz);
+
+			transform.Rotate(movfly);
+
+			wing.transform.localRotation = Quaternion.Euler(0, 0, angz * 50);
+
+
+			flyvelocity -= angx * 0.01f;
+			flyvelocity = Mathf.Lerp(flyvelocity, 3, Time.fixedDeltaTime);
+			flyvelocity = Mathf.Clamp(flyvelocity, 0, movespeed);
+
+		}
+		//movimento sem o glider
+		else
+		{
+			//versão com velocity
+			rdb.velocity = relativeDirectionWOy * movespeed + new Vector3(0, rdb.velocity.y, 0);
+			//versão do commit do reinaldo, com addforce
+			//não utilizado por falta de precisão, o outro parece mais com o movimento do Monster Hunter
+			//rdb.AddForce(relativeDirectionWOy * 10000 * movespeed/(rdb.velocity.magnitude+1));
+			Quaternion rottogo = Quaternion.LookRotation(relativeDirectionWOy * 2 + transform.forward);
+			transform.rotation = Quaternion.Lerp(transform.rotation, rottogo, Time.fixedDeltaTime * 50);
+        }
+        #endregion
+
+        #region inputs
+        //se o botão de ataque foi pressionado
+        //modificação da State Machine por animation event pro buffer funcionar
+        //funções usadas são AnimAttack, AnimBlock e AnimRoll
+        if (attackbtn)
+        {
+            anim.SetBool("Attack", true);
+        }
+        else if (blockbtn)
+        {
+            anim.SetBool("Block", true);
+        }
+        else if (rollbtn)
+        {
+			anim.SetBool("Roll", true);
+        }
+        #endregion
+
+        #region jump
+        //checa se da pra pular
+        RaycastHit hit;
+		if (Physics.Raycast(transform.position - (transform.forward * 0.1f) + transform.up * 0.3f, Vector3.down, out hit, 1000))
+		{
+			anim.SetFloat("JumpHeight", hit.distance);
+
+			//deixa o jogador começar o pulo / hold jump
+			if (hit.distance < 0.5f && jumpbtn)
+			{
+				jumptime = 0.25f;
+			}
+
+			//ativa as asas
+			if (hit.distance > 0.5f && jumpbtndown && !wing.activeSelf)
+			{
+				wing.SetActive(true);
+				jumpbtndown = false;
+			}
+			//desativa as asas
+			else if (hit.distance > 0.5f && jumpbtndown && wing.activeSelf)
+			{
+				wing.SetActive(false);
+			}
+		}
+
+		//pulo
+		if (jumpbtn)
+		{
+			jumptime -= Time.fixedDeltaTime;
+			jumptime = Mathf.Clamp01(jumptime);
+			rdb.AddForce(Vector3.up * jumptime * jumpspeed);
+		}
+		#endregion
+	}
+	private void StateAttack()
+    {
+		//propriedades do ataque
+		if (attacking)
+		{
+			AttackEffect();
+		}
+
+		//se o ataque pode ser cancelado
+		if (atk_cancel)
+		{
+			//se o botão de ataque foi pressionado
+			if (attackbtn)
+			{
+				anim.SetBool("Attack", true);
+			}
+
+			//pulo
+			else if (jumpbtn)
+			{
+				//deixa o jogador pular, mesmo no ar (eu acho talvez)
+				jumptime = 0.25f;
+
+				//volta pro estado normal
+				currentState = State.Free;
+			}
+		}
+	}
+    #endregion
 
     //a callback for calculating IK
     void OnAnimatorIK()
@@ -531,11 +550,21 @@ public class PlayerControl : MonoBehaviour
 	{
 		currentState = State.Attack;
 	}
-	
+	//muda pro state de block
+	private void AnimBlock()
+    {
+		currentState = State.Block;
+    }
+	//muda pro state de roll
+	private void AnimRoll()
+    {
+		currentState = State.Roll;
+    }
+
 	//acontece quando o jogador cai no chão
 	private void AnimLand()
     {
-		
+		//sound effect land
     }
     #endregion
 	

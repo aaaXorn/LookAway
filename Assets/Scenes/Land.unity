@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.4435394, g: 0.49284565, b: 0.57243705, a: 1}
+  m_IndirectSpecularColor: {r: 0.4435391, g: 0.49284512, b: 0.57243615, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6174,7 +6174,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 534669902}
-  m_LocalRotation: {x: 0.16402876, y: -0.27223852, z: 0.047155395, w: 0.9469726}
+  m_LocalRotation: {x: 0.16402875, y: -0.27223852, z: 0.047155388, w: 0.9469726}
   m_LocalPosition: {x: 99.371574, y: 41.372414, z: -134.10681}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -6343,7 +6343,7 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
@@ -6730,7 +6730,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-332404
+  m_Name: pb_Mesh92202
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7181,9 +7181,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrain_quality: 0
   pixel_error:
-  - 64
   - 32
   - 16
+  - 8
   - 8
   baseMap_dist:
   - 8
@@ -7195,6 +7195,11 @@ MonoBehaviour:
   - 18
   - 36
   - 72
+  detail_dens:
+  - 0.5
+  - 0.75
+  - 1
+  - 1
   tree_dist:
   - 450
   - 500
@@ -7211,10 +7216,11 @@ MonoBehaviour:
   - 36
   - 36
   max_mesh_tree:
+  - 131
+  - 262
+  - 393
   - 524
-  - 524
-  - 524
-  - 524
+  bakeLP_tree: 00000101
 --- !u!1001 &869139552
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7429,7 +7435,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1024307418}
-  m_LocalRotation: {x: 0.16402873, y: -0.27223855, z: 0.04715539, w: 0.9469726}
+  m_LocalRotation: {x: 0.16402872, y: -0.27223855, z: 0.047155384, w: 0.9469726}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -8164,6 +8170,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 224504526}
     m_Modifications:
+    - target: {fileID: 1366163657, guid: cd891889f7d5947459e0661c102e88dd, type: 3}
+      propertyPath: sensivity
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8751209680395882100, guid: cd891889f7d5947459e0661c102e88dd,
         type: 3}
       propertyPath: m_Pivot.x
@@ -8287,7 +8297,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-332420
+  m_Name: pb_Mesh93718
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9128,7 +9138,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-332376
+  m_Name: pb_Mesh92872
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

@@ -141,39 +141,39 @@ public class EnemyControl : MonoBehaviour
 		switch(currentState)
 		{
 			case State.Inactive:
-				Inactive();
+				StateInactive();
 				break;
 			
 			case State.Active:
-				Active();
+				StateActive();
 				break;
 			
 			case State.Approach:
-				Approach();
+				StateApproach();
 				break;
 			
 			case State.Retreat:
-				Retreat();
+				StateRetreat();
 				break;
 			
 			case State.Reposition:
-				Reposition();
+				StateReposition();
 				break;
 			
 			case State.Melee:
-				Melee();
+				StateMelee();
 				break;
 			
 			case State.Ranged:
-				Ranged();
+				StateRanged();
 				break;
 			
 			case State.Dead:
-				Dead();
+				StateDead();
 				break;
 			
 			case State.Reset:
-				Reset();
+				StateReset();
 				break;
 			
 			default:
@@ -183,47 +183,47 @@ public class EnemyControl : MonoBehaviour
 	}
 	
 	#region states
-	protected virtual void Inactive()
+	protected virtual void StateInactive()
 	{
 		
 	}
 	
-	protected virtual void Active()
+	protected virtual void StateActive()
 	{
 		
 	}
 	
-	protected virtual void Approach()
+	protected virtual void StateApproach()
 	{
 		
 	}
 	
-	protected virtual void Retreat()
+	protected virtual void StateRetreat()
 	{
 		
 	}
 	
-	protected virtual void Reposition()
+	protected virtual void StateReposition()
 	{
 		
 	}
 	
-	protected virtual void Melee()
+	protected virtual void StateMelee()
 	{
 		
 	}
 	
-	protected virtual void Ranged()
+	protected virtual void StateRanged()
 	{
 		
 	}
 	
-	protected virtual void Dead()
+	protected virtual void StateDead()
 	{
 		
 	}
 	
-	protected virtual void Reset()
+	protected virtual void StateReset()
 	{
 		
 	}
