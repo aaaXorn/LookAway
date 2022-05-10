@@ -1195,6 +1195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3476a10561271047ad184fbe4bf59ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug_mode: 0
   buffer_f_total: 2
   currentState: 0
   rdb: {fileID: 3018380865899209501}
@@ -1249,6 +1250,7 @@ MonoBehaviour:
     - {fileID: 377710751}
   block_f_total: 8
   roll_f_total: 6
+  rollspeed: 10
 --- !u!114 &5087033714714069245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1263,3 +1265,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   max_hp: 5
   hit_id: 0
+  invul: 0

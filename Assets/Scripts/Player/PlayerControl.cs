@@ -15,7 +15,9 @@ public class PlayerControl : MonoBehaviour
 
 	//referência do joystick de movimento
 	private MovementJoystick MoveJ;
-	
+	//referência do script de HP
+	private PlayerHealth P_HP;
+
 	//enum com os states do player
 	private enum State
 	{
@@ -56,7 +58,7 @@ public class PlayerControl : MonoBehaviour
     private bool jumpbtnrelease = false;
     private GameObject closeThing;
     private float weight;
-	
+
 	private bool attackbtn = false;
 	private bool blockbtn = false;
 	private bool rollbtn = false;
@@ -130,6 +132,8 @@ public class PlayerControl : MonoBehaviour
 	private int roll_f;
 	[SerializeField]
 	private int roll_f_total;
+	[SerializeField]
+	private float rollspeed;
 	#endregion
 
 	void Awake()
@@ -146,8 +150,11 @@ public class PlayerControl : MonoBehaviour
 		//pega o script de movimento com joystick
 		if(MovementJoystick.Instance != null) MoveJ = MovementJoystick.Instance;
 		else print("MovementJoystick Instance not found.");
-		
-        if (SceneManager.GetActiveScene().name.Equals("Land"))
+		//pega o script de movimento com joystick
+		if (PlayerHealth.Instance != null) P_HP = PlayerHealth.Instance;
+		else print("PlayerHealth Instance not found.");
+
+		if (SceneManager.GetActiveScene().name.Equals("Land"))
         {
             if (PlayerPrefs.HasKey("OldPlayerPosition"))
             {
@@ -165,13 +172,16 @@ public class PlayerControl : MonoBehaviour
 			AtkDictionary.Add(atk.id, atk);
 		}
 		
-		//aumenta o tamanho do buffer por 1 pra ficar certinho
+		//aumenta certas ações por 1 frame para compensar pelo frame inicial
 		buffer_f_total++;
+		block_f_total++;
+		roll_f_total++;
     }
+
     private void Update()
     {
 		//inputs de debugging
-#if UNITY_EDITOR
+		#if UNITY_EDITOR
         if(Input.GetButtonDown("Jump"))
         {
             JumpDown();
@@ -193,16 +203,18 @@ public class PlayerControl : MonoBehaviour
 			RollDown();
 		}
 		//movaxis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-#endif
+		#endif
 
 		//input de pulo está no script JumpButton
 		//input de ataque está no script AttackButton
 
 		//movimento com o joystick
 		//.normalized garante que o jogador sempre ande na mesma velocidade
-		movaxis = new Vector3(MoveJ.Horizontal, 0, MoveJ.Vertical).normalized;
+		movaxis = new Vector3(MoveJ.Horizontal, 0, MoveJ.Vertical);
+
     }
 
+	//state machine
     void FixedUpdate()
     {
 		switch(currentState)
@@ -219,12 +231,12 @@ public class PlayerControl : MonoBehaviour
 			
 			//bloqueio
 			case State.Block:
-				
+				StateBlock();
 				break;
 			
 			//desvio
 			case State.Roll:
-				
+				StateRoll();
 				break;
 			
 			//tomando dano
@@ -262,16 +274,16 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-#region states
+	#region states
     private void StateFree()
     {
 		#region movement
         //define a direção relativa que o player vai andar
-        Vector3 relativedirection = currentCamera.transform.TransformVector(movaxis);
+		//.normalized pra ficar sempre na vel máxima
+        Vector3 relativedirection = currentCamera.transform.TransformVector(movaxis.normalized);
 		relativedirection = new Vector3(relativedirection.x, jumptime, relativedirection.z);
 		//mesma coisa só que sem a coordenada Y
-		Vector3 relativeDirectionWOy = relativedirection;
-		relativeDirectionWOy = new Vector3(relativedirection.x, 0, relativedirection.z);
+		Vector3 relativeDirectionWOy = new Vector3(relativedirection.x, 0, relativedirection.z);
 
 		//* 5/6 da uma suavizada na animação, necessário por causa da diminuição do FPS do FixedUpdate
 		//sem isso o jogador move as pernas rápido demais em comparação com o quanto ele anda
@@ -314,7 +326,7 @@ public class PlayerControl : MonoBehaviour
         }
 		#endregion
 
-#region inputs
+		#region inputs
         //se o botão de ataque foi pressionado
         //modificação da State Machine por animation event pro buffer funcionar
         //funções usadas são AnimAttack, AnimBlock e AnimRoll
@@ -330,9 +342,9 @@ public class PlayerControl : MonoBehaviour
         {
 			anim.SetBool("Roll", true);
         }
-#endregion
+		#endregion
 
-#region jump
+		#region jump
         //checa se da pra pular
         RaycastHit hit;
 		if (Physics.Raycast(transform.position - (transform.forward * 0.1f) + transform.up * 0.3f, Vector3.down, out hit, 1000))
@@ -365,8 +377,9 @@ public class PlayerControl : MonoBehaviour
 			jumptime = Mathf.Clamp01(jumptime);
 			rdb.AddForce(Vector3.up * jumptime * jumpspeed);
 		}
-#endregion
+		#endregion
 	}
+
 	private void StateAttack()
     {
 		//propriedades do ataque
@@ -387,7 +400,7 @@ public class PlayerControl : MonoBehaviour
 			//pulo
 			else if (jumpbtn)
 			{
-				//deixa o jogador pular, mesmo no ar (eu acho talvez)
+				//deixa o jogador pular
 				jumptime = 0.25f;
 
 				//volta pro estado normal
@@ -395,8 +408,40 @@ public class PlayerControl : MonoBehaviour
 			}
 		}
 	}
-#endregion
 
+	private void StateBlock()
+    {
+		//== para só rodar uma vez
+		if(block_f == 0)
+        {
+			//termina os invulframes
+			P_HP.invul = false;
+        }
+
+		block_f--;
+    }
+
+    private void StateRoll()
+    {
+		//== para só rodar uma vez
+		if (roll_f == 0)
+		{
+			//termina os invulframes
+			P_HP.invul = false;
+		}
+
+		roll_f--;
+
+		//movimento
+		Vector3 transf_f = transform.forward;
+		Vector3 roll_direction = new Vector3(transf_f.x, 0, transf_f.z);
+
+		rdb.velocity = roll_direction * rollspeed + new Vector3(0, rdb.velocity.y, 0);
+		print(rdb.velocity);
+	}
+    #endregion
+
+    #region animation
     //a callback for calculating IK
     void OnAnimatorIK()
     {
@@ -467,8 +512,9 @@ public class PlayerControl : MonoBehaviour
     {
 		
     }
-	
-#region attacks
+	#endregion
+
+	#region attacks
 	//define o dano, duração, tamanho e tipo da hitbox por ID
 	private void AnimHit(string id)
 	{
@@ -553,7 +599,9 @@ public class PlayerControl : MonoBehaviour
 		//diminui 1 frame do delay
 		else atk_delay[curr_hit]--;
     }
+	#endregion
 
+	#region animation events
 	//volta pro State Free
 	private void AnimFree()
 	{
@@ -572,11 +620,21 @@ public class PlayerControl : MonoBehaviour
 	private void AnimBlock()
     {
 		currentState = State.Block;
-    }
+
+		//reseta os frames do block
+		block_f = block_f_total;
+		//inicia os invul frames
+		P_HP.invul = true;
+	}
 	//muda pro state de roll
 	private void AnimRoll()
     {
 		currentState = State.Roll;
+
+		//reseta os frames do roll
+		roll_f = roll_f_total;
+		//inicia os invul frames
+		P_HP.invul = true;
     }
 
 	//acontece quando o jogador cai no chão
@@ -584,9 +642,9 @@ public class PlayerControl : MonoBehaviour
     {
 		//sound effect land
     }
-#endregion
-	
-#region inputs
+	#endregion
+
+	#region inputs
 	//botão de pulo pressionado
 	public void JumpDown()
 	{
@@ -629,9 +687,9 @@ public class PlayerControl : MonoBehaviour
 		attackbtn = false;
 		blockbtn = false;
 	}
-#endregion
+	#endregion
 	
-#if UNITY_EDITOR
+	#if UNITY_EDITOR
 	private void OnDrawGizmos()
 	{
 		if(atk_origin[curr_hit] != null)
@@ -675,5 +733,5 @@ public class PlayerControl : MonoBehaviour
 			}
 		}
 	}
-#endif
+	#endif
 }

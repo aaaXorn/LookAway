@@ -12,6 +12,9 @@ public class PlayerHealth : MonoBehaviour
 	private int hp;//vida atual
 	
 	public int hit_id;
+
+	//se o jogador tem invincibility frames
+	public bool invul = false;
 	
 	private void Awake()
 	{
@@ -28,9 +31,12 @@ public class PlayerHealth : MonoBehaviour
 	
     public void TakeDamage(int dmg)
 	{
-		hp -= dmg;
-		
-		if(hp > max_hp) hp = max_hp;
-		else if(hp <= 0) print("morreu");
+		if (!invul)
+		{
+			hp -= dmg;
+
+			if (hp > max_hp) hp = max_hp;
+			else if (hp <= 0) print("morreu");
+		}
 	}
 }
