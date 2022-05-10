@@ -1,2 +1,4 @@
 # LookAway
-Zelda Like project demo
+
+Alguns arquivos mais pesados estão no repositório LookAwayLFS.
+https://github.com/aaaXorn/LookAwayLFS
