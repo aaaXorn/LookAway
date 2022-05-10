@@ -154,6 +154,7 @@ public class PlayerControl : MonoBehaviour
 		if (PlayerHealth.Instance != null) P_HP = PlayerHealth.Instance;
 		else print("PlayerHealth Instance not found.");
 
+		//config posição no mapa
 		if (SceneManager.GetActiveScene().name.Equals("Land"))
         {
             if (PlayerPrefs.HasKey("OldPlayerPosition"))

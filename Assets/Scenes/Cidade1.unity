@@ -837,8 +837,8 @@ OcclusionArea:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42297783}
   serializedVersion: 2
-  m_Size: {x: 4.763401, y: 4.3134327, z: 4.7171483}
-  m_Center: {x: -2.4823022, y: 1.0811187, z: 2.9423392}
+  m_Size: {x: 4.763401, y: 4.603265, z: 4.7171483}
+  m_Center: {x: -2.4823022, y: 0.93620265, z: 2.9423392}
   m_IsViewVolume: 1
 --- !u!4 &42297785
 Transform:
@@ -5085,6 +5085,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 4262856960047918, guid: cc2d2f430f4326f4ca959307d8c55720, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.51
+      objectReference: {fileID: 0}
     - target: {fileID: 4604638010593674, guid: cc2d2f430f4326f4ca959307d8c55720, type: 3}
       propertyPath: m_RootOrder
       value: 26
@@ -7121,8 +7125,8 @@ OcclusionArea:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 651545835}
   serializedVersion: 2
-  m_Size: {x: 1.4537871, y: 2.5385268, z: 0.9238812}
-  m_Center: {x: -0.8974867, y: 0.3151157, z: 2.30491}
+  m_Size: {x: 1.4537871, y: 2.720151, z: 0.9238812}
+  m_Center: {x: -0.8974867, y: 0.22430366, z: 2.30491}
   m_IsViewVolume: 1
 --- !u!4 &651545837
 Transform:
@@ -9707,7 +9711,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4604638010593674, guid: cc2d2f430f4326f4ca959307d8c55720, type: 3}
       propertyPath: m_RootOrder
-      value: 43
+      value: 42
       objectReference: {fileID: 0}
     - target: {fileID: 4604638010593674, guid: cc2d2f430f4326f4ca959307d8c55720, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9715,7 +9719,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4604638010593674, guid: cc2d2f430f4326f4ca959307d8c55720, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.510376
+      value: 9.2
       objectReference: {fileID: 0}
     - target: {fileID: 4604638010593674, guid: cc2d2f430f4326f4ca959307d8c55720, type: 3}
       propertyPath: m_LocalPosition.z
@@ -13918,8 +13922,8 @@ OcclusionArea:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1533152124}
   serializedVersion: 2
-  m_Size: {x: 4.8238297, y: 8.73386, z: 4.439648}
-  m_Center: {x: -1.6220386, y: 3.291333, z: 1.2605199}
+  m_Size: {x: 4.8238297, y: 8.988511, z: 4.439648}
+  m_Center: {x: -1.6220386, y: 3.1640081, z: 1.2605199}
   m_IsViewVolume: 1
 --- !u!4 &1533152126
 Transform:
@@ -17392,7 +17396,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4304041899533064, guid: fb92be0dbfb14cf4e87d6f6270d8be70, type: 3}
       propertyPath: m_RootOrder
-      value: 100
+      value: 99
       objectReference: {fileID: 0}
     - target: {fileID: 4304041899533064, guid: fb92be0dbfb14cf4e87d6f6270d8be70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17400,7 +17404,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4304041899533064, guid: fb92be0dbfb14cf4e87d6f6270d8be70, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.510378
+      value: 9.33
       objectReference: {fileID: 0}
     - target: {fileID: 4304041899533064, guid: fb92be0dbfb14cf4e87d6f6270d8be70, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17582,7 +17586,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4304041899533064, guid: fb92be0dbfb14cf4e87d6f6270d8be70, type: 3}
       propertyPath: m_RootOrder
-      value: 99
+      value: 98
       objectReference: {fileID: 0}
     - target: {fileID: 4304041899533064, guid: fb92be0dbfb14cf4e87d6f6270d8be70, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17590,7 +17594,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4304041899533064, guid: fb92be0dbfb14cf4e87d6f6270d8be70, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.510378
+      value: 9.13
       objectReference: {fileID: 0}
     - target: {fileID: 4304041899533064, guid: fb92be0dbfb14cf4e87d6f6270d8be70, type: 3}
       propertyPath: m_LocalPosition.z
@@ -18727,8 +18731,8 @@ OcclusionArea:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2058117454}
   serializedVersion: 2
-  m_Size: {x: 0.6694361, y: 2.5625837, z: 1.3936486}
-  m_Center: {x: -0.8139804, y: 0.30308717, z: 2.0700262}
+  m_Size: {x: 0.6694361, y: 2.9569814, z: 1.3936486}
+  m_Center: {x: -0.8139804, y: 0.10588813, z: 2.0700262}
   m_IsViewVolume: 1
 --- !u!4 &2058117456
 Transform:

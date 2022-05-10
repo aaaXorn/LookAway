@@ -4,14 +4,21 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class Menu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+	//qualidade gráfica
+	private int quality_level;
+	
+    private void Start()
     {
-        
+        //config qualidade gráfica
+		if(PlayerPrefs.HasKey("GameQuality"))
+		{
+			int qual = PlayerPrefs.GetInt("GameQuality");
+			
+			QualitySettings.SetQualityLevel(qual);
+		}
     }
-
-    // Update is called once per frame
-    void Update()
+	
+    private void Update()
     {
         
     }
@@ -30,4 +37,10 @@ public class Menu : MonoBehaviour
     {
         Application.Quit();
     }
+	
+	//salva as configs do player
+	private void SaveConfig()
+	{
+		PlayerPrefs.SetInt("GameQuality", quality_level);
+	}
 }

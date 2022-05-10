@@ -20,6 +20,17 @@ public class TerrainSettings : MonoBehaviour
 	
     void Start()
     {
+		//config qualidade gráfica
+		if(PlayerPrefs.HasKey("GameQuality"))
+		{
+			int qual = PlayerPrefs.GetInt("GameQuality");
+			
+			QualitySettings.SetQualityLevel(qual);
+			
+			//config qualidade terreno
+			terrain_quality = qual;
+		}
+		
 		//pega o componente de terreno
         terrain = GetComponent<Terrain>();
 		
