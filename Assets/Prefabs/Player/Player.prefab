@@ -1,5 +1,65 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &377710750
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 377710751}
+  m_Layer: 3
+  m_Name: LHand_Attack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &377710751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377710750}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: -0, w: -0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6035953435347524259}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
+--- !u!1 &1082022049
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1082022050}
+  m_Layer: 3
+  m_Name: RHand_Attack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1082022050
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082022049}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: -0, w: -0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6035953435347524371}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 270, z: 0}
 --- !u!1001 &3018380866440911045
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1135,6 +1195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3476a10561271047ad184fbe4bf59ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buffer_f_total: 2
   currentState: 0
   rdb: {fileID: 3018380865899209501}
   anim: {fileID: 6035953435338536257}
@@ -1146,9 +1207,6 @@ MonoBehaviour:
   wing: {fileID: 6885324732456083844}
   rightHandObj: {fileID: 3018380866613360215}
   leftHandObj: {fileID: 3018380866440298883}
-  jumpbtn: 0
-  jumpbtndown: 0
-  attackbtndown: 0
   enemy_layer:
     serializedVersion: 2
     m_Bits: 64
@@ -1164,7 +1222,7 @@ MonoBehaviour:
     - 0
     delay: 00000000
     origin:
-    - {fileID: 6035953435347524259}
+    - {fileID: 377710751}
   - id: UR1
     type: 
     hit_count: 1
@@ -1176,7 +1234,7 @@ MonoBehaviour:
     - 0
     delay: 00000000
     origin:
-    - {fileID: 6035953435347524371}
+    - {fileID: 1082022050}
   - id: UL2
     type: 
     hit_count: 1
@@ -1188,7 +1246,9 @@ MonoBehaviour:
     - 0
     delay: 00000000
     origin:
-    - {fileID: 6035953435347524259}
+    - {fileID: 377710751}
+  block_f_total: 8
+  roll_f_total: 6
 --- !u!114 &5087033714714069245
 MonoBehaviour:
   m_ObjectHideFlags: 0

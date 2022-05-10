@@ -28,6 +28,7 @@ public class EnemyControl : MonoBehaviour
 		Melee,//ataque melee
 		Ranged,//ataque ranged
 		
+		Hurt,//efeito de stun / outros efeitos que se baseiam em tomar dano
 		Dead,//quando está morto
 		
 		Reset//reseta a luta e volta pra posição inicial
@@ -287,7 +288,7 @@ public class EnemyControl : MonoBehaviour
 
 				//hitbox
 				hitCol = Physics.OverlapCapsule(pos,
-						   pos + -atk_origin[curr_hit].right * atk_length[curr_hit],
+						   pos + atk_origin[curr_hit].forward * atk_length[curr_hit],
 						   atk_size[curr_hit], player_layer);
 
 				//dano
@@ -324,7 +325,7 @@ public class EnemyControl : MonoBehaviour
 			//desenha a hitbox no editor
 			//RIP meu PC
 			Vector3 pos = atk_origin[curr_hit].position;
-			Vector3 pos2 = pos + -atk_origin[curr_hit].right * atk_length[curr_hit];
+			Vector3 pos2 = pos + atk_origin[curr_hit].forward * atk_length[curr_hit];
 			
 			// Special case when both points are in the same position
 			if (atk_length[curr_hit] == 0)
