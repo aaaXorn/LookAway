@@ -7,7 +7,12 @@ public class PlayerControl : MonoBehaviour
 {
 	//referência global do código do personagem
 	public static PlayerControl Instance {get; set;}
-	
+
+	#if UNITY_EDITOR
+	[SerializeField]
+	private bool debug_mode;
+	#endif
+
 	//referência do joystick de movimento
 	private MovementJoystick MoveJ;
 	
@@ -31,9 +36,9 @@ public class PlayerControl : MonoBehaviour
 	//state atual do player
 	[SerializeField]
 	private State currentState;
-	
+
+	#region movement
 	[Header("Movement")]
-	
     public Rigidbody rdb;
     public Animator anim;
     private Vector3 movaxis, turnaxis;
@@ -55,7 +60,9 @@ public class PlayerControl : MonoBehaviour
 	private bool attackbtn = false;
 	private bool blockbtn = false;
 	private bool rollbtn = false;
-	
+	#endregion
+
+	#region attacks
 	[Header("Attacks")]
 	//layer dos inimigos
 	[SerializeField]
@@ -109,7 +116,9 @@ public class PlayerControl : MonoBehaviour
 	//dicionário dos ataques
 	//usado para localizar os ataques por string
 	public Dictionary<string, Attack> AtkDictionary;
-	
+	#endregion
+
+	#region defenses
 	[Header("Defenses")]
 	
 	//tempo de invul block em frames
@@ -121,7 +130,8 @@ public class PlayerControl : MonoBehaviour
 	private int roll_f;
 	[SerializeField]
 	private int roll_f_total;
-	
+	#endregion
+
 	void Awake()
 	{
 		//setta a referência global desse script
@@ -161,7 +171,7 @@ public class PlayerControl : MonoBehaviour
     private void Update()
     {
 		//inputs de debugging
-		#if UNITY_EDITOR
+#if UNITY_EDITOR
         if(Input.GetButtonDown("Jump"))
         {
             JumpDown();
@@ -174,12 +184,20 @@ public class PlayerControl : MonoBehaviour
 		{
 			AttackDown();
 		}
+		else if(Input.GetButtonDown("Fire2"))
+		{
+			BlockDown();
+		}
+		else if(Input.GetButtonDown("Fire3"))
+		{
+			RollDown();
+		}
 		//movaxis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-		#endif
-		
+#endif
+
 		//input de pulo está no script JumpButton
 		//input de ataque está no script AttackButton
-		
+
 		//movimento com o joystick
 		//.normalized garante que o jogador sempre ande na mesma velocidade
 		movaxis = new Vector3(MoveJ.Horizontal, 0, MoveJ.Vertical).normalized;
@@ -244,10 +262,10 @@ public class PlayerControl : MonoBehaviour
         }
     }
 
-    #region states
+#region states
     private void StateFree()
     {
-        #region movement
+		#region movement
         //define a direção relativa que o player vai andar
         Vector3 relativedirection = currentCamera.transform.TransformVector(movaxis);
 		relativedirection = new Vector3(relativedirection.x, jumptime, relativedirection.z);
@@ -270,7 +288,7 @@ public class PlayerControl : MonoBehaviour
 			Vector3 movfly = new Vector3(Vector3.forward.x * flyvelocity, 0, Vector3.forward.z * flyvelocity);
 
 			float angz = Vector3.Dot(transform.right, Vector3.up);
-			float angx = Vector3.Dot(transform.forward, Vector3.up);
+			float angx = Vector3.Dot(transform.forward, Vector3.up)*50;
 			movfly = new Vector3(movaxis.z + angx * 2, -angz, -movaxis.x - angz);
 
 			transform.Rotate(movfly);
@@ -294,9 +312,9 @@ public class PlayerControl : MonoBehaviour
 			Quaternion rottogo = Quaternion.LookRotation(relativeDirectionWOy * 2 + transform.forward);
 			transform.rotation = Quaternion.Lerp(transform.rotation, rottogo, Time.fixedDeltaTime * 50);
         }
-        #endregion
+		#endregion
 
-        #region inputs
+#region inputs
         //se o botão de ataque foi pressionado
         //modificação da State Machine por animation event pro buffer funcionar
         //funções usadas são AnimAttack, AnimBlock e AnimRoll
@@ -312,9 +330,9 @@ public class PlayerControl : MonoBehaviour
         {
 			anim.SetBool("Roll", true);
         }
-        #endregion
+#endregion
 
-        #region jump
+#region jump
         //checa se da pra pular
         RaycastHit hit;
 		if (Physics.Raycast(transform.position - (transform.forward * 0.1f) + transform.up * 0.3f, Vector3.down, out hit, 1000))
@@ -347,7 +365,7 @@ public class PlayerControl : MonoBehaviour
 			jumptime = Mathf.Clamp01(jumptime);
 			rdb.AddForce(Vector3.up * jumptime * jumpspeed);
 		}
-		#endregion
+#endregion
 	}
 	private void StateAttack()
     {
@@ -377,7 +395,7 @@ public class PlayerControl : MonoBehaviour
 			}
 		}
 	}
-    #endregion
+#endregion
 
     //a callback for calculating IK
     void OnAnimatorIK()
@@ -450,7 +468,7 @@ public class PlayerControl : MonoBehaviour
 		
     }
 	
-	#region attacks
+#region attacks
 	//define o dano, duração, tamanho e tipo da hitbox por ID
 	private void AnimHit(string id)
 	{
@@ -566,9 +584,9 @@ public class PlayerControl : MonoBehaviour
     {
 		//sound effect land
     }
-    #endregion
+#endregion
 	
-	#region inputs
+#region inputs
 	//botão de pulo pressionado
 	public void JumpDown()
 	{
@@ -611,7 +629,7 @@ public class PlayerControl : MonoBehaviour
 		attackbtn = false;
 		blockbtn = false;
 	}
-	#endregion
+#endregion
 	
 #if UNITY_EDITOR
 	private void OnDrawGizmos()
