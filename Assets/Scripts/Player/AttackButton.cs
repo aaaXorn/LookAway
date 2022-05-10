@@ -29,6 +29,6 @@ public class AttackButton : MonoBehaviour, IPointerDownHandler
     //quando o jogador toca no botão
     public void OnPointerDown(PointerEventData eventData)
 	{
-		PlayerC.attackbtndown = true;
+		PlayerC.AttackDown();
 	}
 }

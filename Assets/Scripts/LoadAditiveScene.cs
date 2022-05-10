@@ -39,7 +39,7 @@ public class LoadAditiveScene : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && sceneloaded)
         {
             SceneManager.UnloadSceneAsync(SceneName);
             sceneloaded=false;

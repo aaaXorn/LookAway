@@ -15,8 +15,18 @@ public class PlayerControl : MonoBehaviour
 	private enum State
 	{
 		Free,//movimento e pulo
-		Attack//atacando
+		Attack,//atacando
+		Block,//bloqueando
+		Roll,//desviando
+		
+		Hurt,//tomando hit
+		Dead//morrendo
 	};
+	
+	//frames de buffer
+	private int buffer_f;
+	[SerializeField]
+	private int buffer_f_total;
 	
 	//state atual do player
 	[SerializeField]
@@ -36,13 +46,15 @@ public class PlayerControl : MonoBehaviour
     private float flyvelocity = 3;
     public GameObject wing;
     public Transform rightHandObj, leftHandObj;
-    public bool jumpbtn = false;
-    public bool jumpbtndown = false;
+    private bool jumpbtn = false;
+    private bool jumpbtndown = false;
     private bool jumpbtnrelease = false;
     private GameObject closeThing;
     private float weight;
 	
-	public bool attackbtndown = false;
+	private bool attackbtn = false;
+	private bool blockbtn = false;
+	private bool rollbtn = false;
 	
 	[Header("Attacks")]
 	//layer dos inimigos
@@ -84,7 +96,7 @@ public class PlayerControl : MonoBehaviour
 		public int[] duration;
 		[Tooltip("Hitbox radius")]
 		public float[] size;
-		[Tooltip("Hitbox length")]
+		[Tooltip("Hitbox length, 0 makes it a sphere")]
 		public float[] length;
 		[Tooltip("Delay between the attacks")]
 		public int[] delay;
@@ -97,6 +109,18 @@ public class PlayerControl : MonoBehaviour
 	//dicionário dos ataques
 	//usado para localizar os ataques por string
 	public Dictionary<string, Attack> AtkDictionary;
+	
+	[Header("Defenses")]
+	
+	//tempo de invul block em frames
+	private int block_f;
+	[SerializeField]
+	private int block_f_total;
+	
+	//tempo de invul do roll em frames
+	private int roll_f;
+	[SerializeField]
+	private int roll_f_total;
 	
 	void Awake()
 	{
@@ -130,6 +154,9 @@ public class PlayerControl : MonoBehaviour
 		{
 			AtkDictionary.Add(atk.id, atk);
 		}
+		
+		//aumenta o tamanho do buffer por 1 pra ficar certinho
+		buffer_f_total++;
     }
     private void Update()
     {
@@ -137,17 +164,15 @@ public class PlayerControl : MonoBehaviour
 		#if UNITY_EDITOR
         if(Input.GetButtonDown("Jump"))
         {
-            jumpbtn = true;
-            jumpbtndown = true;
+            JumpDown();
         }
         if (Input.GetButtonUp("Jump"))
         {
-            jumpbtn = false;
-            jumptime = 0;
+            JumpUp();
         }
 		if(Input.GetButtonDown("Fire1"))
 		{
-			attackbtndown = true;
+			AttackDown();
 		}
 		//movaxis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 		#endif
@@ -215,11 +240,12 @@ public class PlayerControl : MonoBehaviour
 				}
 				
 				//se o botão de ataque foi pressionado
-				if (attackbtndown)
+				if (attackbtn)
 				{
-					anim.SetTrigger("PunchA");
+					anim.SetBool("Attack", true);
 					
-					currentState = State.Attack;
+					//modificação da State Machine por animation event pro buffer funcionar
+					//função usada é AnimAttack
 				}
 				
 				//checa se da pra pular
@@ -270,9 +296,9 @@ public class PlayerControl : MonoBehaviour
 				if(atk_cancel)
 				{
 					//se o botão de ataque foi pressionado
-					if (attackbtndown)
+					if (attackbtn)
 					{
-						anim.SetTrigger("PunchA");
+						anim.SetBool("Attack", true);
 					}
 					
 					//pulo
@@ -288,6 +314,26 @@ public class PlayerControl : MonoBehaviour
 				#endregion
 				break;
 			
+			//bloqueio
+			case State.Block:
+				
+				break;
+			
+			//desvio
+			case State.Roll:
+				
+				break;
+			
+			//tomando dano
+			case State.Hurt:
+				
+				break;
+			
+			//morrendo
+			case State.Dead:
+				
+				break;
+			
 			default:
 				print("Player state machine error.");
 				break;
@@ -295,7 +341,22 @@ public class PlayerControl : MonoBehaviour
 		
 		//reseta os button down
         jumpbtndown = false;
-		attackbtndown = false;
+		
+		//buffer
+		if(buffer_f > 0)
+			buffer_f--;
+		else if(buffer_f == 0)
+		{
+			//para só rodar uma vez
+			buffer_f--;
+			
+			attackbtn = false;
+				anim.SetBool("Attack", false);
+			blockbtn = false;
+				anim.SetBool("Block", false);
+			rollbtn = false;
+				anim.SetBool("Roll", false);
+		}
     }
 
 
@@ -321,7 +382,9 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
-        if (closeThing)
+		//quando tem um objeto empurrado e está no state free
+		//				  para não atrapalhar animações como a de ataque
+        if (closeThing && currentState == State.Free)
         {
             //calcula a direcao do ponto de toque para a personagem
             Vector3 handDirection = closeThing.transform.position - transform.position;
@@ -427,13 +490,13 @@ public class PlayerControl : MonoBehaviour
 				
 				//hitbox
 				hitCol = Physics.OverlapCapsule(pos,
-						   pos + -atk_origin[curr_hit].right * atk_length[curr_hit],
+						   pos + atk_origin[curr_hit].forward * atk_length[curr_hit],
 						   atk_size[curr_hit], enemy_layer);
 			
 				//dano
 				foreach(var hit in hitCol)
 				{
-					EnemyHealth E_HP = GetComponent<EnemyHealth>();
+					EnemyHealth E_HP = hit.GetComponent<EnemyHealth>();
 					if(E_HP.hit_id != hit_id)
 						E_HP.TakeDamage(atk_dmg[curr_hit]);
 					
@@ -462,14 +525,65 @@ public class PlayerControl : MonoBehaviour
 		attacking = false;
 		atk_cancel = false;
 	}
-
+	
+	//muda pro state de ataque
+	private void AnimAttack()
+	{
+		currentState = State.Attack;
+	}
+	
 	//acontece quando o jogador cai no chão
 	private void AnimLand()
     {
 		
     }
     #endregion
-
+	
+	#region inputs
+	//botão de pulo pressionado
+	public void JumpDown()
+	{
+		jumpbtn = true;
+		jumpbtndown = true;
+	}
+	//botão de pulo solto
+	public void JumpUp()
+	{
+		jumpbtn = false;
+        jumptime = 0;
+	}
+	//botão de ataque pressionado
+	public void AttackDown()
+	{
+		attackbtn = true;
+		
+		//buffer
+		buffer_f = buffer_f_total;
+		blockbtn = false;
+		rollbtn = false;
+	}
+	//botão de bloquear pressionado
+	public void BlockDown()
+	{
+		blockbtn = true;
+		
+		//buffer
+		buffer_f = buffer_f_total;
+		attackbtn = false;
+		rollbtn = false;
+	}
+	//botão de roll pressionado
+	public void RollDown()
+	{
+		rollbtn = true;
+		
+		//buffer
+		buffer_f = buffer_f_total;
+		attackbtn = false;
+		blockbtn = false;
+	}
+	#endregion
+	
 #if UNITY_EDITOR
 	private void OnDrawGizmos()
 	{
@@ -478,7 +592,7 @@ public class PlayerControl : MonoBehaviour
 			//desenha a hitbox no editor
 			//RIP meu PC
 			Vector3 pos = atk_origin[curr_hit].position;
-			Vector3 pos2 = pos + -atk_origin[curr_hit].right * atk_length[curr_hit];
+			Vector3 pos2 = pos + atk_origin[curr_hit].forward * atk_length[curr_hit];
 			
 			// Special case when both points are in the same position
 			if (atk_length[curr_hit] == 0)

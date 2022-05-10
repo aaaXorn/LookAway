@@ -30,14 +30,12 @@ public class JumpButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 	//quando o jogador toca no botão
     public void OnPointerDown(PointerEventData eventData)
 	{
-		PlayerC.jumpbtn = true;
-		PlayerC.jumpbtndown = true;
+		PlayerC.JumpDown();
 	}
 	
 	//quando o jogador solta o botão
 	public void OnPointerUp(PointerEventData eventData)
     {
-		PlayerC.jumpbtn = false;
-		PlayerC.jumptime = 0;
+		PlayerC.JumpUp();
 	}
 }
