@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TerrainSettings : MonoBehaviour
 {
+	//referência global do código do terreno
+	public static TerrainSettings Instance {get; set;}
+	
 	//referência do terreno
 	private Terrain terrain;
 	
@@ -18,18 +21,17 @@ public class TerrainSettings : MonoBehaviour
 	[SerializeField]
 	private bool[] bakeLP_tree;
 	
-    void Start()
-    {
-		//config qualidade gráfica
-		if(PlayerPrefs.HasKey("GameQuality"))
-		{
-			int qual = PlayerPrefs.GetInt("GameQuality");
-			
-			QualitySettings.SetQualityLevel(qual);
-			
-			//config qualidade terreno
-			terrain_quality = qual;
-		}
+	private void Awake()
+	{
+		//setta a referência global desse script
+		if(Instance == null) Instance = this;
+		//garante que só tem um dele na cena
+		else Destroy(gameObject);
+	}
+	
+	public void SetTerrain(int terrain_quality)
+	{
+		print(terrain_quality);
 		
 		//pega o componente de terreno
         terrain = GetComponent<Terrain>();

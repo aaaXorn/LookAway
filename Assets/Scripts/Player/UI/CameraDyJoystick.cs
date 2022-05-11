@@ -6,6 +6,9 @@ using Cinemachine;
 
 public class CameraDyJoystick : Joystick
 {
+	//referência global do código da rotação da camera
+	public static CameraDyJoystick Instance {get; set;}
+	
     //protected Vector2 input = Vector2.zero;
 	
 	public float MoveThreshold { get { return moveThreshold; } set { moveThreshold = Mathf.Abs(value); } }
@@ -19,9 +22,16 @@ public class CameraDyJoystick : Joystick
 	//referência do cinemachine
 	private CinemachineFreeLook cine;
 
-	[SerializeField]
-	private float sensivity;
-
+	public float sensivity;
+	
+	private void Awake()
+	{
+		//setta a referência global desse script
+		if(Instance == null) Instance = this;
+		//garante que só tem um dele na cena
+		else Destroy(gameObject);
+	}
+	
     protected override void Start()
     {
         MoveThreshold = moveThreshold;
