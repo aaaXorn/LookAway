@@ -69,7 +69,7 @@ public class SaveSystem
 			{
 				CameraDyJoystick CDJ = CameraDyJoystick.Instance;
 				
-				// 
+				//carrega o multiplicador de sensibilidade da camera
 				CDJ.sensivity = (float)
 							    (PlayerPrefs.GetInt("CameraSensivity"))/100;
 			}
