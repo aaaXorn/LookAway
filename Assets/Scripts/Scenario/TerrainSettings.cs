@@ -18,8 +18,6 @@ public class TerrainSettings : MonoBehaviour
 	[SerializeField]
 	private float[] pixel_error, baseMap_dist, detail_dist, detail_dens,
 					tree_dist, billb_start, fade_length, max_mesh_tree;
-	[SerializeField]
-	private bool[] bakeLP_tree;
 	
 	private void Awake()
 	{
@@ -39,7 +37,6 @@ public class TerrainSettings : MonoBehaviour
 		//muda as configurações
 		terrain.heightmapPixelError = pixel_error[terrain_quality];
 		terrain.basemapDistance = baseMap_dist[terrain_quality];
-		terrain.bakeLightProbesForTrees = bakeLP_tree[terrain_quality];
 		terrain.detailObjectDistance = detail_dist[terrain_quality];
 		terrain.detailObjectDensity = detail_dens[terrain_quality];
 		terrain.treeDistance = tree_dist[terrain_quality];
