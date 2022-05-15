@@ -12,6 +12,9 @@ OldPlayerPosition (Vector3): última posição do player na Scene Land
 
 public class SaveSystem
 {
+	//próxima scene
+	public static string NextScene;
+	
 	//salva as configs do player
 	public static void SaveConfig(int quality, int sensivity)
 	{

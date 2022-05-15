@@ -51,7 +51,9 @@ public class Menu : MonoBehaviour
     {
 		SaveSystem.SaveConfig(quality_level, cam_sensivity);
 		
-        SceneManager.LoadScene("Land");
+		SaveSystem.NextScene = "Land";
+		SceneManager.LoadScene("LoadScene");
+        //SceneManager.LoadScene("Land");
     }
 	
 	//usado pra abrir/fechar o menu de opções
