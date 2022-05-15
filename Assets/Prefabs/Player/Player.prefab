@@ -1251,6 +1251,8 @@ MonoBehaviour:
   block_f_total: 8
   roll_f_total: 6
   rollspeed: 10
+  hurt_f_total: 48
+  hurt_animations: 0
 --- !u!114 &5087033714714069245
 MonoBehaviour:
   m_ObjectHideFlags: 0

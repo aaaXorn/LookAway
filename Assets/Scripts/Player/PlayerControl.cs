@@ -123,17 +123,26 @@ public class PlayerControl : MonoBehaviour
 	#region defenses
 	[Header("Defenses")]
 	
+	//tempo de invul atual
+	private int invul_f;
+	
 	//tempo de invul block em frames
-	private int block_f;
+	[Tooltip("Frames in 24 FPS (FixedUpdate FPS)")]
 	[SerializeField]
 	private int block_f_total;
 	
 	//tempo de invul do roll em frames
-	private int roll_f;
 	[SerializeField]
 	private int roll_f_total;
 	[SerializeField]
 	private float rollspeed;
+	
+	//tempo de invul depois de tomar dano
+	[SerializeField]
+	private int hurt_f_total;
+	//número de animações de tomar dano
+	[SerializeField]
+	private int hurt_animations;
 	#endregion
 
 	void Awake()
@@ -232,12 +241,12 @@ public class PlayerControl : MonoBehaviour
 			
 			//tomando dano
 			case State.Hurt:
-				
+				StateHurt();
 				break;
 			
 			//morrendo
 			case State.Dead:
-				
+				StateDead();
 				break;
 			
 			default:
@@ -263,6 +272,17 @@ public class PlayerControl : MonoBehaviour
 			rollbtn = false;
 				anim.SetBool("Roll", false);
         }
+		
+		//== para só rodar uma vez
+		if(invul_f == 0)
+        {
+			//termina os invulframes
+			P_HP.invul = false;
+			
+			invul_f--;
+        }
+		else if(invul_f > 0)
+			invul_f--;
     }
 
 	#region states
@@ -402,33 +422,27 @@ public class PlayerControl : MonoBehaviour
 
 	private void StateBlock()
     {
-		//== para só rodar uma vez
-		if(block_f == 0)
-        {
-			//termina os invulframes
-			P_HP.invul = false;
-        }
-
-		block_f--;
+		
     }
 
     private void StateRoll()
     {
-		//== para só rodar uma vez
-		if (roll_f == 0)
-		{
-			//termina os invulframes
-			P_HP.invul = false;
-		}
-
-		roll_f--;
-
 		//movimento
 		Vector3 transf_f = transform.forward;
 		Vector3 roll_direction = new Vector3(transf_f.x, 0, transf_f.z);
 
 		rdb.velocity = roll_direction * rollspeed + new Vector3(0, rdb.velocity.y, 0);
 		print(rdb.velocity);
+	}
+	
+	private void StateHurt()
+	{
+		
+	}
+	
+	private void StateDead()
+	{
+		
 	}
     #endregion
 
@@ -607,27 +621,57 @@ public class PlayerControl : MonoBehaviour
 	{
 		currentState = State.Attack;
 	}
+	
 	//muda pro state de block
 	private void AnimBlock()
     {
 		currentState = State.Block;
-
-		//reseta os frames do block
-		block_f = block_f_total;
-		//inicia os invul frames
-		P_HP.invul = true;
+		
+		//if equipment tier < 3
+		//block 50%/75%
+		//else
+		//pra não dar overwrite e diminuir os invul frames
+		if(invul_f < block_f_total)
+		{
+			//reseta os frames de invul
+			invul_f = block_f_total;
+			//inicia os invul frames
+			P_HP.invul = true;
+		}
 	}
 	//muda pro state de roll
 	private void AnimRoll()
     {
 		currentState = State.Roll;
-
-		//reseta os frames do roll
-		roll_f = roll_f_total;
-		//inicia os invul frames
-		P_HP.invul = true;
+		
+		//pra não dar overwrite e diminuir os invul frames
+		if(invul_f < roll_f_total)
+		{
+			//reseta os frames de invul
+			invul_f = roll_f_total;
+			//inicia os invul frames
+			P_HP.invul = true;
+		}
     }
-
+	
+	//dano
+	public void TookDamage()
+	{
+		currentState = State.Hurt;
+		
+		//pra não dar overwrite e diminuir os invul frames
+		if(invul_f < hurt_f_total)
+		{
+			//reseta os frames de invul
+			invul_f = hurt_f_total;
+			//inicia os invul frames
+			P_HP.invul = true;
+		}
+		
+		//random range hurt_animations anim.SetInt
+		anim.SetTrigger("Hurt");
+	}
+	
 	//acontece quando o jogador cai no chão
 	private void AnimLand()
     {
