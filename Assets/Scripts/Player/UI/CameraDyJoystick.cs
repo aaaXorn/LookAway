@@ -22,6 +22,7 @@ public class CameraDyJoystick : Joystick
 	//referência do cinemachine
 	private CinemachineFreeLook cine;
 
+	//sensividade da camera
 	public float sensivity;
 	
 	private void Awake()

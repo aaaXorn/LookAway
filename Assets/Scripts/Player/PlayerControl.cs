@@ -145,7 +145,7 @@ public class PlayerControl : MonoBehaviour
 	private int hurt_animations;
 	#endregion
 
-	void Awake()
+	private void Awake()
 	{
 		//setta a referência global desse script
 		if(Instance == null) Instance = this;
@@ -154,7 +154,7 @@ public class PlayerControl : MonoBehaviour
 	}
 	
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
 		//pega o script de movimento com joystick
 		if(MovementJoystick.Instance != null) MoveJ = MovementJoystick.Instance;
