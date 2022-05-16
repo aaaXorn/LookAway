@@ -28,7 +28,7 @@ public class EnemyLockOn : MonoBehaviour
 	private Vector3 selectorDirection;
 	private bool parentChangeInitializationPerformed;
 
-	public bool camShoot;
+	public bool canShoot;
 	private bool temp;
 
 	private TargetLockCamera cam;
@@ -44,7 +44,42 @@ public class EnemyLockOn : MonoBehaviour
 
     private void Update()
     {
+		//if(InputManager.CameraButtonHeld())
+		if (InputManager.CameraButton()) temp = !temp;
+		if(temp)
+        {
+			RunEnemySearchSphereCollider();
+        }
+		else
+        {
+			enemiesToLock.Clear();
+			cam.targetLockCam = false;
+        }
 
+		if(enemyCount == 0 || priorityEnemy == null)
+        {
+			InitializeTargetGroup();
+			cam.targetLockCam = false;
+			foundPriorityEnemy = false;
+			closestEnemy = null;
+			selectedEnemy = null;
+			priorityEnemy = null;
+			InitializeConeParent();
+			ResetTargetingCone();
+			canShoot = false;
+        }
+
+		//Main Chunk
+		if(enemyCount != 0)
+        {
+			cam.targetLockCam = true;
+			FindClosestEnemy();
+			if(closestEnemy != null && foundPriorityEnemy == false) SetPriorityEnemy(closestEnemy);
+			SwitchTarget();
+			if(selectedEnemy != null) SetPriorityEnemy(selectedEnemy);
+			if(priorityEnemy != null) BuildTargetGroup();
+			canShoot = true;
+        }
     }
 
     private void RunEnemySearchSphereCollider()
