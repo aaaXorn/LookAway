@@ -211,7 +211,6 @@ public class PlayerControl : MonoBehaviour
 		//movimento com o joystick
 		//.normalized garante que o jogador sempre ande na mesma velocidade
 		movaxis = new Vector3(MoveJ.Horizontal, 0, MoveJ.Vertical);
-
     }
 
 	//state machine
@@ -311,9 +310,9 @@ public class PlayerControl : MonoBehaviour
 			Vector3 movfly = new Vector3(Vector3.forward.x * flyvelocity, 0, Vector3.forward.z * flyvelocity);
 
 			float angz = Vector3.Dot(transform.right, Vector3.up);
-			float angx = Vector3.Dot(transform.forward, Vector3.up)*50;
+			float angx = Vector3.Dot(transform.forward, Vector3.up);//*50;
 			movfly = new Vector3(movaxis.z + angx * 2, -angz, -movaxis.x - angz);
-
+			
 			transform.Rotate(movfly);
 
 			wing.transform.localRotation = Quaternion.Euler(0, 0, angz * 50);
@@ -334,30 +333,30 @@ public class PlayerControl : MonoBehaviour
 			//rdb.AddForce(relativeDirectionWOy * 10000 * movespeed/(rdb.velocity.magnitude+1));
 			Quaternion rottogo = Quaternion.LookRotation(relativeDirectionWOy * 2 + transform.forward);
 			transform.rotation = Quaternion.Lerp(transform.rotation, rottogo, Time.fixedDeltaTime * 50);
-        }
-		#endregion
 
-		#region inputs
-        //se o botão de ataque foi pressionado
-        //modificação da State Machine por animation event pro buffer funcionar
-        //funções usadas são AnimAttack, AnimBlock e AnimRoll
-        if (attackbtn)
-        {
-            anim.SetBool("Attack", true);
-        }
-        else if (blockbtn)
-        {
-            anim.SetBool("Block", true);
-        }
-        else if (rollbtn)
-        {
-			anim.SetBool("Roll", true);
-        }
+			#region inputs
+			//se o botão de ataque foi pressionado
+			//modificação da State Machine por animation event pro buffer funcionar
+			//funções usadas são AnimAttack, AnimBlock e AnimRoll
+			if (attackbtn)
+			{
+				anim.SetBool("Attack", true);
+			}
+			else if (blockbtn)
+			{
+				anim.SetBool("Block", true);
+			}
+			else if (rollbtn)
+			{
+				anim.SetBool("Roll", true);
+			}
+			#endregion
+		}
 		#endregion
 
 		#region jump
-        //checa se da pra pular
-        RaycastHit hit;
+		//checa se da pra pular
+		RaycastHit hit;
 		if (Physics.Raycast(transform.position - (transform.forward * 0.1f) + transform.up * 0.3f, Vector3.down, out hit, 1000))
 		{
 			anim.SetFloat("JumpHeight", hit.distance);

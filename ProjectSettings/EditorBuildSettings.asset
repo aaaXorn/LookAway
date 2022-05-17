@@ -41,4 +41,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Cidade1_Additive/Cidade1_5.unity
     guid: 3c70b59f16957e74c87ff42b00fe8561
+  - enabled: 1
+    path: Assets/Scenes/CidadeGelo_Additive/CG_1.unity
+    guid: 8f3cb28be601a164fa5db9eda6dddaae
+  - enabled: 1
+    path: Assets/Scenes/CidadeGelo_Additive/CG_2.unity
+    guid: 91170233402d90e4ca25daec1cfeee56
+  - enabled: 1
+    path: Assets/Scenes/CidadeGelo_Additive/CG_3.unity
+    guid: d534196f94d125846a545068ebcb4ca5
+  - enabled: 1
+    path: Assets/Scenes/CidadeGelo_Additive/CG_4.unity
+    guid: beca70461616a4643a4950c31da36bcd
   m_configObjects: {}

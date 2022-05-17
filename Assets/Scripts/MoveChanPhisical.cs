@@ -50,7 +50,7 @@ public class MoveChanPhisical : MonoBehaviour
             jumptime = 0;
         }
         movaxis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
+        print(movaxis);
     }
 
     void FixedUpdate()
