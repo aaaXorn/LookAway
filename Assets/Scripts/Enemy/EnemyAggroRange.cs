@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class EnemyAggroRange : MonoBehaviour
 {
-    [SerializeField]
 	private EnemyControl EnemyC;
 	
-	private Transform EnemyTransf;
+	[SerializeField]
+	private Transform[] EnemyTransf;
 	
 	private PlayerControl PlayerC;
 	private CamLock CL;
@@ -21,22 +21,20 @@ public class EnemyAggroRange : MonoBehaviour
 		//pega o script de camera lock
 		if(CamLock.Instance != null) CL = CamLock.Instance;
 		else print("CameraLock Instance not found.");
-		
-		EnemyTransf = EnemyC.transform;
     }
 	
 	private void OnTriggerEnter(Collider other)
     {
 		if (other.gameObject.CompareTag("Player"))
 		{
-			CL.AddLockedTarget(EnemyTransf);
+			CL.LockOn(EnemyTransf);
 		}
 	}
 	private void OnTriggerExit(Collider other)
 	{
 		if (other.gameObject.CompareTag("Player"))
 		{
-			CL.NullLockedTarget();
+			CL.LockOff();
 		}
 	}
 }

@@ -11,9 +11,11 @@ public class CamLock : MonoBehaviour
     //se a câmera está lockada num alvo
 	public bool cam_lock;
 	
-	//alvo da camera
-	private Transform cam_target;
-	
+	//alvos da camera
+	private List<Transform> cam_target = new List<Transform>();
+	//alvo atual da camera
+	private int curr_target;
+
 	[SerializeField]
 	//referência do cinemachine
 	private CinemachineFreeLook cine_FL;
@@ -28,50 +30,55 @@ public class CamLock : MonoBehaviour
 		else Destroy(gameObject);
 	}
 	
+	//muda a câmera pro próximo alvo
+	public void NextTarget()
+    {
+		if (cam_lock && cam_target.Count > 1)
+		{
+			curr_target++;
+			if (curr_target >= cam_target.Count) curr_target = 0;
+			
+			cine_T.LookAt = cam_target[curr_target];
+		}
+	}
+
 	//ativa o lock
-	public void LockOn()
+	public void LockOn(Transform[] enemies)
 	{
-		if(cam_target != null && !cam_lock)
+		if(!cam_lock && cam_target.Count <= 0)
 		{
 			cam_lock = true;
 			
 			cine_FL.gameObject.SetActive(false);
 			cine_T.gameObject.SetActive(true);
 			
+			foreach (Transform transf in enemies)
+			{
+				cam_target.Add(transf);
+			}
+
+			curr_target = 0;
 			//define para onde o cinemachine de lock vai olhar
-			cine_T.LookAt = cam_target;
+			cine_T.LookAt = cam_target[0];
 		}
 	}
 	//desativa o lock
 	public void LockOff()
 	{
-		if(cam_lock)
+		if(cam_lock && cam_target.Count > 0)
 		{
 			cam_lock = false;
-			
+
+			cam_target.Clear();
+
 			cine_FL.gameObject.SetActive(true);
 			cine_T.gameObject.SetActive(false);
-		}
-	}
-	
-	//muda o alvo do lock
-	public void AddLockedTarget(Transform enemy)
-	{
-		if(cam_target == null)
-		{
-			cam_target = enemy;
-		}
-		
-		LockOn();
-	}
-	//tira o alvo do lock
-	public void NullLockedTarget()
-	{
-		if(cam_target != null)
-		{
-			cam_target = null;
-		}
-		
-		LockOff();
-	}
+        }
+    }
+
+	//remove o alvo do array
+    public void RemoveTarget(Transform transf)
+    {
+		cam_target.Remove(transf);
+    }
 }
