@@ -168,7 +168,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 22.0505
+  m_Radius: 40
   m_Center: {x: -3.0283546, y: 0, z: 1.9084015}
 --- !u!114 &8886609
 MonoBehaviour:
@@ -697,8 +697,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 15.551748
-  m_Height: 66.35564
+  m_Radius: 30
+  m_Height: 66
   m_Direction: 2
   m_Center: {x: -12.173479, y: 2.0270905, z: -0.81069183}
 --- !u!1001 &641590778
@@ -867,8 +867,8 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 16.632807
-  m_Height: 69.57535
+  m_Radius: 30
+  m_Height: 69
   m_Direction: 2
   m_Center: {x: -13.036905, y: 2.027092, z: -2.4810104}
 --- !u!1001 &707205822
@@ -1333,7 +1333,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 21.939844
+  m_Radius: 40
   m_Center: {x: -0.88931656, y: 0, z: 1.7398491}
 --- !u!4 &1195888644 stripped
 Transform:
@@ -3270,7 +3270,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 29.869682
+  m_Radius: 40
   m_Center: {x: 9.218864, y: 0, z: 0.45254326}
 --- !u!1 &2021995300
 GameObject:
