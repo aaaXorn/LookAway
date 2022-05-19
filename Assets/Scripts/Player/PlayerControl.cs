@@ -407,7 +407,25 @@ public class PlayerControl : MonoBehaviour
 				anim.SetBool("Attack", true);
 			}
 
-			//pulo
+			//cancels de movimento/defesa
+			else if(rollbtn)
+			{
+				#region rotação roll
+				//define a direção relativa que o player vai andar
+				//.normalized pra ficar sempre na vel máxima
+				Vector3 relativedirection = currentCamera.transform.TransformVector(movaxis.normalized);
+				relativedirection = new Vector3(relativedirection.x, jumptime, relativedirection.z);
+				//mesma coisa só que sem a coordenada Y
+				Vector3 relativeDirectionWOy = new Vector3(relativedirection.x, 0, relativedirection.z);
+				
+				Quaternion rottogo = Quaternion.LookRotation(relativeDirectionWOy * 2 + transform.forward);
+				transform.rotation = rottogo;
+				#endregion
+				
+				anim.SetBool("Roll", true);
+			}
+			else if (blockbtn)
+				anim.SetBool("Block", true);
 			else if (jumpbtn)
 			{
 				//deixa o jogador pular
@@ -431,7 +449,6 @@ public class PlayerControl : MonoBehaviour
 		Vector3 roll_direction = new Vector3(transf_f.x, 0, transf_f.z);
 
 		rdb.velocity = roll_direction * rollspeed + new Vector3(0, rdb.velocity.y, 0);
-		print(rdb.velocity);
 	}
 	
 	private void StateHurt()
@@ -613,6 +630,8 @@ public class PlayerControl : MonoBehaviour
 
 		attacking = false;
 		atk_cancel = false;
+		
+		anim.SetTrigger("Free");
 	}
 	
 	//muda pro state de ataque
@@ -726,7 +745,7 @@ public class PlayerControl : MonoBehaviour
 	#if UNITY_EDITOR
 	private void OnDrawGizmos()
 	{
-		if(atk_origin[curr_hit] != null)
+		if(atk_origin[curr_hit] != null && currentState == State.Attack)
 		{
 			//desenha a hitbox no editor
 			//RIP meu PC
