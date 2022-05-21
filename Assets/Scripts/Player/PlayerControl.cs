@@ -216,6 +216,7 @@ public class PlayerControl : MonoBehaviour
 	//state machine
     void FixedUpdate()
     {
+		//state machine
 		switch(currentState)
 		{
 			//movimentação e pulo
@@ -266,8 +267,8 @@ public class PlayerControl : MonoBehaviour
 			
 			attackbtn = false;
 				anim.SetBool("Attack", false);
-			blockbtn = false;
-				anim.SetBool("Block", false);
+			/*blockbtn = false;
+				anim.SetBool("Block", false);*/
 			rollbtn = false;
 				anim.SetBool("Roll", false);
         }
@@ -439,7 +440,13 @@ public class PlayerControl : MonoBehaviour
 
 	private void StateBlock()
     {
-		
+		//sai do estado de block
+		if(!blockbtn)
+		{
+			anim.SetBool("Block", false);
+			
+			currentState = State.Free;
+		}
     }
 
     private void StateRoll()
@@ -645,16 +652,21 @@ public class PlayerControl : MonoBehaviour
     {
 		currentState = State.Block;
 		
-		//if equipment tier < 3
-		//block 50%/75%
-		//else
-		//pra não dar overwrite e diminuir os invul frames
-		if(invul_f < block_f_total)
+		P_HP.blocking = true;
+		//diminui % do dano
+		if(PlayerEquipment.shield_lvl < 3)
+			P_HP.block_mult = (PlayerEquipment.shield_lvl < 2) ? 0.5f : 0.25f;
+		//invul frames
+		else
 		{
-			//reseta os frames de invul
-			invul_f = block_f_total;
-			//inicia os invul frames
-			P_HP.invul = true;
+			//pra não dar overwrite e diminuir os invul frames
+			if(invul_f < block_f_total)
+			{
+				//reseta os frames de invul
+				invul_f = block_f_total;
+				//inicia os invul frames
+				P_HP.invul = true;
+			}
 		}
 	}
 	//muda pro state de roll
@@ -688,6 +700,19 @@ public class PlayerControl : MonoBehaviour
 		
 		//random range hurt_animations anim.SetInt
 		anim.SetTrigger("Hurt");
+	}
+	public void HitBlocked()
+	{
+		//pra não dar overwrite e diminuir os invul frames
+		if(invul_f < block_f_total)
+		{
+			//reseta os frames de invul
+			invul_f = hurt_f_total;
+			//inicia os invul frames
+			P_HP.invul = true;
+		}
+		
+		//sound effect
 	}
 	
 	//acontece quando o jogador cai no chão
@@ -726,10 +751,15 @@ public class PlayerControl : MonoBehaviour
 		blockbtn = true;
 		
 		//buffer
-		buffer_f = buffer_f_total;
+		//buffer_f = buffer_f_total;
 		attackbtn = false;
 		rollbtn = false;
 	}
+		//quando solta o block
+		public void BlockUp()
+		{
+			blockbtn = false;
+		}
 	//botão de roll pressionado
 	public void RollDown()
 	{

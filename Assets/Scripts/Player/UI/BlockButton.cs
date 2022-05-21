@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class BlockButton : MonoBehaviour, IPointerDownHandler
+public class BlockButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
 	//referência global do código do botão
 	public static BlockButton Instance {get; set;}
@@ -30,5 +30,10 @@ public class BlockButton : MonoBehaviour, IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
 	{
 		PlayerC.BlockDown();
+	}
+	//quando o jogador solta o botão
+    public void OnPointerUp(PointerEventData eventData)
+	{
+		PlayerC.BlockUp();
 	}
 }

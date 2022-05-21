@@ -17,7 +17,8 @@ public class PlayerHealth : MonoBehaviour
 	public int hit_id;
 
 	//se o jogador tem invincibility frames
-	public bool invul = false;
+	public bool invul = false, blocking = false;
+	public float block_mult = 1;
 	
 	private void Awake()
 	{
@@ -40,6 +41,8 @@ public class PlayerHealth : MonoBehaviour
 	{
 		if (!invul)
 		{
+			if(blocking)
+				dmg = (int)Mathf.Round(dmg * block_mult);
 			hp -= dmg;
 
 			if (hp > max_hp) hp = max_hp;

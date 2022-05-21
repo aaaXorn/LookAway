@@ -11,6 +11,7 @@ public class EnemyAggroRange : MonoBehaviour
 	
 	private PlayerControl PlayerC;
 	private CamLock CL;
+	private LockButton LB;
 	
     private void Start()
     {
@@ -21,20 +22,30 @@ public class EnemyAggroRange : MonoBehaviour
 		//pega o script de camera lock
 		if(CamLock.Instance != null) CL = CamLock.Instance;
 		else print("CameraLock Instance not found.");
+		
+		//pega o script do botão de camera lock
+		if(LockButton.Instance != null) LB = LockButton.Instance;
+		else print("LockButton Instance not found.");
     }
 	
 	private void OnTriggerEnter(Collider other)
     {
 		if (other.gameObject.CompareTag("Player"))
 		{
-			CL.LockOn(EnemyTransf);
+			//adiciona os alvos pro camera lock
+			CL.AddTargets(EnemyTransf);
+			//muda a cor do botão
+			LB.SetColor(true);
 		}
 	}
 	private void OnTriggerExit(Collider other)
 	{
 		if (other.gameObject.CompareTag("Player"))
 		{
-			CL.LockOff();
+			//tira os alvos do camera lock
+			CL.ResetLock();
+			//muda a cor do botão
+			LB.SetColor(false);
 		}
 	}
 }
