@@ -11,10 +11,10 @@ public class CameraDyJoystick : Joystick
 	
     //protected Vector2 input = Vector2.zero;
 	
-	public float MoveThreshold { get { return moveThreshold; } set { moveThreshold = Mathf.Abs(value); } }
+	//public float MoveThreshold { get { return moveThreshold; } set { moveThreshold = Mathf.Abs(value); } }
 	
-    [SerializeField]
-	private float moveThreshold = 1;
+    //[SerializeField]
+	//private float moveThreshold = 1;
 	
 	//referência do rect transform
 	private RectTransform rect;
@@ -24,6 +24,7 @@ public class CameraDyJoystick : Joystick
 
 	//sensividade da camera
 	public float sensivity;
+	private float sens_mod = 3f;
 	
 	private void Awake()
 	{
@@ -35,7 +36,7 @@ public class CameraDyJoystick : Joystick
 	
     protected override void Start()
     {
-        MoveThreshold = moveThreshold;
+        //MoveThreshold = moveThreshold;
         base.Start();
         background.gameObject.SetActive(false);
 		
@@ -50,15 +51,19 @@ public class CameraDyJoystick : Joystick
 		
 		//encontra e pega o componente do cinemachine
 		cine = GameObject.FindWithTag("Cinemachine").GetComponent<CinemachineFreeLook>();
-    }
+    
+		#if UNITY_ENGINE
+		sens_mod = 1f;
+		#endif
+	}
 	
 	private void Update()
 	{
 		//rotaciona a camera com base no input
 		if(Horizontal != 0 || Vertical != 0)
 		{
-			cine.m_XAxis.Value += Horizontal * 1.5f * sensivity;
-			cine.m_YAxis.Value += -Vertical / 30 * sensivity;
+			cine.m_XAxis.Value += Horizontal * 1.5f * sensivity * sens_mod;
+			cine.m_YAxis.Value += -Vertical / 30 * sensivity * sens_mod;
 		}
 	}
 	
@@ -75,7 +80,7 @@ public class CameraDyJoystick : Joystick
         base.OnPointerUp(eventData);
     }
 
-    protected override void HandleInput(float magnitude, Vector2 normalised, Vector2 radius, Camera cam)
+    /*protected override void HandleInput(float magnitude, Vector2 normalised, Vector2 radius, Camera cam)
     {
         if (magnitude > moveThreshold)
         {
@@ -83,5 +88,5 @@ public class CameraDyJoystick : Joystick
             background.anchoredPosition += difference;
         }
         base.HandleInput(magnitude, normalised, radius, cam);
-    }
+    }*/
 }
