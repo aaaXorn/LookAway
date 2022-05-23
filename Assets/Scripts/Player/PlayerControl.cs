@@ -11,6 +11,8 @@ public class PlayerControl : MonoBehaviour
 	#if UNITY_EDITOR
 	[SerializeField]
 	private bool debug_mode;
+	[SerializeField]
+	private int debug_fps;
 	#endif
 
 	//referência do joystick de movimento
@@ -78,6 +80,7 @@ public class PlayerControl : MonoBehaviour
 	private int atk_hits, curr_hit, prev_hit;
 	//dano, duração e tamanho do ataque
 	private int[] atk_dmg = new int[5], atk_duration = new int[5], atk_delay = new int[5];
+	private int atk_last_frame;
 	private float[] atk_size = new float[5], atk_length = new float[5];
 	//ponto de origem do ataque
 	private Transform[] atk_origin = new Transform[5];
@@ -91,8 +94,8 @@ public class PlayerControl : MonoBehaviour
 	//informações dos tipos de ataque
 	public class Attack
 	{
-		[Tooltip("Attack's name")]
-		public string id;
+		/*[Tooltip("Attack's name")]
+		public string id;*/
 		
 		[Tooltip("Attack properties")]
 		public string type;
@@ -109,6 +112,8 @@ public class PlayerControl : MonoBehaviour
 		public float[] length;
 		[Tooltip("Delay between the attacks")]
 		public int[] delay;
+		[Tooltip("When the attack ends if not canceled")]
+		public int last_frame;
 		[Tooltip("Attack point of origin")]
 		public Transform[] origin;
 	}
@@ -117,7 +122,9 @@ public class PlayerControl : MonoBehaviour
 	public List<Attack> AtkList;
 	//dicionário dos ataques
 	//usado para localizar os ataques por string
-	public Dictionary<string, Attack> AtkDictionary;
+	//public Dictionary<string, Attack> AtkDictionary;
+	//ataque atual
+	private int currAtk;
 	#endregion
 
 	#region defenses
@@ -131,9 +138,10 @@ public class PlayerControl : MonoBehaviour
 	[SerializeField]
 	private int block_f_total;
 	
-	//tempo de invul do roll em frames
+	//tempo de invul do roll em frames e tempo da animação
 	[SerializeField]
-	private int roll_f_total;
+	private int roll_f_total, roll_anim_f_total;
+	private int roll_anim_f;
 	[SerializeField]
 	private float rollspeed;
 	
@@ -165,17 +173,21 @@ public class PlayerControl : MonoBehaviour
 		
         currentCamera = Camera.main.gameObject;
 	   
-	   //cria o dicionário de ataques
-		AtkDictionary = new Dictionary<string, Attack>();
+	    //cria o dicionário de ataques
+		/*AtkDictionary = new Dictionary<string, Attack>();
 		foreach(Attack atk in AtkList)
 		{
 			AtkDictionary.Add(atk.id, atk);
-		}
+		}*/
 		
 		//aumenta certas ações por 1 frame para compensar pelo frame inicial
 		buffer_f_total++;
 		block_f_total++;
 		roll_f_total++;
+		
+		#if UNITY_EDITOR
+		if(debug_mode) Application.targetFrameRate = debug_fps;
+		#endif
     }
 
     private void Update()
@@ -271,11 +283,7 @@ public class PlayerControl : MonoBehaviour
 			buffer_f--;
 			
 			attackbtn = false;
-				anim.SetBool("Attack", false);
-			/*blockbtn = false;
-				anim.SetBool("Block", false);*/
 			rollbtn = false;
-				anim.SetBool("Roll", false);
         }
 		
 		//== para só rodar uma vez
@@ -339,38 +347,40 @@ public class PlayerControl : MonoBehaviour
 			//rdb.AddForce(relativeDirectionWOy * 10000 * movespeed/(rdb.velocity.magnitude+1));
 			Quaternion rottogo = Quaternion.LookRotation(relativeDirectionWOy * 2 + transform.forward);
 			transform.rotation = Quaternion.Lerp(transform.rotation, rottogo, Time.fixedDeltaTime * 50);
-
-			#region inputs
-			//se o botão de ataque foi pressionado
-			//modificação da State Machine por animation event pro buffer funcionar
-			//funções usadas são AnimAttack, AnimBlock e AnimRoll
-			if (attackbtn)
-			{
-				anim.SetBool("Attack", true);
-			}
-			else if (blockbtn)
-			{
-				anim.SetBool("Block", true);
-			}
-			else if (rollbtn)
-			{
-				anim.SetBool("Roll", true);
-			}
-			#endregion
 		}
 		#endregion
 
-		#region jump
+		#region jump and actions
 		//checa se da pra pular
 		RaycastHit hit;
 		if (Physics.Raycast(transform.position - (transform.forward * 0.1f) + transform.up * 0.3f, Vector3.down, out hit, 1000))
 		{
 			anim.SetFloat("JumpHeight", hit.distance);
 
-			//deixa o jogador começar o pulo / hold jump
-			if (hit.distance < 0.5f && jumpbtn)
+			//se está no chão/quase no chão
+			if (hit.distance < 0.5f)
 			{
-				jumptime = 0.25f;
+				#region actions
+				//se o botão foi pressionado
+				//ataque
+				if (attackbtn)
+				{
+					AnimAttack();
+				}
+				//block
+				else if (blockbtn)
+				{
+					AnimBlock();
+				}
+				//roll
+				else if (rollbtn)
+				{
+					AnimRoll();
+				}
+				//deixa o jogador começar o pulo / hold jump
+				else if(jumpbtn)
+					jumptime = 0.25f;
+				#endregion
 			}
 
 			//ativa as asas
@@ -408,9 +418,13 @@ public class PlayerControl : MonoBehaviour
 		if (atk_cancel)
 		{
 			//se o botão de ataque foi pressionado
-			if (attackbtn)
+			if (attackbtn && AtkList.Count > currAtk + 1)
 			{
-				anim.SetBool("Attack", true);
+				anim.SetTrigger("Attack");
+				
+				currAtk++;
+				
+				AnimHit(currAtk);
 				
 				atk_cancel = false;
 			}
@@ -430,13 +444,13 @@ public class PlayerControl : MonoBehaviour
 				transform.rotation = rottogo;
 				#endregion
 				
-				anim.SetBool("Roll", true);
+				AnimRoll();
 				
 				atk_cancel = false;
 			}
 			else if (blockbtn)
 			{
-				anim.SetBool("Block", true);
+				AnimBlock();
 				
 				atk_cancel = false;
 			}
@@ -451,6 +465,11 @@ public class PlayerControl : MonoBehaviour
 				atk_cancel = false;
 			}
 		}
+		
+		//encerra o ataque
+		if(atk_last_frame <= 0)
+			AnimFree();
+		else atk_last_frame--;
 	}
 
 	private void StateBlock()
@@ -464,12 +483,13 @@ public class PlayerControl : MonoBehaviour
 			currentState = State.Free;
 		}
 		
+		//cancela o block com um roll
 		if(rollbtn)
 		{
 			anim.SetBool("Block", false);
 			P_HP.blocking = false;
 			
-			anim.SetBool("Roll", true);
+			AnimRoll();
 		}
     }
 
@@ -480,6 +500,11 @@ public class PlayerControl : MonoBehaviour
 		Vector3 roll_direction = new Vector3(transf_f.x, 0, transf_f.z);
 
 		rdb.velocity = roll_direction * rollspeed + new Vector3(0, rdb.velocity.y, 0);
+		
+		//determina quando o roll acaba
+		if(roll_anim_f > 0)
+			roll_anim_f--;
+		else AnimFree();
 	}
 	
 	private void StateHurt()
@@ -568,10 +593,11 @@ public class PlayerControl : MonoBehaviour
 
 	#region attacks
 	//define o dano, duração, tamanho e tipo da hitbox por ID
-	private void AnimHit(string id)
+	private void AnimHit(int id)//(string id)
 	{
 		//propriedades do ataque
-		Attack atk = AtkDictionary[id];
+		//Attack atk = AtkDictionary[id];
+		Attack atk = AtkList[id];
 		
 		atk_type = atk.type;
 		atk_hits = atk.hit_count;
@@ -585,6 +611,7 @@ public class PlayerControl : MonoBehaviour
 			atk_size[i] = atk.size[i];
 			atk_length[i] = atk.length[i];
 			atk_delay[i] = atk.delay[i];
+			atk_last_frame = atk.last_frame;
 			atk_origin[i] = atk.origin[i];
 		}
 		
@@ -668,12 +695,20 @@ public class PlayerControl : MonoBehaviour
 	//muda pro state de ataque
 	private void AnimAttack()
 	{
+		anim.SetTrigger("Attack");
+		
+		currAtk = 0;
+		
+		AnimHit(0);
+		
 		currentState = State.Attack;
 	}
 	
 	//muda pro state de block
 	private void AnimBlock()
     {
+		anim.SetBool("Block", true);
+		
 		currentState = State.Block;
 		
 		P_HP.blocking = true;
@@ -696,7 +731,11 @@ public class PlayerControl : MonoBehaviour
 	//muda pro state de roll
 	private void AnimRoll()
     {
+		anim.SetBool("Roll", true);
+		
 		currentState = State.Roll;
+		
+		roll_anim_f = roll_anim_f_total;
 		
 		//pra não dar overwrite e diminuir os invul frames
 		if(invul_f < roll_f_total)
@@ -801,42 +840,45 @@ public class PlayerControl : MonoBehaviour
 	{
 		if(atk_origin[curr_hit] != null && currentState == State.Attack)
 		{
-			//desenha a hitbox no editor
-			//RIP meu PC
-			Vector3 pos = atk_origin[curr_hit].position;
-			Vector3 pos2 = pos + atk_origin[curr_hit].forward * atk_length[curr_hit];
-			
-			// Special case when both points are in the same position
-			if (atk_length[curr_hit] == 0)
+			if(atk_delay[curr_hit] <= 0 && atk_duration[curr_hit] >= 0)
 			{
-				// DrawWireSphere works only in gizmo methods
-				Gizmos.DrawWireSphere(pos, atk_size[curr_hit]);
-				return;
-			}
-			using (new UnityEditor.Handles.DrawingScope(Gizmos.color, Gizmos.matrix))
-			{
-				Quaternion p1Rotation = Quaternion.LookRotation(pos - pos2);
-				Quaternion p2Rotation = Quaternion.LookRotation(pos2 - pos);
-				// Check if capsule direction is collinear to Vector.up
-				float c = Vector3.Dot((pos - pos2).normalized, Vector3.up);
-				if (c == 1f || c == -1f)
+				//desenha a hitbox no editor
+				//RIP meu PC
+				Vector3 pos = atk_origin[curr_hit].position;
+				Vector3 pos2 = pos + atk_origin[curr_hit].forward * atk_length[curr_hit];
+				
+				// Special case when both points are in the same position
+				if (atk_length[curr_hit] == 0)
 				{
-					// Fix rotation
-					p2Rotation = Quaternion.Euler(p2Rotation.eulerAngles.x, p2Rotation.eulerAngles.y + 180f, p2Rotation.eulerAngles.z);
+					// DrawWireSphere works only in gizmo methods
+					Gizmos.DrawWireSphere(pos, atk_size[curr_hit]);
+					return;
 				}
-				// First side
-				UnityEditor.Handles.DrawWireArc(pos, p1Rotation * Vector3.left,  p1Rotation * Vector3.down, 180f, atk_size[curr_hit]);
-				UnityEditor.Handles.DrawWireArc(pos, p1Rotation * Vector3.up,  p1Rotation * Vector3.left, 180f, atk_size[curr_hit]);
-				UnityEditor.Handles.DrawWireDisc(pos, (pos2 - pos).normalized, atk_size[curr_hit]);
-				// Second side
-				UnityEditor.Handles.DrawWireArc(pos2, p2Rotation * Vector3.left,  p2Rotation * Vector3.down, 180f, atk_size[curr_hit]);
-				UnityEditor.Handles.DrawWireArc(pos2, p2Rotation * Vector3.up,  p2Rotation * Vector3.left, 180f, atk_size[curr_hit]);
-				UnityEditor.Handles.DrawWireDisc(pos2, (pos - pos2).normalized, atk_size[curr_hit]);
-				// Lines
-				UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.down * atk_size[curr_hit], pos2 + p2Rotation * Vector3.down * atk_size[curr_hit]);
-				UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.left * atk_size[curr_hit], pos2 + p2Rotation * Vector3.right * atk_size[curr_hit]);
-				UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.up * atk_size[curr_hit], pos2 + p2Rotation * Vector3.up * atk_size[curr_hit]);
-				UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.right * atk_size[curr_hit], pos2 + p2Rotation * Vector3.left * atk_size[curr_hit]);
+				using (new UnityEditor.Handles.DrawingScope(Gizmos.color, Gizmos.matrix))
+				{
+					Quaternion p1Rotation = Quaternion.LookRotation(pos - pos2);
+					Quaternion p2Rotation = Quaternion.LookRotation(pos2 - pos);
+					// Check if capsule direction is collinear to Vector.up
+					float c = Vector3.Dot((pos - pos2).normalized, Vector3.up);
+					if (c == 1f || c == -1f)
+					{
+						// Fix rotation
+						p2Rotation = Quaternion.Euler(p2Rotation.eulerAngles.x, p2Rotation.eulerAngles.y + 180f, p2Rotation.eulerAngles.z);
+					}
+					// First side
+					UnityEditor.Handles.DrawWireArc(pos, p1Rotation * Vector3.left,  p1Rotation * Vector3.down, 180f, atk_size[curr_hit]);
+					UnityEditor.Handles.DrawWireArc(pos, p1Rotation * Vector3.up,  p1Rotation * Vector3.left, 180f, atk_size[curr_hit]);
+					UnityEditor.Handles.DrawWireDisc(pos, (pos2 - pos).normalized, atk_size[curr_hit]);
+					// Second side
+					UnityEditor.Handles.DrawWireArc(pos2, p2Rotation * Vector3.left,  p2Rotation * Vector3.down, 180f, atk_size[curr_hit]);
+					UnityEditor.Handles.DrawWireArc(pos2, p2Rotation * Vector3.up,  p2Rotation * Vector3.left, 180f, atk_size[curr_hit]);
+					UnityEditor.Handles.DrawWireDisc(pos2, (pos - pos2).normalized, atk_size[curr_hit]);
+					// Lines
+					UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.down * atk_size[curr_hit], pos2 + p2Rotation * Vector3.down * atk_size[curr_hit]);
+					UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.left * atk_size[curr_hit], pos2 + p2Rotation * Vector3.right * atk_size[curr_hit]);
+					UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.up * atk_size[curr_hit], pos2 + p2Rotation * Vector3.up * atk_size[curr_hit]);
+					UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.right * atk_size[curr_hit], pos2 + p2Rotation * Vector3.left * atk_size[curr_hit]);
+				}
 			}
 		}
 	}
