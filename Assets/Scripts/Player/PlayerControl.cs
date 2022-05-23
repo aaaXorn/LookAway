@@ -202,6 +202,11 @@ public class PlayerControl : MonoBehaviour
 		{
 			RollDown();
 		}
+		
+		if(Input.GetButtonUp("Fire2"))
+		{
+			BlockUp();
+		}
 		//movaxis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 		#endif
 
@@ -406,6 +411,8 @@ public class PlayerControl : MonoBehaviour
 			if (attackbtn)
 			{
 				anim.SetBool("Attack", true);
+				
+				atk_cancel = false;
 			}
 
 			//cancels de movimento/defesa
@@ -424,9 +431,15 @@ public class PlayerControl : MonoBehaviour
 				#endregion
 				
 				anim.SetBool("Roll", true);
+				
+				atk_cancel = false;
 			}
 			else if (blockbtn)
+			{
 				anim.SetBool("Block", true);
+				
+				atk_cancel = false;
+			}
 			else if (jumpbtn)
 			{
 				//deixa o jogador pular
@@ -434,6 +447,8 @@ public class PlayerControl : MonoBehaviour
 
 				//volta pro estado normal
 				currentState = State.Free;
+				
+				atk_cancel = false;
 			}
 		}
 	}
@@ -444,8 +459,17 @@ public class PlayerControl : MonoBehaviour
 		if(!blockbtn)
 		{
 			anim.SetBool("Block", false);
+			P_HP.blocking = false;
 			
 			currentState = State.Free;
+		}
+		
+		if(rollbtn)
+		{
+			anim.SetBool("Block", false);
+			P_HP.blocking = false;
+			
+			anim.SetBool("Roll", true);
 		}
     }
 

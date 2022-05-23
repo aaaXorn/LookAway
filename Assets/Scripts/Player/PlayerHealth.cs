@@ -53,8 +53,9 @@ public class PlayerHealth : MonoBehaviour
 				return;
 			}
 			
-			//faz os efeitos de invul frame e animação
-			PlayerC.TookDamage();
+			if(!blocking)
+				//faz os efeitos de invul frame e animação
+				PlayerC.TookDamage();
 		}
 	}
 }
