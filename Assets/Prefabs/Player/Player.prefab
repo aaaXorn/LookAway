@@ -85,7 +85,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 566885343, guid: 40daa8e1b273a644f81288fa519caf50, type: 3}
       propertyPath: m_Radius
-      value: 0.23
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 133387616971583723, guid: 40daa8e1b273a644f81288fa519caf50,
         type: 3}
@@ -1170,19 +1170,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3018380866440911045}
   m_PrefabAsset: {fileID: 0}
---- !u!135 &1068687339
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6035953435348010785}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.29
-  m_Center: {x: 0, y: 1.03, z: 0.07}
 --- !u!114 &1068687340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1212,51 +1199,39 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   AtkList:
-  - id: UL1
-    type: 
-    hit_count: 1
-    dmg: 01000000
-    duration: 02000000
-    size:
-    - 0.3
-    length:
-    - 0
-    delay: 00000000
-    origin:
-    - {fileID: 377710751}
-  - id: UR1
-    type: 
-    hit_count: 1
-    dmg: 01000000
-    duration: 02000000
-    size:
-    - 0.3
-    length:
-    - 0
-    delay: 00000000
-    origin:
-    - {fileID: 1082022050}
-  - id: UL2
-    type: 
-    hit_count: 1
-    dmg: 01000000
-    duration: 02000000
-    size:
-    - 0.3
-    length:
-    - 0
-    delay: 00000000
-    origin:
-    - {fileID: 377710751}
   - id: Atk3
     type: 
     hit_count: 1
     dmg: 05000000
-    duration: 02000000
+    duration: 03000000
     size:
-    - 0.3
+    - 0.5
     length:
-    - 0
+    - 1
+    delay: 00000000
+    origin:
+    - {fileID: 1082022050}
+  - id: Atk1
+    type: 
+    hit_count: 1
+    dmg: 07000000
+    duration: 03000000
+    size:
+    - 0.5
+    length:
+    - 1
+    delay: 00000000
+    origin:
+    - {fileID: 1082022050}
+  - id: Atk4
+    type: 
+    hit_count: 1
+    dmg: 09000000
+    duration: 03000000
+    size:
+    - 0.5
+    length:
+    - 1
     delay: 00000000
     origin:
     - {fileID: 1082022050}
@@ -1280,6 +1255,8 @@ MonoBehaviour:
   max_hp: 5
   hit_id: 0
   invul: 0
+  blocking: 0
+  block_mult: 1
 --- !u!1001 &3150248267744740626
 PrefabInstance:
   m_ObjectHideFlags: 0
