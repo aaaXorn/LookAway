@@ -9,7 +9,7 @@ public class PauseMenu : MonoBehaviour
     public static PauseMenu Instance { get; set; }
 
     //tempo fora do pause
-    private float base_timeScale;
+    private float base_timeScale = 1.2f;
 
     [SerializeField]
     private GameObject MenuObj;
@@ -20,8 +20,8 @@ public class PauseMenu : MonoBehaviour
         if (Instance == null) Instance = this;
         //garante que só tem um dele na cena
         else Destroy(gameObject);
-        
-        base_timeScale = Time.timeScale;
+
+        Time.timeScale = base_timeScale;
     }
 
     private void Start()

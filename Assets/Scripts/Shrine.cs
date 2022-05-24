@@ -7,7 +7,7 @@ public class Shrine : MonoBehaviour
 {
     public string ShrineName;
     // Start is called before the first frame update
-    void Start()
+    /*void Start()
     {
        
     }
@@ -16,13 +16,13 @@ public class Shrine : MonoBehaviour
     void Update()
     {
         
-    }
+    }*/
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            PlayerPrefsX.SetVector3("OldPlayerPosition", other.transform.position - other.transform.forward * 2);
+            SaveSystem.SaveGame();
             SceneManager.LoadScene(ShrineName);
         }
     }

@@ -7,7 +7,7 @@ public class ShrineOut : MonoBehaviour
 {
     
     // Start is called before the first frame update
-    void Start()
+    /*void Start()
     {
         
     }
@@ -16,12 +16,13 @@ public class ShrineOut : MonoBehaviour
     void Update()
     {
         
-    }
+    }*/
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
+            SaveSystem.SaveGame();
             SceneManager.LoadScene("Land");
         }
     }

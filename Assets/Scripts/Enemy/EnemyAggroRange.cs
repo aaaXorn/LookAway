@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyAggroRange : MonoBehaviour
 {
-	private EnemyControl EnemyC;
+	private EnemyControl[] EnemyC;
 	
 	[SerializeField]
 	private Transform[] EnemyTransf;
@@ -26,6 +26,10 @@ public class EnemyAggroRange : MonoBehaviour
 		//pega o script do botão de camera lock
 		if(LockButton.Instance != null) LB = LockButton.Instance;
 		else print("LockButton Instance not found.");
+
+		EnemyC = new EnemyControl[EnemyTransf.Length];
+		for (int i = 0; i < EnemyTransf.Length; i++)
+			EnemyC[i] = EnemyTransf[i].GetComponent<EnemyControl>();
     }
 	
 	private void OnTriggerEnter(Collider other)

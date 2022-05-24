@@ -27,10 +27,14 @@ public class DayTime : MonoBehaviour
         sunlight = GetComponent<Light>();
         DawnCall += Afternon;
         DuskCall += Morning;
+
+        float time = (Time.timeScale == 0) ? 0 : 1f / Time.timeScale;
+
+        InvokeRepeating("DayTimer", 0, time);
     }
     
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
         daySeconds += Time.deltaTime* daySpeed;
         radDay = daySeconds / (86400/2);
@@ -53,7 +57,8 @@ public class DayTime : MonoBehaviour
             day = false;
         }
 
-    }
+    }*/
+
     void Morning()
     {
         print("Good day");
@@ -61,5 +66,29 @@ public class DayTime : MonoBehaviour
     void Afternon()
     {
         print("Good night");
+    }
+
+    private void DayTimer()
+    {
+        daySeconds += 1f * daySpeed;//Time.deltaTime * daySpeed;
+        radDay = daySeconds / (86400 / 2);
+        transform.localRotation = Quaternion.Euler(radDay * (180 / Mathf.PI), 0, 0);
+
+        intensity = Mathf.Clamp01(Vector3.Dot(transform.forward, Vector3.down) + 0.3f);
+        sunlight.intensity = intensity + SunBoost;
+
+        RenderSettings.ambientLight = ambient.Evaluate(intensity);
+
+        RenderSettings.fogDensity = 0.001f * intensity;
+        if (intensity > 0.4f && !day)
+        {
+            DuskCall();
+            day = true;
+        }
+        if (intensity < 0.4f && day)
+        {
+            DawnCall();
+            day = false;
+        }
     }
 }

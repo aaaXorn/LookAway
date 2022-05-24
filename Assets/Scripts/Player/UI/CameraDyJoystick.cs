@@ -50,7 +50,7 @@ public class CameraDyJoystick : Joystick
 		cine = GameObject.FindWithTag("Cinemachine").GetComponent<CinemachineFreeLook>();
     
 		#if UNITY_ENGINE
-		sens_mod = 0.5f;
+		if(!PlayerControl.Instance.debug_mode) sens_mod = 0.5f;
 		#endif
 	}
 	

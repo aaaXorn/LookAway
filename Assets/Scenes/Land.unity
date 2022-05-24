@@ -7319,13 +7319,13 @@ Terrain:
   serializedVersion: 6
   m_TerrainData: {fileID: 15600000, guid: c641a123e23f40e48825b4291e493771, type: 2}
   m_TreeDistance: 600
-  m_TreeBillboardDistance: 200
+  m_TreeBillboardDistance: 100
   m_TreeCrossFadeLength: 36
-  m_TreeMaximumFullLODCount: 524
-  m_DetailObjectDistance: 64
-  m_DetailObjectDensity: 1
-  m_HeightmapPixelError: 8
-  m_SplatMapDistance: 64
+  m_TreeMaximumFullLODCount: 50
+  m_DetailObjectDistance: 16
+  m_DetailObjectDensity: 0.5
+  m_HeightmapPixelError: 48
+  m_SplatMapDistance: 32
   m_HeightmapMaximumLOD: 0
   m_ShadowCastingMode: 1
   m_DrawHeightmap: 1
@@ -7369,14 +7369,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrain_quality: 0
   pixel_error:
-  - 64
+  - 48
   - 32
   - 16
   - 8
   baseMap_dist:
-  - 16
-  - 24
   - 32
+  - 32
+  - 64
   - 64
   detail_dist:
   - 16
@@ -8117,7 +8117,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-242328
+  m_Name: pb_Mesh-5222
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9894,7 +9894,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-242284
+  m_Name: pb_Mesh-5178
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11180,7 +11180,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-242312
+  m_Name: pb_Mesh-5206
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12481,6 +12481,11 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1484336120}
+    - target: {fileID: 3337686432649976233, guid: 99d887aea4736dc49beed7e20eadbc60,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6128613827976723376, guid: 99d887aea4736dc49beed7e20eadbc60,
         type: 3}
       propertyPath: m_Radius

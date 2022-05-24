@@ -38,11 +38,10 @@ public class LoadAditiveScene : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
         if(asyncOperation != null)
         {
-          
            LoadIcon.instance.LoadIconRun(asyncOperation.progress+0.1f);
             if (asyncOperation.isDone&&LoadIcon.instance)
             {
@@ -50,6 +49,26 @@ public class LoadAditiveScene : MonoBehaviour
                 asyncOperation = null;
             }
         }
+    }*/
+    
+    private IEnumerator LoadAdd()
+    {
+        while (asyncOperation != null)
+        {
+            LoadIcon.instance.LoadIconRun(asyncOperation.progress + 0.1f);
+            if (asyncOperation.isDone && LoadIcon.instance)
+            {
+                LoadIcon.instance.LoadIconRun(0);
+                asyncOperation = null;
+
+                StopCoroutine("LoadAdd");
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        if(asyncOperation == null) StopCoroutine("LoadAdd");
+        yield return new WaitForEndOfFrame();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -94,6 +113,7 @@ public class LoadAditiveScene : MonoBehaviour
 
             sceneloaded = true;
             asyncOperation = SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Additive);
+            StartCoroutine("LoadAdd");
         }
     }
 

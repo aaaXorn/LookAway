@@ -46,21 +46,27 @@ public class EnemyControl : MonoBehaviour
 	//ID do hit, usado pra mesma hitbox não acertar várias vezes
 	private int hit_id;
 	private string atk_type;//tipo do ataque
-	//número de hits do ataque, hits que tinha quando o ataque começou,
-	//último hit dado e hit anterior (pra efeitos que acontecem só uma vez)
+							//número de hits do ataque, hits que tinha quando o ataque começou,
+							//último hit dado e hit anterior (pra efeitos que acontecem só uma vez)
 	private int atk_hits, curr_hit, prev_hit;
 	//dano, duração e tamanho do ataque
 	private int[] atk_dmg = new int[5], atk_duration = new int[5], atk_delay = new int[5];
+	private int atk_last_frame;
 	private float[] atk_size = new float[5], atk_length = new float[5];
 	//ponto de origem do ataque
 	private Transform[] atk_origin = new Transform[5];
+
+	//se o ataque pode ser cancelado (geralmente após um hit)
+	private bool atk_cancel;
+	//se o jogador está atacando
+	private bool attacking;
 
 	[System.Serializable]
 	//informações dos tipos de ataque
 	public class Attack
 	{
-		[Tooltip("Attack's name")]
-		public string id;
+		/*[Tooltip("Attack's name")]
+		public string id;*/
 
 		[Tooltip("Attack properties")]
 		public string type;
@@ -73,10 +79,12 @@ public class EnemyControl : MonoBehaviour
 		public int[] duration;
 		[Tooltip("Hitbox radius")]
 		public float[] size;
-		[Tooltip("Hitbox length")]
+		[Tooltip("Hitbox length, 0 makes it a sphere")]
 		public float[] length;
 		[Tooltip("Delay between the attacks")]
 		public int[] delay;
+		[Tooltip("When the attack ends if not canceled")]
+		public int last_frame;
 		[Tooltip("Attack point of origin")]
 		public Transform[] origin;
 	}
@@ -85,7 +93,9 @@ public class EnemyControl : MonoBehaviour
 	public List<Attack> AtkList;
 	//dicionário dos ataques
 	//usado para localizar os ataques por string
-	public Dictionary<string, Attack> AtkDictionary;
+	//public Dictionary<string, Attack> AtkDictionary;
+	//ataque atual
+	private int currAtk;
 
 	private void Start()
     {
@@ -98,13 +108,13 @@ public class EnemyControl : MonoBehaviour
 		navAgent = GetComponent<NavMeshAgent>();
 		
 		E_HP = GetComponent<EnemyHealth>();
-
+		
 		//cria o dicionário de ataques
-		AtkDictionary = new Dictionary<string, Attack>();
+		/*AtkDictionary = new Dictionary<string, Attack>();
 		foreach (Attack atk in AtkList)
 		{
 			AtkDictionary.Add(atk.id, atk);
-		}
+		}*/
 
 		OnStart();
     }
@@ -231,10 +241,11 @@ public class EnemyControl : MonoBehaviour
 
 	#region attacks
 	//define o dano, duração, tamanho e tipo da hitbox por ID
-	private void AnimHit(string id)
+	private void AnimHit(int id)//(string id)
 	{
 		//propriedades do ataque
-		Attack atk = AtkDictionary[id];
+		//Attack atk = AtkDictionary[id];
+		Attack atk = AtkList[id];
 
 		atk_type = atk.type;
 		atk_hits = atk.hit_count;
@@ -248,11 +259,12 @@ public class EnemyControl : MonoBehaviour
 			atk_size[i] = atk.size[i];
 			atk_length[i] = atk.length[i];
 			atk_delay[i] = atk.delay[i];
+			atk_last_frame = atk.last_frame;
 			atk_origin[i] = atk.origin[i];
 		}
 
 		//inicia o ataque
-		//attacking = true;
+		attacking = true;
 	}
 
 	private void AttackEffect()
@@ -263,7 +275,7 @@ public class EnemyControl : MonoBehaviour
 			//encerra os ataques
 			if (curr_hit >= atk_hits)
 			{
-				//attacking = false;
+				attacking = false;
 
 				return;
 			}
@@ -294,11 +306,11 @@ public class EnemyControl : MonoBehaviour
 				//dano
 				foreach (var hit in hitCol)
 				{
-					//EnemyHealth E_HP = GetComponent<EnemyHealth>();
-					//if (E_HP.hit_id != hit_id)
-					//	E_HP.TakeDamage(atk_dmg[curr_hit]);
+					/*EnemyHealth E_HP = hit.GetComponent<EnemyHealth>();
+					if (E_HP.hit_id != hit_id)
+						E_HP.TakeDamage(atk_dmg[curr_hit]);*/
 
-					//atk_cancel = true;
+					atk_cancel = true;
 
 					print("Hit");
 				}
@@ -320,44 +332,47 @@ public class EnemyControl : MonoBehaviour
 #if UNITY_EDITOR
 	private void OnDrawGizmos()
 	{
-		if(atk_origin[curr_hit] != null)
+		if(atk_origin[curr_hit] != null && currentState == State.Melee)
 		{
-			//desenha a hitbox no editor
-			//RIP meu PC
-			Vector3 pos = atk_origin[curr_hit].position;
-			Vector3 pos2 = pos + atk_origin[curr_hit].forward * atk_length[curr_hit];
-			
-			// Special case when both points are in the same position
-			if (atk_length[curr_hit] == 0)
+			if(atk_delay[curr_hit] <= 0 && atk_duration[curr_hit] >= 0)
 			{
-				// DrawWireSphere works only in gizmo methods
-				Gizmos.DrawWireSphere(pos, atk_size[curr_hit]);
-				return;
-			}
-			using (new UnityEditor.Handles.DrawingScope(Gizmos.color, Gizmos.matrix))
-			{
-				Quaternion p1Rotation = Quaternion.LookRotation(pos - pos2);
-				Quaternion p2Rotation = Quaternion.LookRotation(pos2 - pos);
-				// Check if capsule direction is collinear to Vector.up
-				float c = Vector3.Dot((pos - pos2).normalized, Vector3.up);
-				if (c == 1f || c == -1f)
+				//desenha a hitbox no editor
+				//RIP meu PC
+				Vector3 pos = atk_origin[curr_hit].position;
+				Vector3 pos2 = pos + atk_origin[curr_hit].forward * atk_length[curr_hit];
+				
+				// Special case when both points are in the same position
+				if (atk_length[curr_hit] == 0)
 				{
-					// Fix rotation
-					p2Rotation = Quaternion.Euler(p2Rotation.eulerAngles.x, p2Rotation.eulerAngles.y + 180f, p2Rotation.eulerAngles.z);
+					// DrawWireSphere works only in gizmo methods
+					Gizmos.DrawWireSphere(pos, atk_size[curr_hit]);
+					return;
 				}
-				// First side
-				UnityEditor.Handles.DrawWireArc(pos, p1Rotation * Vector3.left,  p1Rotation * Vector3.down, 180f, atk_size[curr_hit]);
-				UnityEditor.Handles.DrawWireArc(pos, p1Rotation * Vector3.up,  p1Rotation * Vector3.left, 180f, atk_size[curr_hit]);
-				UnityEditor.Handles.DrawWireDisc(pos, (pos2 - pos).normalized, atk_size[curr_hit]);
-				// Second side
-				UnityEditor.Handles.DrawWireArc(pos2, p2Rotation * Vector3.left,  p2Rotation * Vector3.down, 180f, atk_size[curr_hit]);
-				UnityEditor.Handles.DrawWireArc(pos2, p2Rotation * Vector3.up,  p2Rotation * Vector3.left, 180f, atk_size[curr_hit]);
-				UnityEditor.Handles.DrawWireDisc(pos2, (pos - pos2).normalized, atk_size[curr_hit]);
-				// Lines
-				UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.down * atk_size[curr_hit], pos2 + p2Rotation * Vector3.down * atk_size[curr_hit]);
-				UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.left * atk_size[curr_hit], pos2 + p2Rotation * Vector3.right * atk_size[curr_hit]);
-				UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.up * atk_size[curr_hit], pos2 + p2Rotation * Vector3.up * atk_size[curr_hit]);
-				UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.right * atk_size[curr_hit], pos2 + p2Rotation * Vector3.left * atk_size[curr_hit]);
+				using (new UnityEditor.Handles.DrawingScope(Gizmos.color, Gizmos.matrix))
+				{
+					Quaternion p1Rotation = Quaternion.LookRotation(pos - pos2);
+					Quaternion p2Rotation = Quaternion.LookRotation(pos2 - pos);
+					// Check if capsule direction is collinear to Vector.up
+					float c = Vector3.Dot((pos - pos2).normalized, Vector3.up);
+					if (c == 1f || c == -1f)
+					{
+						// Fix rotation
+						p2Rotation = Quaternion.Euler(p2Rotation.eulerAngles.x, p2Rotation.eulerAngles.y + 180f, p2Rotation.eulerAngles.z);
+					}
+					// First side
+					UnityEditor.Handles.DrawWireArc(pos, p1Rotation * Vector3.left,  p1Rotation * Vector3.down, 180f, atk_size[curr_hit]);
+					UnityEditor.Handles.DrawWireArc(pos, p1Rotation * Vector3.up,  p1Rotation * Vector3.left, 180f, atk_size[curr_hit]);
+					UnityEditor.Handles.DrawWireDisc(pos, (pos2 - pos).normalized, atk_size[curr_hit]);
+					// Second side
+					UnityEditor.Handles.DrawWireArc(pos2, p2Rotation * Vector3.left,  p2Rotation * Vector3.down, 180f, atk_size[curr_hit]);
+					UnityEditor.Handles.DrawWireArc(pos2, p2Rotation * Vector3.up,  p2Rotation * Vector3.left, 180f, atk_size[curr_hit]);
+					UnityEditor.Handles.DrawWireDisc(pos2, (pos - pos2).normalized, atk_size[curr_hit]);
+					// Lines
+					UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.down * atk_size[curr_hit], pos2 + p2Rotation * Vector3.down * atk_size[curr_hit]);
+					UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.left * atk_size[curr_hit], pos2 + p2Rotation * Vector3.right * atk_size[curr_hit]);
+					UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.up * atk_size[curr_hit], pos2 + p2Rotation * Vector3.up * atk_size[curr_hit]);
+					UnityEditor.Handles.DrawLine(pos + p1Rotation * Vector3.right * atk_size[curr_hit], pos2 + p2Rotation * Vector3.left * atk_size[curr_hit]);
+				}
 			}
 		}
 	}
