@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -19,6 +20,9 @@ public class PlayerHealth : MonoBehaviour
 	//se o jogador tem invincibility frames
 	public bool invul = false, blocking = false;
 	public float block_mult = 1;
+
+	[SerializeField]
+	private Image hp_img;
 	
 	private void Awake()
 	{
@@ -41,14 +45,20 @@ public class PlayerHealth : MonoBehaviour
 	{
 		if (!invul)
 		{
-			if(blocking)
+			//se dando block, diminui o dano
+			if(blocking && dmg > 0)
 				dmg = (int)Mathf.Round(dmg * block_mult);
-			hp -= dmg;
+			//diminui/aumenta o HP
+			if(hp > 0) hp -= dmg;
 
+			//limita o HP pra não ultrapassar max_hp
 			if (hp > max_hp) hp = max_hp;
+			//player morre
 			else if (hp <= 0)
 			{
-				print("morreu");
+				hp = 0;
+
+				PlayerC.Dying();
 				
 				return;
 			}
@@ -56,6 +66,9 @@ public class PlayerHealth : MonoBehaviour
 			if(!blocking)
 				//faz os efeitos de invul frame e animação
 				PlayerC.TookDamage();
+
+			//UI
+			hp_img.fillAmount = (float)hp / max_hp;
 		}
 	}
 }

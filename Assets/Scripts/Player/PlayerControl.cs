@@ -145,9 +145,10 @@ public class PlayerControl : MonoBehaviour
 	[SerializeField]
 	private float rollspeed;
 	
-	//tempo de invul depois de tomar dano
+	//tempo de invul depois de tomar dano e tempo da animação
 	[SerializeField]
-	private int hurt_f_total;
+	private int hurt_f_total, hurt_anim_f_total;
+	private int hurt_anim_f;
 	//número de animações de tomar dano
 	[SerializeField]
 	private int hurt_animations;
@@ -509,12 +510,15 @@ public class PlayerControl : MonoBehaviour
 	
 	private void StateHurt()
 	{
-		
+		if (hurt_anim_f > 0)
+			hurt_anim_f--;
+		else
+			AnimFree();
 	}
 	
 	private void StateDead()
 	{
-		
+		//timer até o player morrer, menu de morte
 	}
     #endregion
 
@@ -760,6 +764,8 @@ public class PlayerControl : MonoBehaviour
 			//inicia os invul frames
 			P_HP.invul = true;
 		}
+
+		hurt_anim_f = hurt_anim_f_total;
 		
 		//random range hurt_animations anim.SetInt
 		anim.SetTrigger("Hurt");
@@ -777,6 +783,17 @@ public class PlayerControl : MonoBehaviour
 		
 		//sound effect
 	}
+
+	//player morrendo
+	public void Dying()
+    {
+		if (currentState != State.Dead)
+		{
+			anim.SetTrigger("Dead");
+
+			currentState = State.Dead;
+		}
+    }
 	
 	//acontece quando o jogador cai no chão
 	private void AnimLand()

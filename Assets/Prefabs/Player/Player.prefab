@@ -1203,45 +1203,49 @@ MonoBehaviour:
   - type: 
     hit_count: 1
     dmg: 07000000
-    duration: 03000000
+    duration: 04000000
     size:
     - 0.5
     length:
     - 1
-    delay: 00000000
+    delay: 0d000000
+    last_frame: 36
     origin:
     - {fileID: 1082022050}
   - type: 
     hit_count: 1
     dmg: 05000000
-    duration: 03000000
+    duration: 04000000
     size:
     - 0.5
     length:
     - 1
-    delay: 00000000
+    delay: 0c000000
+    last_frame: 31
     origin:
     - {fileID: 1082022050}
   - type: 
     hit_count: 1
     dmg: 09000000
-    duration: 03000000
+    duration: 04000000
     size:
     - 0.75
     length:
     - 1
-    delay: 00000000
+    delay: 17000000
+    last_frame: 39
     origin:
     - {fileID: 1082022050}
   - type: 
     hit_count: 1
     dmg: 09000000
-    duration: 03000000
+    duration: 04000000
     size:
     - 0.5
     length:
     - 1
-    delay: 00000000
+    delay: 11000000
+    last_frame: 40
     origin:
     - {fileID: 1082022050}
   block_f_total: 8
@@ -1249,6 +1253,7 @@ MonoBehaviour:
   roll_anim_f_total: 10
   rollspeed: 10
   hurt_f_total: 48
+  hurt_anim_f_total: 24
   hurt_animations: 0
 --- !u!114 &5087033714714069245
 MonoBehaviour:
@@ -1267,6 +1272,7 @@ MonoBehaviour:
   invul: 0
   blocking: 0
   block_mult: 1
+  hp_img: {fileID: 0}
 --- !u!1001 &3150248267744740626
 PrefabInstance:
   m_ObjectHideFlags: 0

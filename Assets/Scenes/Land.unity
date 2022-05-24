@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.4435394, g: 0.49284565, b: 0.57243705, a: 1}
+  m_IndirectSpecularColor: {r: 0.4435391, g: 0.49284512, b: 0.57243615, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -804,6 +804,18 @@ MonoBehaviour:
     m_NumColorKeys: 6
     m_NumAlphaKeys: 2
   SunBoost: 0.3
+--- !u!114 &248107401 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 122955680127761647, guid: 88f03e1c7f46469458858ae5988d224b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2967842342135501770}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &320452733
 GameObject:
   m_ObjectHideFlags: 0
@@ -8105,7 +8117,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-6126
+  m_Name: pb_Mesh-242328
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9882,7 +9894,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-6082
+  m_Name: pb_Mesh-242284
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11168,7 +11180,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-6110
+  m_Name: pb_Mesh-242312
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12238,86 +12250,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[0].last_frame
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[1].last_frame
-      value: 31
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[2].last_frame
-      value: 39
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[3].last_frame
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[0].delay.Array.data[0]
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[1].delay.Array.data[0]
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[2].delay.Array.data[0]
-      value: 23
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[3].delay.Array.data[0]
-      value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[0].last_frame.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[1].last_frame.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[2].last_frame.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[3].last_frame.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[0].duration.Array.data[0]
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[1].duration.Array.data[0]
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[2].duration.Array.data[0]
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[3].duration.Array.data[0]
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[0].last_frame.Array.data[0]
-      value: 36
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[1].last_frame.Array.data[0]
-      value: 31
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[2].last_frame.Array.data[0]
-      value: 39
-      objectReference: {fileID: 0}
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[3].last_frame.Array.data[0]
-      value: 40
-      objectReference: {fileID: 0}
+    - target: {fileID: 5087033714714069245, guid: 67f1910acec3c97419389992804d29c4,
+        type: 3}
+      propertyPath: hp_img
+      value: 
+      objectReference: {fileID: 248107401}
     - target: {fileID: 6035953435347524289, guid: 67f1910acec3c97419389992804d29c4,
         type: 3}
       propertyPath: m_RootOrder

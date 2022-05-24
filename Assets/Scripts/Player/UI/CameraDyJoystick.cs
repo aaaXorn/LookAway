@@ -16,9 +16,6 @@ public class CameraDyJoystick : Joystick
     //[SerializeField]
 	//private float moveThreshold = 1;
 	
-	//referência do rect transform
-	private RectTransform rect;
-	
 	//referência do cinemachine
 	private CinemachineFreeLook cine;
 
@@ -41,10 +38,10 @@ public class CameraDyJoystick : Joystick
         background.gameObject.SetActive(false);
 		
 		//pega o componente de rect transform
-		rect = GetComponent<RectTransform>();
+		RectTransform rect = GetComponent<RectTransform>();
 		//pega a escala do canvas, usado depois pra sempre cobrir a tela inteira
 		float canvas_scale = transform.parent.GetComponent<RectTransform>().localScale.x;
-		print(canvas_scale);
+		
 		//muda a largura e altura do rect transform
 		//para poder ser usado em qualquer parte da tela
 		rect.sizeDelta = new Vector2(Screen.width / canvas_scale, Screen.height / canvas_scale);
