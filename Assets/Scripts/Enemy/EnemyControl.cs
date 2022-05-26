@@ -55,6 +55,8 @@ public class EnemyControl : MonoBehaviour
 	private float[] atk_size = new float[5], atk_length = new float[5];
 	//ponto de origem do ataque
 	private Transform[] atk_origin = new Transform[5];
+	//movimento durante o ataque
+	private float atk_movement;
 
 	//se o ataque pode ser cancelado (geralmente após um hit)
 	private bool atk_cancel;
@@ -87,6 +89,9 @@ public class EnemyControl : MonoBehaviour
 		public int last_frame;
 		[Tooltip("Attack point of origin")]
 		public Transform[] origin;
+		
+		[Tooltip("Mid attack movement")]
+		public float movement;
 	}
 
 	//lista com os ataques
@@ -262,7 +267,19 @@ public class EnemyControl : MonoBehaviour
 			atk_last_frame = atk.last_frame;
 			atk_origin[i] = atk.origin[i];
 		}
-
+		
+		atk_movement = atk.movement;
+		
+		//movimento
+		/*if(atk_movement != 0)
+		{
+			Vector3 transf_f = transform.forward;
+			Vector3 direction = new Vector3(transf_f.x, 0, transf_f.z);
+			
+			rdb.velocity = direction * atk_movement + new Vector3(0, rdb.velocity.y, 0);
+		}*/
+		//nav agent speed atk movement, nav agent target player
+		
 		//inicia o ataque
 		attacking = true;
 	}

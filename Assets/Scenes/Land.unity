@@ -6491,6 +6491,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam_lock: 0
+  cam_target: []
+  curr_target: 0
   cine_FL: {fileID: 1728260771}
   cine_T: {fileID: 1147684246}
 --- !u!1 &639064089
@@ -8117,7 +8119,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-100276
+  m_Name: pb_Mesh-5274
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9894,7 +9896,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-100232
+  m_Name: pb_Mesh-5230
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11180,7 +11182,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-100260
+  m_Name: pb_Mesh-5258
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12250,6 +12252,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
+      propertyPath: AtkList.Array.data[2].movement
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5087033714714069245, guid: 67f1910acec3c97419389992804d29c4,
         type: 3}
       propertyPath: hp_img

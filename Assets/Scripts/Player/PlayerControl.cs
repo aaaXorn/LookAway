@@ -86,6 +86,8 @@ public class PlayerControl : MonoBehaviour
 	private float[] atk_size = new float[5], atk_length = new float[5];
 	//ponto de origem do ataque
 	private Transform[] atk_origin = new Transform[5];
+	//movimento durante o ataque
+	private float atk_movement;
 	
 	//se o ataque pode ser cancelado (geralmente após um hit)
 	private bool atk_cancel;
@@ -118,6 +120,9 @@ public class PlayerControl : MonoBehaviour
 		public int last_frame;
 		[Tooltip("Attack point of origin")]
 		public Transform[] origin;
+		
+		[Tooltip("Mid attack movement")]
+		public float movement;
 	}
 	
 	//lista com os ataques
@@ -418,7 +423,7 @@ public class PlayerControl : MonoBehaviour
 		{
 			AttackEffect();
 		}
-
+		
 		//se o ataque pode ser cancelado
 		if (atk_cancel)
 		{
@@ -500,11 +505,7 @@ public class PlayerControl : MonoBehaviour
 
     private void StateRoll()
     {
-		//movimento
-		Vector3 transf_f = transform.forward;
-		Vector3 roll_direction = new Vector3(transf_f.x, 0, transf_f.z);
-
-		rdb.velocity = roll_direction * rollspeed + new Vector3(0, rdb.velocity.y, 0);
+		//movimento em AnimRoll
 		
 		//determina quando o roll acaba
 		if(roll_anim_f > 0)
@@ -632,6 +633,8 @@ public class PlayerControl : MonoBehaviour
 			atk_origin[i] = atk.origin[i];
 		}
 		
+		atk_movement = atk.movement;
+		
 		//inicia o ataque
 		attacking = true;
 		
@@ -641,6 +644,15 @@ public class PlayerControl : MonoBehaviour
 			Vector3 dir = CL.cam_target[CL.curr_target].position - transform.position;
 			Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 			transform.rotation = rot;
+		}
+		
+		//movimento
+		if(atk_movement != 0)
+		{
+			Vector3 transf_f = transform.forward;
+			Vector3 direction = new Vector3(transf_f.x, 0, transf_f.z);
+			
+			rdb.velocity = direction * atk_movement + new Vector3(0, rdb.velocity.y, 0);
 		}
 	}
 	
@@ -668,6 +680,10 @@ public class PlayerControl : MonoBehaviour
 		//após o delay acabar, começa o hit
 		if(atk_delay[curr_hit] <= 0)
 		{
+			#if UNITY_EDITOR
+			if(debug_mode) atk_cancel = true;
+			#endif
+			
 			//faz o ataque
 			if(atk_duration[curr_hit] > 0)
 			{
@@ -773,6 +789,12 @@ public class PlayerControl : MonoBehaviour
 			//inicia os invul frames
 			P_HP.invul = true;
 		}
+		
+		//movimento
+		Vector3 transf_f = transform.forward;
+		Vector3 roll_direction = new Vector3(transf_f.x, 0, transf_f.z);
+		
+		rdb.velocity = roll_direction * rollspeed + new Vector3(0, rdb.velocity.y, 0);
     }
 	
 	//dano
