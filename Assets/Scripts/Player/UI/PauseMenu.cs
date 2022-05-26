@@ -12,7 +12,7 @@ public class PauseMenu : MonoBehaviour
     private float base_timeScale = 1.2f;
 
     [SerializeField]
-    private GameObject MenuObj;
+    private GameObject MenuObj, DeathMenuObj;
 
     private void Awake()
     {
@@ -27,17 +27,22 @@ public class PauseMenu : MonoBehaviour
     private void Start()
     {
         //pega o componente de rect transform
-        RectTransform rect = MenuObj.GetComponent<RectTransform>();
+        RectTransform rectP = MenuObj.GetComponent<RectTransform>();
+		RectTransform rectD = DeathMenuObj.GetComponent<RectTransform>();
         //pega a escala do canvas, usado depois pra sempre cobrir a tela inteira
         float canvas_scale = transform.GetComponent<RectTransform>().localScale.x;
 
         //muda a largura e altura do rect transform
         //para poder ser usado em qualquer parte da tela
-        rect.sizeDelta = new Vector2(Screen.width / canvas_scale, Screen.height / canvas_scale);
+		Vector2 canvas_size = new Vector2(Screen.width / canvas_scale, Screen.height / canvas_scale);
+        rectP.sizeDelta = canvas_size;
+		rectD.sizeDelta = canvas_size;
 
         MenuObj.SetActive(false);
+		DeathMenuObj.SetActive(false);
     }
-
+	
+	#region pause
     public void Pause()
     {
         //despausa
@@ -64,4 +69,26 @@ public class PauseMenu : MonoBehaviour
         SaveSystem.NextScene = "Menu";
         SceneManager.LoadScene("LoadScene");
     }
+	#endregion
+	
+	#region death
+	//volta pro jogo
+	public void TryAgain()
+	{
+		SaveSystem.SavePlayerStats();
+		
+		//talvez seja trocado por uma simples mudança de posição
+		SaveSystem.NextScene = SceneManager.GetActiveScene().name;
+		SceneManager.LoadScene("LoadScene");
+	}
+	
+	public void GameOverScreen()
+	{
+		Time.timeScale = 0f;
+		
+		MenuObj.SetActive(false);
+		
+		DeathMenuObj.SetActive(true);
+	}
+	#endregion
 }

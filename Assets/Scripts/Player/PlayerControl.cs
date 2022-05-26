@@ -19,6 +19,8 @@ public class PlayerControl : MonoBehaviour
 	private MovementJoystick MoveJ;
 	//referência do script de HP
 	private PlayerHealth P_HP;
+	//referência do script de camera lock
+	private CamLock CL;
 
 	//enum com os states do player
 	private enum State
@@ -152,6 +154,10 @@ public class PlayerControl : MonoBehaviour
 	//número de animações de tomar dano
 	[SerializeField]
 	private int hurt_animations;
+	
+	//tempo até a tela de game over aparecer
+	[SerializeField]
+	private int dead_f;
 	#endregion
 
 	private void Awake()
@@ -171,6 +177,9 @@ public class PlayerControl : MonoBehaviour
 		//pega o script de movimento com joystick
 		if (PlayerHealth.Instance != null) P_HP = PlayerHealth.Instance;
 		else print("PlayerHealth Instance not found.");
+		//pega o script de movimento com joystick
+		if (CamLock.Instance != null) CL = CamLock.Instance;
+		else print("CamLock Instance not found.");
 		
         currentCamera = Camera.main.gameObject;
 	   
@@ -180,11 +189,6 @@ public class PlayerControl : MonoBehaviour
 		{
 			AtkDictionary.Add(atk.id, atk);
 		}*/
-		
-		//aumenta certas ações por 1 frame para compensar pelo frame inicial
-		buffer_f_total++;
-		block_f_total++;
-		roll_f_total++;
 		
 		#if UNITY_EDITOR
 		if(debug_mode) Application.targetFrameRate = debug_fps;
@@ -519,6 +523,10 @@ public class PlayerControl : MonoBehaviour
 	private void StateDead()
 	{
 		//timer até o player morrer, menu de morte
+		if(dead_f > 0)
+			dead_f--;
+		else
+			PauseMenu.Instance.GameOverScreen();
 	}
     #endregion
 
@@ -544,55 +552,60 @@ public class PlayerControl : MonoBehaviour
 
             }
         }
-
-		//quando tem um objeto empurrado e está no state free
-		//				  para não atrapalhar animações como a de ataque
-        if (closeThing && currentState == State.Free)
+		
+		//animação de empurrar, removida
+		//quando tem um objeto empurrado
+        /*if (closeThing)
         {
-            //calcula a direcao do ponto de toque para a personagem
-            Vector3 handDirection = closeThing.transform.position - transform.position;
-            //verifica se o objeto ta na frente do personagem >0
-            float lookto = Vector3.Dot(handDirection.normalized, transform.forward);
-            //calcula e interpola o peso pela formula (l*3)/distancia^3
-            weight=Mathf.Lerp(weight,(lookto*3 / (Mathf.Pow(handDirection.magnitude,3))),Time.fixedDeltaTime*2);
-           
-            anim.SetIKPositionWeight(AvatarIKGoal.RightHand, weight);
-            anim.SetIKRotationWeight(AvatarIKGoal.RightHand, weight);
-            anim.SetIKPosition(AvatarIKGoal.RightHand, closeThing.transform.position + transform.right * 0.1f);
-            anim.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.identity);
+			//cancela a animação se estiver em um ataque/roll/etc
+			if(currentState != State.Free)
+			{
+				Destroy(closeThing);
+				
+				return;
+			}
+			
+			//calcula a direcao do ponto de toque para a personagem
+			Vector3 handDirection = closeThing.transform.position - transform.position;
+			//verifica se o objeto ta na frente do personagem >0
+			float lookto = Vector3.Dot(handDirection.normalized, transform.forward);
+			//calcula e interpola o peso pela formula (l*3)/distancia^3
+			weight=Mathf.Lerp(weight,(lookto*3 / (Mathf.Pow(handDirection.magnitude,3))),Time.fixedDeltaTime*2);
+		   
+			anim.SetIKPositionWeight(AvatarIKGoal.RightHand, weight);
+			anim.SetIKRotationWeight(AvatarIKGoal.RightHand, weight);
+			anim.SetIKPosition(AvatarIKGoal.RightHand, closeThing.transform.position + transform.right * 0.1f);
+			anim.SetIKRotation(AvatarIKGoal.RightHand, Quaternion.identity);
 
-            anim.SetIKPositionWeight(AvatarIKGoal.LeftHand, weight);
-            anim.SetIKRotationWeight(AvatarIKGoal.LeftHand, weight);
-            anim.SetIKPosition(AvatarIKGoal.LeftHand, closeThing.transform.position- transform.right*0.1f);
-            anim.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.identity);
-
+			anim.SetIKPositionWeight(AvatarIKGoal.LeftHand, weight);
+			anim.SetIKRotationWeight(AvatarIKGoal.LeftHand, weight);
+			anim.SetIKPosition(AvatarIKGoal.LeftHand, closeThing.transform.position- transform.right*0.1f);
+			anim.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.identity);
+			
             if (weight <= 0)
             {
                 Destroy(closeThing);
             }
-           
-        }
+        }*/
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         wing.SetActive(false);
-        if (collision.transform.position.y > transform.position.y + .05f) {
+        /*if (collision.transform.position.y > transform.position.y + .05f) {
             if(!closeThing)
             closeThing = new GameObject("Handpos");
 
             weight = 0;
             closeThing.transform.parent = collision.gameObject.transform;
             closeThing.transform.position= collision.GetContact(0).point;
-
-        }
-
+        }*/
     }
 	
-    private void OnCollisionExit(Collision collision)
+    /*private void OnCollisionExit(Collision collision)
     {
 		
-    }
+    }*/
 	#endregion
 
 	#region attacks
@@ -621,6 +634,14 @@ public class PlayerControl : MonoBehaviour
 		
 		//inicia o ataque
 		attacking = true;
+		
+		//rotaciona o player na direção do inimigo
+		if(CL.cam_lock)
+		{
+			Vector3 dir = CL.cam_target[CL.curr_target].position - transform.position;
+			Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+			transform.rotation = rot;
+		}
 	}
 	
 	private void AttackEffect()
@@ -664,7 +685,10 @@ public class PlayerControl : MonoBehaviour
 				{
 					EnemyHealth E_HP = hit.GetComponent<EnemyHealth>();
 					if(E_HP.hit_id != hit_id)
+					{
+						E_HP.hit_id = hit_id;
 						E_HP.TakeDamage(atk_dmg[curr_hit]);
+					}
 					
 					atk_cancel = true;
 					

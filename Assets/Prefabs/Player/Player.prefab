@@ -1255,6 +1255,7 @@ MonoBehaviour:
   hurt_f_total: 48
   hurt_anim_f_total: 24
   hurt_animations: 0
+  dead_f: 48
 --- !u!114 &5087033714714069245
 MonoBehaviour:
   m_ObjectHideFlags: 0

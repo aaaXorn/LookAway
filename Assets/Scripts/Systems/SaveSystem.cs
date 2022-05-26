@@ -30,6 +30,12 @@ public class SaveSystem
 			PlayerPrefsX.SetVector3("OldPlayerPosition", PlayerControl.Instance.transform.position);
 		}
 		
+		SavePlayerStats();
+	}
+	
+	//salva somente os stats do player
+	public static void SavePlayerStats()
+	{
 		//stats espada, armadura, escudo
 	}
 	

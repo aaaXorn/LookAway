@@ -12,9 +12,9 @@ public class CamLock : MonoBehaviour
 	public bool cam_lock;
 	
 	//alvos da camera
-	private List<Transform> cam_target = new List<Transform>();
+	public List<Transform> cam_target = new List<Transform>();
 	//alvo atual da camera
-	private int curr_target;
+	public int curr_target;
 
 	[SerializeField]
 	//referência do cinemachine
