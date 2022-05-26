@@ -17,7 +17,7 @@ public class EnemyControl : MonoBehaviour
 	private EnemyHealth E_HP;
 	
 	//enum com todos os states
-	private enum State
+	public enum State
 	{
 		Inactive,//fora de combate
 		Active,//inicia o combat
@@ -35,9 +35,9 @@ public class EnemyControl : MonoBehaviour
 	};
 	
 	//state atual
-	[SerializeField]
-	private State currentState;
-
+	public State currentState;
+	
+	#region attacks
 	[Header("Attacks")]
 	//layer do player
 	[SerializeField]
@@ -101,7 +101,32 @@ public class EnemyControl : MonoBehaviour
 	//public Dictionary<string, Attack> AtkDictionary;
 	//ataque atual
 	private int currAtk;
-
+	
+	[SerializeField]
+	//cooldown do ataque
+	private int atk_cd_total;
+	private int atk_cd;
+	
+	[SerializeField]
+	//alcance dos ataques
+	private float melee_atk_range, ranged_atk_range;
+	#endregion
+	
+	#region movement
+	[Header("Movement")]
+	//posição inicial
+	[SerializeField]
+	private Vector3 start_pos;
+	
+	//velocidade padrão
+	[SerializeField]
+	private float base_speed;
+	//raio da reposição do inimigo
+	[SerializeField]
+	private float reposition_radius;
+	//rng angulo virado pro centro
+	#endregion
+	
 	private void Start()
     {
         //pega o script de controle do jogador
@@ -114,13 +139,10 @@ public class EnemyControl : MonoBehaviour
 		
 		E_HP = GetComponent<EnemyHealth>();
 		
-		//cria o dicionário de ataques
-		/*AtkDictionary = new Dictionary<string, Attack>();
-		foreach (Attack atk in AtkList)
-		{
-			AtkDictionary.Add(atk.id, atk);
-		}*/
-
+		atk_cd = atk_cd_total;
+		
+		start_pos = transform.position;
+		
 		OnStart();
     }
 	
@@ -131,15 +153,17 @@ public class EnemyControl : MonoBehaviour
 	}
 	
 	//ativa o inimigo e começa o combate
-	public void Activate()
+	public virtual void Activate()
 	{
 		if(currentState == State.Inactive || currentState == State.Reset)
 		{
 			currentState = State.Active;
+			
+			atk_cd = atk_cd_total;
 		}
 	}
 	//desativa o inimigo, encerrando o combate
-	public void Deactivate()
+	public virtual void Deactivate()
 	{
 		if(currentState != State.Inactive && currentState != State.Reset && currentState != State.Dead)
 		{
@@ -147,6 +171,11 @@ public class EnemyControl : MonoBehaviour
 			
 			//reseta o HP
 			E_HP.ResetHP();
+			
+			navAgent.speed = base_speed;
+			
+			//muda o alvo pra posição inicial
+			navAgent.SetDestination(start_pos);
 		}
 	}
 	
@@ -205,17 +234,42 @@ public class EnemyControl : MonoBehaviour
 	
 	protected virtual void StateActive()
 	{
-		
+		//faz o inimigo começar a andar
+		navAgent.speed = base_speed;
+		currentState = State.Approach;
 	}
 	
 	protected virtual void StateApproach()
 	{
+		//define o alvo do movimento como o jogador
+		navAgent.SetDestination(PlayerTransf.position);
 		
+		//continua se movendo
+		if(atk_cd > 0)
+			atk_cd--;
+		//ataca
+		else
+		{
+			//melee
+			if(navAgent.remainingDistance <= melee_atk_range)
+			{
+				AnimHit(0);
+				
+				currentState = State.Melee;
+			}
+			//ranged
+			else if(navAgent.remainingDistance <= ranged_atk_range)
+			{
+				print("ranged");
+			}
+		}
 	}
 	
 	protected virtual void StateRetreat()
 	{
-		
+		//vai pra posição oposta da do player
+		Vector3 destination = 2 * transform.position - PlayerTransf.position;
+		navAgent.SetDestination(destination);
 	}
 	
 	protected virtual void StateReposition()
@@ -225,7 +279,23 @@ public class EnemyControl : MonoBehaviour
 	
 	protected virtual void StateMelee()
 	{
+		//propriedades do ataque
+		if (attacking)
+		{
+			AttackEffect();
+		}
 		
+		//encerra o ataque
+		if(atk_last_frame <= 0)
+		{
+			attacking = false;
+			atk_cancel = false;
+			
+			atk_cd = atk_cd_total;
+			
+			currentState = State.Approach;
+		}
+		else atk_last_frame--;
 	}
 	
 	protected virtual void StateRanged()
@@ -240,10 +310,11 @@ public class EnemyControl : MonoBehaviour
 	
 	protected virtual void StateReset()
 	{
-		
+		if(navAgent.remainingDistance <= 0.1f)
+			currentState = State.Inactive;
 	}
 	#endregion
-
+	
 	#region attacks
 	//define o dano, duração, tamanho e tipo da hitbox por ID
 	private void AnimHit(int id)//(string id)
@@ -278,7 +349,8 @@ public class EnemyControl : MonoBehaviour
 			
 			rdb.velocity = direction * atk_movement + new Vector3(0, rdb.velocity.y, 0);
 		}*/
-		//nav agent speed atk movement, nav agent target player
+		navAgent.speed = atk_movement;
+		navAgent.SetDestination(PlayerTransf.position);
 		
 		//inicia o ataque
 		attacking = true;
