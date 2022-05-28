@@ -10,8 +10,8 @@ public class EnemyControl : MonoBehaviour
 	//transform do player
 	private Transform PlayerTransf;
 	
-	//componente do nav mesh
-	private NavMeshAgent navAgent;
+	//componente do character controller
+	private CharacterController Control;
 	
 	//componente de vida
 	private EnemyHealth E_HP;
@@ -121,10 +121,11 @@ public class EnemyControl : MonoBehaviour
 	//velocidade padrão
 	[SerializeField]
 	private float base_speed;
+	private float speed;
 	//raio da reposição do inimigo
 	[SerializeField]
-	private float reposition_radius;
-	//rng angulo virado pro centro
+	private int reposition_radius;
+	Vector3 move_target, move_dir;
 	#endregion
 	
 	private void Start()
@@ -135,13 +136,15 @@ public class EnemyControl : MonoBehaviour
 		//pega o transform do objeto do player
 		PlayerTransf = PlayerC.transform;
 		
-		navAgent = GetComponent<NavMeshAgent>();
+		Control = GetComponent<CharacterController>();
 		
 		E_HP = GetComponent<EnemyHealth>();
 		
 		atk_cd = atk_cd_total;
 		
 		start_pos = transform.position;
+		
+		speed = base_speed;
 		
 		OnStart();
     }
@@ -155,7 +158,8 @@ public class EnemyControl : MonoBehaviour
 	//ativa o inimigo e começa o combate
 	public virtual void Activate()
 	{
-		if(currentState == State.Inactive || currentState == State.Reset)
+		if((currentState == State.Inactive || currentState == State.Reset)
+		   && currentState != State.Dead)
 		{
 			currentState = State.Active;
 			
@@ -171,11 +175,6 @@ public class EnemyControl : MonoBehaviour
 			
 			//reseta o HP
 			E_HP.ResetHP();
-			
-			navAgent.speed = base_speed;
-			
-			//muda o alvo pra posição inicial
-			navAgent.SetDestination(start_pos);
 		}
 	}
 	
@@ -235,14 +234,22 @@ public class EnemyControl : MonoBehaviour
 	protected virtual void StateActive()
 	{
 		//faz o inimigo começar a andar
-		navAgent.speed = base_speed;
 		currentState = State.Approach;
 	}
 	
+	#region movement
 	protected virtual void StateApproach()
 	{
-		//define o alvo do movimento como o jogador
-		navAgent.SetDestination(PlayerTransf.position);
+		Vector3 go_to = PlayerTransf.position - transform.position;
+		//direção
+		Vector3 dir = go_to.normalized;
+		
+		//rotação
+		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+		transform.rotation = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+		
+		//movimento
+		Control.SimpleMove(dir * base_speed);
 		
 		//continua se movendo
 		if(atk_cd > 0)
@@ -250,15 +257,18 @@ public class EnemyControl : MonoBehaviour
 		//ataca
 		else
 		{
+			//distância entre o inimigo e o player
+			float dist = go_to.magnitude;
+			
 			//melee
-			if(navAgent.remainingDistance <= melee_atk_range)
+			if(dist <= melee_atk_range)
 			{
 				AnimHit(0);
 				
 				currentState = State.Melee;
 			}
 			//ranged
-			else if(navAgent.remainingDistance <= ranged_atk_range)
+			else if(dist <= ranged_atk_range)
 			{
 				print("ranged");
 			}
@@ -267,15 +277,43 @@ public class EnemyControl : MonoBehaviour
 	
 	protected virtual void StateRetreat()
 	{
-		//vai pra posição oposta da do player
-		Vector3 destination = 2 * transform.position - PlayerTransf.position;
-		navAgent.SetDestination(destination);
+		//pega a direção oposta do player
+		Vector3 dir = (transform.position - PlayerTransf.position).normalized;
+		
+		//rotação
+		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+		transform.rotation = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+		
+		//move o inimigo
+		Control.SimpleMove(dir * base_speed);
 	}
 	
 	protected virtual void StateReposition()
 	{
+		//movimento
+		Control.SimpleMove(move_dir * base_speed);
 		
+		//quando chega no ponto escolhido, para
+		if(Vector3.Distance(transform.position, move_target) <= 1)
+			currentState = State.Active;
 	}
+		//define pra qual posição o reposition vai ir
+		protected virtual void RepositionStart()
+		{
+			//aleatoriza a direção
+			float rad = Random.Range(0, reposition_radius + 1);
+			rad -= reposition_radius/2;
+			
+			//direção
+			Vector3 go_to = start_pos - transform.position;
+			move_target = Quaternion.AngleAxis(rad, Vector3.up) * go_to;
+			move_dir = move_target.normalized;
+			//posição final
+			move_target += transform.position;
+			
+			currentState = State.Reposition;
+		}
+	#endregion
 	
 	protected virtual void StateMelee()
 	{
@@ -284,6 +322,9 @@ public class EnemyControl : MonoBehaviour
 		{
 			AttackEffect();
 		}
+		
+		if(atk_movement != 0)
+			Control.SimpleMove(transform.forward * atk_movement);
 		
 		//encerra o ataque
 		if(atk_last_frame <= 0)
@@ -310,7 +351,16 @@ public class EnemyControl : MonoBehaviour
 	
 	protected virtual void StateReset()
 	{
-		if(navAgent.remainingDistance <= 0.1f)
+		Vector3 go_to = start_pos - transform.position;
+		//direção
+		Vector3 dir = go_to.normalized;
+		//distância
+		float dist = go_to.magnitude;
+		
+		//move o inimigo
+		Control.SimpleMove(dir * base_speed);
+		
+		if(dist <= 0.1f)
 			currentState = State.Inactive;
 	}
 	#endregion
@@ -341,6 +391,10 @@ public class EnemyControl : MonoBehaviour
 		
 		atk_movement = atk.movement;
 		
+		Vector3 dir = (transform.position - PlayerTransf.position).normalized;
+		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+		transform.rotation = rot;
+		
 		//movimento
 		/*if(atk_movement != 0)
 		{
@@ -349,8 +403,8 @@ public class EnemyControl : MonoBehaviour
 			
 			rdb.velocity = direction * atk_movement + new Vector3(0, rdb.velocity.y, 0);
 		}*/
-		navAgent.speed = atk_movement;
-		navAgent.SetDestination(PlayerTransf.position);
+		//navAgent.speed = atk_movement;
+		//navAgent.SetDestination(PlayerTransf.position);
 		
 		//inicia o ataque
 		attacking = true;

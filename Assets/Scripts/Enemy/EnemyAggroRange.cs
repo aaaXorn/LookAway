@@ -40,6 +40,9 @@ public class EnemyAggroRange : MonoBehaviour
 			CL.AddTargets(EnemyTransf);
 			//muda a cor do botão
 			LB.SetColor(true);
+			
+			for (int i = 0; i < EnemyTransf.Length; i++)
+				EnemyC[i].Activate();
 		}
 	}
 	private void OnTriggerExit(Collider other)
@@ -50,6 +53,9 @@ public class EnemyAggroRange : MonoBehaviour
 			CL.ResetLock();
 			//muda a cor do botão
 			LB.SetColor(false);
+			
+			for (int i = 0; i < EnemyTransf.Length; i++)
+				EnemyC[i].Deactivate();
 		}
 	}
 }

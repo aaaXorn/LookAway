@@ -6591,29 +6591,25 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!195 &654572856
-NavMeshAgent:
+  m_IsActive: 0
+--- !u!143 &654572856
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 654572855}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
+  serializedVersion: 2
   m_Height: 1
-  m_BaseOffset: 0.5
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &654572857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8125,7 +8121,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5274
+  m_Name: pb_Mesh-5276
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8655,7 +8651,7 @@ GameObject:
   - component: {fileID: 1130164741}
   - component: {fileID: 1130164740}
   - component: {fileID: 1130164739}
-  - component: {fileID: 1130164738}
+  - component: {fileID: 1130164747}
   - component: {fileID: 1130164746}
   m_Layer: 6
   m_Name: EnemyTest
@@ -8664,28 +8660,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!195 &1130164738
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1130164737}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0.5
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!114 &1130164739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8721,8 +8695,8 @@ MonoBehaviour:
   melee_atk_range: 0
   ranged_atk_range: 0
   start_pos: {x: 0, y: 0, z: 0}
-  base_speed: 2
-  reposition_radius: 0
+  base_speed: 3
+  reposition_radius: 90
 --- !u!54 &1130164741
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8827,6 +8801,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4f9b138e8dee6c42ba443c06734acf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!143 &1130164747
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130164737}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 1
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1133051656
 GameObject:
   m_ObjectHideFlags: 0
@@ -9140,7 +9132,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyTransf:
   - {fileID: 1130164745}
-  - {fileID: 654572863}
 --- !u!135 &1183210966
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -9908,7 +9899,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5230
+  m_Name: pb_Mesh-5232
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11194,7 +11185,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5258
+  m_Name: pb_Mesh-5260
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

@@ -643,7 +643,7 @@ public class PlayerControl : MonoBehaviour
 		{
 			Vector3 dir = CL.cam_target[CL.curr_target].position - transform.position;
 			Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
-			transform.rotation = rot;
+			transform.rotation = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
 		}
 		
 		//movimento
