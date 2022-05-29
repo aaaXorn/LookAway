@@ -71,4 +71,16 @@ public class PlayerHealth : MonoBehaviour
 			hp_img.fillAmount = (float)hp / max_hp;
 		}
 	}
+	
+	public void ReceiveHealing(int heal)
+	{
+		//aumenta o HP
+		if(hp > 0) hp += heal;
+		
+		//limita o HP pra não ultrapassar max_hp
+		if(hp > max_hp) hp = max_hp;
+		
+		//UI
+		hp_img.fillAmount = (float)hp / max_hp;
+	}
 }

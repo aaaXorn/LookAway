@@ -6647,6 +6647,7 @@ MonoBehaviour:
   start_pos: {x: 0, y: 0, z: 0}
   base_speed: 0
   reposition_radius: 0
+  reposition_dist: 0
 --- !u!54 &654572859
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8121,7 +8122,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5276
+  m_Name: pb_Mesh-5274
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8652,7 +8653,6 @@ GameObject:
   - component: {fileID: 1130164740}
   - component: {fileID: 1130164739}
   - component: {fileID: 1130164747}
-  - component: {fileID: 1130164746}
   m_Layer: 6
   m_Name: EnemyTest
   m_TagString: Untagged
@@ -8690,13 +8690,28 @@ MonoBehaviour:
   player_layer:
     serializedVersion: 2
     m_Bits: 8
-  AtkList: []
+  AtkList:
+  - type: 
+    hit_count: 1
+    dmg: 01000000
+    duration: 06000000
+    size:
+    - 1
+    length:
+    - 2
+    delay: 0c000000
+    last_frame: 24
+    origin:
+    - {fileID: 1130164745}
+    cooldown: 24
+    movement: 4
   atk_cd_total: 0
-  melee_atk_range: 0
+  melee_atk_range: 3
   ranged_atk_range: 0
   start_pos: {x: 0, y: 0, z: 0}
   base_speed: 3
   reposition_radius: 90
+  reposition_dist: 7
 --- !u!54 &1130164741
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8789,18 +8804,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1130164746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1130164737}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4f9b138e8dee6c42ba443c06734acf2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!143 &1130164747
 CharacterController:
   m_ObjectHideFlags: 0
@@ -9899,7 +9902,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5232
+  m_Name: pb_Mesh-5230
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11185,7 +11188,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5260
+  m_Name: pb_Mesh-5258
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12255,10 +12258,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1068687340, guid: 67f1910acec3c97419389992804d29c4, type: 3}
-      propertyPath: AtkList.Array.data[2].movement
-      value: 8
-      objectReference: {fileID: 0}
     - target: {fileID: 5087033714714069245, guid: 67f1910acec3c97419389992804d29c4,
         type: 3}
       propertyPath: hp_img

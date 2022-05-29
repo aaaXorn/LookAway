@@ -28,7 +28,10 @@ public class EnemyHealth : MonoBehaviour
 		hp -= dmg;
 		
 		if(hp > max_hp) hp = max_hp;
-		else if(hp <= 0) print("morreu");
+		else if(hp <= 0)
+		{
+			EnemyC.currentState = EnemyControl.State.Dead;
+		}
 	}
 	
 	public void ResetHP()

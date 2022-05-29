@@ -89,6 +89,8 @@ public class EnemyControl : MonoBehaviour
 		public int last_frame;
 		[Tooltip("Attack point of origin")]
 		public Transform[] origin;
+		[Tooltip("The cooldown of the attack")]
+		public int cooldown;
 		
 		[Tooltip("Mid attack movement")]
 		public float movement;
@@ -126,6 +128,9 @@ public class EnemyControl : MonoBehaviour
 	[SerializeField]
 	private int reposition_radius;
 	Vector3 move_target, move_dir;
+	//movimento total da reposição
+	[SerializeField]
+	private float reposition_dist;
 	#endregion
 	
 	private void Start()
@@ -309,7 +314,7 @@ public class EnemyControl : MonoBehaviour
 			move_target = Quaternion.AngleAxis(rad, Vector3.up) * go_to;
 			move_dir = move_target.normalized;
 			//posição final
-			move_target += transform.position;
+			move_target = transform.position + (move_dir * reposition_dist);
 			
 			currentState = State.Reposition;
 		}
@@ -332,9 +337,8 @@ public class EnemyControl : MonoBehaviour
 			attacking = false;
 			atk_cancel = false;
 			
-			atk_cd = atk_cd_total;
-			
-			currentState = State.Approach;
+			RepositionStart();
+			//currentState = State.Approach;
 		}
 		else atk_last_frame--;
 	}
@@ -391,20 +395,12 @@ public class EnemyControl : MonoBehaviour
 		
 		atk_movement = atk.movement;
 		
-		Vector3 dir = (transform.position - PlayerTransf.position).normalized;
-		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
-		transform.rotation = rot;
+		atk_cd = atk.cooldown;
 		
-		//movimento
-		/*if(atk_movement != 0)
-		{
-			Vector3 transf_f = transform.forward;
-			Vector3 direction = new Vector3(transf_f.x, 0, transf_f.z);
-			
-			rdb.velocity = direction * atk_movement + new Vector3(0, rdb.velocity.y, 0);
-		}*/
-		//navAgent.speed = atk_movement;
-		//navAgent.SetDestination(PlayerTransf.position);
+		//rotação
+		Vector3 dir = (PlayerTransf.position - transform.position).normalized;
+		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+		transform.rotation = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
 		
 		//inicia o ataque
 		attacking = true;
@@ -449,13 +445,11 @@ public class EnemyControl : MonoBehaviour
 				//dano
 				foreach (var hit in hitCol)
 				{
-					/*EnemyHealth E_HP = hit.GetComponent<EnemyHealth>();
-					if (E_HP.hit_id != hit_id)
-						E_HP.TakeDamage(atk_dmg[curr_hit]);*/
+					PlayerHealth P_HP = hit.GetComponent<PlayerHealth>();
+					if (P_HP.hit_id != hit_id)
+						P_HP.TakeDamage(atk_dmg[curr_hit]);
 
-					atk_cancel = true;
-
-					print("Hit");
+					//atk_cancel = true;
 				}
 
 				atk_duration[curr_hit]--;

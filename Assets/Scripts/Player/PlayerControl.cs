@@ -29,6 +29,7 @@ public class PlayerControl : MonoBehaviour
 		Attack,//atacando
 		Block,//bloqueando
 		Roll,//desviando
+		Heal,//se curando
 		
 		Hurt,//tomando hit
 		Dead//morrendo
@@ -160,6 +161,11 @@ public class PlayerControl : MonoBehaviour
 	[SerializeField]
 	private int hurt_animations;
 	
+	//duração da animação de curar e HP recuperado
+	[SerializeField]
+	private int heal_f_total, potion_healing;
+	private int heal_f;
+	
 	//tempo até a tela de game over aparecer
 	[SerializeField]
 	private int dead_f;
@@ -264,6 +270,11 @@ public class PlayerControl : MonoBehaviour
 			//desvio
 			case State.Roll:
 				StateRoll();
+				break;
+			
+			//cura
+			case State.Heal:
+				StateHeal();
 				break;
 			
 			//tomando dano
@@ -505,12 +516,25 @@ public class PlayerControl : MonoBehaviour
 
     private void StateRoll()
     {
-		//movimento em AnimRoll
+		//movimento do roll em AnimRoll
 		
 		//determina quando o roll acaba
 		if(roll_anim_f > 0)
 			roll_anim_f--;
 		else AnimFree();
+	}
+	
+	private void StateHeal()
+	{
+		//determina quando o heal acaba
+		if(heal_f > 0)
+			heal_f--;
+		else
+		{
+			//se cura
+			
+			AnimFree();
+		}
 	}
 	
 	private void StateHurt()
@@ -796,6 +820,16 @@ public class PlayerControl : MonoBehaviour
 		
 		rdb.velocity = roll_direction * rollspeed + new Vector3(0, rdb.velocity.y, 0);
     }
+	
+	//muda pro state de beber poção
+	private void AnimHeal()
+	{
+		//anim
+		
+		currentState = State.Heal;
+		
+		heal_f = heal_f_total;
+	}
 	
 	//dano
 	public void TookDamage()
