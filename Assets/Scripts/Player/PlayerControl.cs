@@ -67,6 +67,7 @@ public class PlayerControl : MonoBehaviour
 	private bool attackbtn = false;
 	private bool blockbtn = false;
 	private bool rollbtn = false;
+	private bool potbtn = false;
 	#endregion
 
 	#region attacks
@@ -305,6 +306,7 @@ public class PlayerControl : MonoBehaviour
 			
 			attackbtn = false;
 			rollbtn = false;
+			potbtn = false;
         }
 		
 		//== para só rodar uma vez
@@ -397,6 +399,11 @@ public class PlayerControl : MonoBehaviour
 				else if (rollbtn)
 				{
 					AnimRoll();
+				}
+				//poção
+				else if (potbtn)
+				{
+					AnimHeal();
 				}
 				//deixa o jogador começar o pulo / hold jump
 				else if(jumpbtn)
@@ -532,6 +539,7 @@ public class PlayerControl : MonoBehaviour
 		else
 		{
 			//se cura
+			P_HP.ReceiveHealing(potion_healing);
 			
 			AnimFree();
 		}
@@ -747,8 +755,8 @@ public class PlayerControl : MonoBehaviour
 		else atk_delay[curr_hit]--;
     }
 	#endregion
-
-	#region animation events
+	
+	#region state change
 	//volta pro State Free
 	private void AnimFree()
 	{
@@ -799,7 +807,7 @@ public class PlayerControl : MonoBehaviour
 	//muda pro state de roll
 	private void AnimRoll()
     {
-		anim.SetBool("Roll", true);
+		anim.SetTrigger("Roll");
 		
 		currentState = State.Roll;
 		
@@ -824,7 +832,7 @@ public class PlayerControl : MonoBehaviour
 	//muda pro state de beber poção
 	private void AnimHeal()
 	{
-		//anim
+		anim.SetTrigger("Drink");
 		
 		currentState = State.Heal;
 		
@@ -904,6 +912,7 @@ public class PlayerControl : MonoBehaviour
 		buffer_f = buffer_f_total;
 		blockbtn = false;
 		rollbtn = false;
+		potbtn = false;
 	}
 	//botão de bloquear pressionado
 	public void BlockDown()
@@ -914,6 +923,7 @@ public class PlayerControl : MonoBehaviour
 		//buffer_f = buffer_f_total;
 		attackbtn = false;
 		rollbtn = false;
+		potbtn = false;
 	}
 		//quando solta o block
 		public void BlockUp()
@@ -929,7 +939,19 @@ public class PlayerControl : MonoBehaviour
 		buffer_f = buffer_f_total;
 		attackbtn = false;
 		blockbtn = false;
+		potbtn = false;
 	}
+	//botão da poção pressionado
+	public void PotDown()
+    {
+		potbtn = true;
+
+		//buffer
+		buffer_f = buffer_f_total;
+		attackbtn = false;
+		blockbtn = false;
+		rollbtn = false;
+    }
 	#endregion
 	
 	#if UNITY_EDITOR

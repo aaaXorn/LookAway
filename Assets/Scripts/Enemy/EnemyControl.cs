@@ -131,6 +131,9 @@ public class EnemyControl : MonoBehaviour
 	//movimento total da reposição
 	[SerializeField]
 	private float reposition_dist;
+	//velocidade rotação e rotação durante um ataque
+	[SerializeField]
+	private float rot_spd, rot_atk_spd;
 	#endregion
 	
 	private void Start()
@@ -251,7 +254,8 @@ public class EnemyControl : MonoBehaviour
 		
 		//rotação
 		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
-		transform.rotation = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+		rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_spd);
 		
 		//movimento
 		Control.SimpleMove(dir * base_speed);
@@ -287,8 +291,9 @@ public class EnemyControl : MonoBehaviour
 		
 		//rotação
 		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
-		transform.rotation = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
-		
+		rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_spd);
+
 		//move o inimigo
 		Control.SimpleMove(dir * base_speed);
 	}
@@ -297,9 +302,14 @@ public class EnemyControl : MonoBehaviour
 	{
 		//movimento
 		Control.SimpleMove(move_dir * base_speed);
-		
+
+		//rotação
+		Quaternion rot = Quaternion.LookRotation(move_dir, Vector3.up);
+		rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_spd);
+
 		//quando chega no ponto escolhido, para
-		if(Vector3.Distance(transform.position, move_target) <= 1)
+		if (Vector3.Distance(transform.position, move_target) <= 1)
 			currentState = State.Active;
 	}
 		//define pra qual posição o reposition vai ir
@@ -330,9 +340,18 @@ public class EnemyControl : MonoBehaviour
 		
 		if(atk_movement != 0)
 			Control.SimpleMove(transform.forward * atk_movement);
-		
+
+		Vector3 go_to = PlayerTransf.position - transform.position;
+		//direção
+		Vector3 dir = go_to.normalized;
+
+		//rotação
+		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+		rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_atk_spd);
+
 		//encerra o ataque
-		if(atk_last_frame <= 0)
+		if (atk_last_frame <= 0)
 		{
 			attacking = false;
 			atk_cancel = false;
@@ -363,8 +382,13 @@ public class EnemyControl : MonoBehaviour
 		
 		//move o inimigo
 		Control.SimpleMove(dir * base_speed);
-		
-		if(dist <= 0.1f)
+
+		//rotação
+		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+		rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_atk_spd);
+
+		if (dist <= 0.1f)
 			currentState = State.Inactive;
 	}
 	#endregion
@@ -396,11 +420,6 @@ public class EnemyControl : MonoBehaviour
 		atk_movement = atk.movement;
 		
 		atk_cd = atk.cooldown;
-		
-		//rotação
-		Vector3 dir = (PlayerTransf.position - transform.position).normalized;
-		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
-		transform.rotation = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
 		
 		//inicia o ataque
 		attacking = true;

@@ -5,19 +5,8 @@ using UnityEngine.EventSystems;
 
 public class BlockButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-	//referência global do código do botão
-	public static BlockButton Instance {get; set;}
-	
 	//referência do código do player
 	private PlayerControl PlayerC;
-	
-	void Awake()
-	{
-		//setta a referência global desse script
-		if(Instance == null) Instance = this;
-		//garante que só tem um dele na cena
-		else Destroy(gameObject);
-	}
 	
     void Start()
     {
