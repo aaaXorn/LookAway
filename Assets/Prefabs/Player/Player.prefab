@@ -1286,6 +1286,24 @@ MonoBehaviour:
   blocking: 0
   block_mult: 1
   hp_img: {fileID: 0}
+  pot_txt: {fileID: 0}
+--- !u!114 &4914450020673877303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6035953435348010785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f3c8d64c1d99804b87c3dc64015b61f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sword_lvl: 0
+  armor_lvl: 0
+  shield_lvl: 0
+  potions: 4
+  max_potions: 4
 --- !u!1001 &3150248267744740626
 PrefabInstance:
   m_ObjectHideFlags: 0

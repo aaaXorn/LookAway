@@ -789,8 +789,8 @@ public class PlayerControl : MonoBehaviour
 		
 		P_HP.blocking = true;
 		//diminui % do dano
-		if(PlayerEquipment.shield_lvl < 3)
-			P_HP.block_mult = (PlayerEquipment.shield_lvl < 2) ? 0.5f : 0.25f;
+		if(PlayerEquipment.Instance.shield_lvl < 3)
+			P_HP.block_mult = (PlayerEquipment.Instance.shield_lvl < 2) ? 0.5f : 0.25f;
 		//invul frames
 		else
 		{
@@ -944,6 +944,8 @@ public class PlayerControl : MonoBehaviour
 	//botão da poção pressionado
 	public void PotDown()
     {
+		if(PlayerEquipment.Instance.potions <= 0) return;
+
 		potbtn = true;
 
 		//buffer

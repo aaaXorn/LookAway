@@ -8,6 +8,9 @@ settings de PlayerPrefs:
 GameQuality (int): qualidade gráfica
 CameraSensivity (int): sensividade da camera
 OldPlayerPosition (Vector3): última posição do player na Scene Land
+SwordLevel, ArmorLevel, ShieldLevel (int): níveis de equipamento
+CurrPotions (int): poções que o jogador tem atualmente
+MaxPotions (int): número máximo de poções que o jogador tem
 */
 
 public class SaveSystem
@@ -36,7 +39,13 @@ public class SaveSystem
 	//salva somente os stats do player
 	public static void SavePlayerStats()
 	{
-		//stats espada, armadura, escudo
+		//equipamentos
+		PlayerPrefs.SetInt("SwordLevel", PlayerEquipment.Instance.sword_lvl);
+		PlayerPrefs.SetInt("ArmorLevel", PlayerEquipment.Instance.armor_lvl);
+		PlayerPrefs.SetInt("ShieldLevel", PlayerEquipment.Instance.shield_lvl);
+		//poção
+		PlayerPrefs.SetInt("MaxPotions", PlayerEquipment.Instance.max_potions);
+		PlayerPrefs.SetInt("CurrPotions", PlayerEquipment.Instance.potions);
 	}
 	
 	//carrega as configs
@@ -100,6 +109,38 @@ public class SaveSystem
                 PC.transform.position = PlayerPrefsX.GetVector3("OldPlayerPosition");
             }
         }
-		//config stats de arma/armadur/escudo
+
+		LoadPlayerStats();
+	}
+
+	//carrega somente os stats do player
+	public static void LoadPlayerStats()
+    {
+		//equipamento
+		if (PlayerPrefs.HasKey("SwordLevel"))
+		{
+			PlayerEquipment.Instance.sword_lvl = PlayerPrefs.GetInt("SwordLevel");
+		}
+		if (PlayerPrefs.HasKey("ArmorLevel"))
+		{
+			PlayerEquipment.Instance.armor_lvl = PlayerPrefs.GetInt("ArmorLevel");
+		}
+		if (PlayerPrefs.HasKey("ShieldLevel"))
+		{
+			PlayerEquipment.Instance.shield_lvl = PlayerPrefs.GetInt("ShieldLevel");
+		}
+		//poção
+		if (PlayerPrefs.HasKey("MaxPotions"))
+		{
+			if (PlayerPrefs.GetInt("MaxPotion") < 4)
+				PlayerPrefs.SetInt("MaxPotions", 4);
+			PlayerEquipment.Instance.max_potions = PlayerPrefs.GetInt("MaxPotions");
+		}
+		if (PlayerPrefs.HasKey("CurrPotions"))
+		{
+			if (PlayerPrefs.GetInt("CurrPotions") < 0)
+				PlayerPrefs.SetInt("CurrPotions", PlayerEquipment.Instance.max_potions);
+			 PlayerEquipment.Instance.potions = PlayerPrefs.GetInt("CurrPotions");
+		}
 	}
 }

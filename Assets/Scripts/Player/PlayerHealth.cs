@@ -21,8 +21,12 @@ public class PlayerHealth : MonoBehaviour
 	public bool invul = false, blocking = false;
 	public float block_mult = 1;
 
+	//barra de hp
 	[SerializeField]
 	private Image hp_img;
+
+	//número de poções sobrando
+	public Text pot_txt;
 	
 	private void Awake()
 	{
@@ -35,6 +39,9 @@ public class PlayerHealth : MonoBehaviour
 	private void Start()
 	{
 		hp = max_hp;
+
+		//UI
+		pot_txt.text = "" + PlayerEquipment.Instance.potions;
 		
 		//pega o script de controle do jogador
 		if(PlayerControl.Instance != null) PlayerC = PlayerControl.Instance;
@@ -75,12 +82,16 @@ public class PlayerHealth : MonoBehaviour
 	public void ReceiveHealing(int heal)
 	{
 		//aumenta o HP
-		if(hp > 0) hp += heal;
-		
+		if (hp > 0) hp += heal;
+
 		//limita o HP pra não ultrapassar max_hp
-		if(hp > max_hp) hp = max_hp;
-		
+		if (hp > max_hp) hp = max_hp;
+
+		//diminui as poções restantes por 1
+		PlayerEquipment.Instance.potions--;
+
 		//UI
 		hp_img.fillAmount = (float)hp / max_hp;
+		pot_txt.text = "" + PlayerEquipment.Instance.potions;
 	}
 }
