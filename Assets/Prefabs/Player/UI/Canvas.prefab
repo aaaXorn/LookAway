@@ -1158,7 +1158,7 @@ MonoBehaviour:
   ad_btn:
   - {fileID: 5024256359132541396}
   - {fileID: 8635878650797749116}
-  placementId: 
+  placementId: teste
 --- !u!1 &2967842342458726267
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ public class AdFunctions : MonoBehaviour, IUnityAdsListener
 {
     //id de development do jogo
     private string gameId = "4747893";
-    private bool test_mode = false;
+    private bool test_mode = true;
 
     //botão usado
     [SerializeField]
