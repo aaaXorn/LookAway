@@ -8,7 +8,7 @@ public class AdFunctions : MonoBehaviour, IUnityAdsListener
 {
     //id de development do jogo
     private string gameId = "4747893";
-    private bool test_mode = true;
+    private bool test_mode = false;
 
     //botão usado
     [SerializeField]
@@ -19,6 +19,43 @@ public class AdFunctions : MonoBehaviour, IUnityAdsListener
 
     private void Start()
     {
+        /*
+        #if UNITY_EDITOR
+        test_mode = true;
+        
+        //inicializa os ads
+        Advertisement.AddListener(this);
+        Advertisement.Initialize(gameId, test_mode);
+
+        if (ad_btn != null)
+        {
+            foreach(Button btn in ad_btn)
+            {
+                //para só dar para interagir com o botão se tiverem anúncios
+                //btn.interactable = Advertisement.IsReady(placementId);
+
+                btn.onClick.AddListener(RewardedAd);
+            }
+        }
+        else print("ad_btn is null");
+        #endif
+        #if !UNITY_EDITOR
+        if (ad_btn != null)
+        {
+            foreach(Button btn in ad_btn)
+            {
+                //para só dar para interagir com o botão se tiverem anúncios
+                //btn.interactable = Advertisement.IsReady(placementId);
+
+                btn.onClick.AddListener(RewardedAd);
+            }
+        }
+        #endif
+        */
+        #if UNITY_EDITOR
+        test_mode = true;
+        #endif
+
         //inicializa os ads
         Advertisement.AddListener(this);
         Advertisement.Initialize(gameId, test_mode);
@@ -39,7 +76,22 @@ public class AdFunctions : MonoBehaviour, IUnityAdsListener
     //inicia o ad
     private void RewardedAd()
     {
+        /*
+        #if UNITY_EDITOR
         Advertisement.Show(placementId);
+        #endif
+        #if !UNITY_EDITOR
+        Rewards();
+        #endif
+        */
+        Advertisement.Show(placementId);
+    }
+
+    //recompensa do jogador por ver o anuncio
+    private void Rewards()
+    {
+        PlayerEquipment.Instance.potions = PlayerEquipment.Instance.max_potions;
+        PlayerHealth.Instance.pot_txt.text = "" + PlayerEquipment.Instance.potions;
     }
 
     public void OnUnityAdsReady(string p_id)
@@ -58,8 +110,7 @@ public class AdFunctions : MonoBehaviour, IUnityAdsListener
         if(showR == ShowResult.Finished)
         {
             //da a recompença
-            PlayerEquipment.Instance.potions = PlayerEquipment.Instance.max_potions;
-            PlayerHealth.Instance.pot_txt.text = "" + PlayerEquipment.Instance.potions;
+            Rewards();
         }
         else if(showR == ShowResult.Skipped)
         {
