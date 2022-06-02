@@ -1012,6 +1012,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3f02eab47675284e90175a610ba69e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dyn_checks_decrease: 3
+  dyn_checks_increase: 10
+  dyn_check_cd: 1
+  dyn_change_cd: 3
 --- !u!1 &2967842342082984192
 GameObject:
   m_ObjectHideFlags: 0

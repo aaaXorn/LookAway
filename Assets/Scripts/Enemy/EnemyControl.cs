@@ -5,8 +5,6 @@ using UnityEngine.AI;
 
 public class EnemyControl : MonoBehaviour
 {
-	//referência do código do player
-	private PlayerControl PlayerC;
 	//transform do player
 	private Transform PlayerTransf;
 	
@@ -138,11 +136,8 @@ public class EnemyControl : MonoBehaviour
 	
 	private void Start()
     {
-        //pega o script de controle do jogador
-		if(PlayerControl.Instance != null) PlayerC = PlayerControl.Instance;
-		else print("PlayerControl Instance not found.");
 		//pega o transform do objeto do player
-		PlayerTransf = PlayerC.transform;
+		PlayerTransf = PlayerControl.Instance.transform;
 		
 		Control = GetComponent<CharacterController>();
 		

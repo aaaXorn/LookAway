@@ -15,13 +15,6 @@ public class PlayerControl : MonoBehaviour
 	private int debug_fps;
 	#endif
 
-	//referência do joystick de movimento
-	private MovementJoystick MoveJ;
-	//referência do script de HP
-	private PlayerHealth P_HP;
-	//referência do script de camera lock
-	private CamLock CL;
-
 	//enum com os states do player
 	private enum State
 	{
@@ -183,17 +176,7 @@ public class PlayerControl : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-		//pega o script de movimento com joystick
-		if(MovementJoystick.Instance != null) MoveJ = MovementJoystick.Instance;
-		else print("MovementJoystick Instance not found.");
-		//pega o script de movimento com joystick
-		if (PlayerHealth.Instance != null) P_HP = PlayerHealth.Instance;
-		else print("PlayerHealth Instance not found.");
-		//pega o script de movimento com joystick
-		if (CamLock.Instance != null) CL = CamLock.Instance;
-		else print("CamLock Instance not found.");
-		
-        currentCamera = Camera.main.gameObject;
+		currentCamera = Camera.main.gameObject;
 	   
 	    //cria o dicionário de ataques
 		/*AtkDictionary = new Dictionary<string, Attack>();
@@ -244,7 +227,7 @@ public class PlayerControl : MonoBehaviour
 
 		//movimento com o joystick
 		//.normalized garante que o jogador sempre ande na mesma velocidade
-		movaxis = new Vector3(MoveJ.Horizontal, 0, MoveJ.Vertical);
+		movaxis = new Vector3(MovementJoystick.Instance.Horizontal, 0, MovementJoystick.Instance.Vertical);
     }
 
 	//state machine
@@ -313,7 +296,7 @@ public class PlayerControl : MonoBehaviour
 		if(invul_f == 0)
         {
 			//termina os invulframes
-			P_HP.invul = false;
+			PlayerHealth.Instance.invul = false;
 			
 			invul_f--;
         }
@@ -506,7 +489,7 @@ public class PlayerControl : MonoBehaviour
 		if(!blockbtn)
 		{
 			anim.SetBool("Block", false);
-			P_HP.blocking = false;
+			PlayerHealth.Instance.blocking = false;
 			
 			currentState = State.Free;
 		}
@@ -515,7 +498,7 @@ public class PlayerControl : MonoBehaviour
 		if(rollbtn)
 		{
 			anim.SetBool("Block", false);
-			P_HP.blocking = false;
+			PlayerHealth.Instance.blocking = false;
 			
 			AnimRoll();
 		}
@@ -539,7 +522,7 @@ public class PlayerControl : MonoBehaviour
 		else
 		{
 			//se cura
-			P_HP.ReceiveHealing(potion_healing);
+			PlayerHealth.Instance.ReceiveHealing(potion_healing);
 			
 			AnimFree();
 		}
@@ -671,9 +654,9 @@ public class PlayerControl : MonoBehaviour
 		attacking = true;
 		
 		//rotaciona o player na direção do inimigo
-		if(CL.cam_lock)
+		if(CamLock.Instance.cam_lock)
 		{
-			Vector3 dir = CL.cam_target[CL.curr_target].position - transform.position;
+			Vector3 dir = CamLock.Instance.cam_target[CamLock.Instance.curr_target].position - transform.position;
 			Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 			transform.rotation = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
 		}
@@ -787,10 +770,10 @@ public class PlayerControl : MonoBehaviour
 		
 		currentState = State.Block;
 		
-		P_HP.blocking = true;
+		PlayerHealth.Instance.blocking = true;
 		//diminui % do dano
 		if(PlayerEquipment.Instance.shield_lvl < 3)
-			P_HP.block_mult = (PlayerEquipment.Instance.shield_lvl < 2) ? 0.5f : 0.25f;
+			PlayerHealth.Instance.block_mult = (PlayerEquipment.Instance.shield_lvl < 2) ? 0.5f : 0.25f;
 		//invul frames
 		else
 		{
@@ -800,7 +783,7 @@ public class PlayerControl : MonoBehaviour
 				//reseta os frames de invul
 				invul_f = block_f_total;
 				//inicia os invul frames
-				P_HP.invul = true;
+				PlayerHealth.Instance.invul = true;
 			}
 		}
 	}
@@ -819,7 +802,7 @@ public class PlayerControl : MonoBehaviour
 			//reseta os frames de invul
 			invul_f = roll_f_total;
 			//inicia os invul frames
-			P_HP.invul = true;
+			PlayerHealth.Instance.invul = true;
 		}
 		
 		//movimento
@@ -850,7 +833,7 @@ public class PlayerControl : MonoBehaviour
 			//reseta os frames de invul
 			invul_f = hurt_f_total;
 			//inicia os invul frames
-			P_HP.invul = true;
+			PlayerHealth.Instance.invul = true;
 		}
 
 		hurt_anim_f = hurt_anim_f_total;
@@ -866,7 +849,7 @@ public class PlayerControl : MonoBehaviour
 			//reseta os frames de invul
 			invul_f = hurt_f_total;
 			//inicia os invul frames
-			P_HP.invul = true;
+			PlayerHealth.Instance.invul = true;
 		}
 		
 		//sound effect

@@ -8,9 +8,6 @@ public class PlayerHealth : MonoBehaviour
 	//referência global do código do personagem
 	public static PlayerHealth Instance {get; set;}
 	
-	//referência do código do player
-	private PlayerControl PlayerC;
-	
 	[SerializeField]
 	private int max_hp;//vida máxima
 	private int hp;//vida atual
@@ -42,10 +39,6 @@ public class PlayerHealth : MonoBehaviour
 
 		//UI
 		pot_txt.text = "" + PlayerEquipment.Instance.potions;
-		
-		//pega o script de controle do jogador
-		if(PlayerControl.Instance != null) PlayerC = PlayerControl.Instance;
-		else print("PlayerControl Instance not found.");
 	}
 	
     public void TakeDamage(int dmg)
@@ -65,14 +58,17 @@ public class PlayerHealth : MonoBehaviour
 			{
 				hp = 0;
 
-				PlayerC.Dying();
+				PlayerControl.Instance.Dying();
+				
+				//UI
+				hp_img.fillAmount = 0;
 				
 				return;
 			}
 			
 			if(!blocking)
 				//faz os efeitos de invul frame e animação
-				PlayerC.TookDamage();
+				PlayerControl.Instance.TookDamage();
 
 			//UI
 			hp_img.fillAmount = (float)hp / max_hp;
