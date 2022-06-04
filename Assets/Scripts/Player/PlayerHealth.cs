@@ -11,8 +11,6 @@ public class PlayerHealth : MonoBehaviour
 	[SerializeField]
 	private int max_hp;//vida máxima
 	private int hp;//vida atual
-	
-	public int hit_id;
 
 	//se o jogador tem invincibility frames
 	public bool invul = false, blocking = false;

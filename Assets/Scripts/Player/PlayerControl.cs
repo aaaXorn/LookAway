@@ -70,7 +70,7 @@ public class PlayerControl : MonoBehaviour
 	private LayerMask enemy_layer;
 	
 	//ID do hit, usado pra mesma hitbox não acertar várias vezes
-	private int hit_id;
+	private int hit_id = 200;
 	//número de hits do ataque, hits que tinha quando o ataque começou,
 	//último hit dado e hit anterior (pra efeitos que acontecem só uma vez)
 	private int atk_hits, curr_hit, prev_hit;

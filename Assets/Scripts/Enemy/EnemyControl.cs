@@ -41,8 +41,8 @@ public class EnemyControl : MonoBehaviour
 	[SerializeField]
 	private LayerMask player_layer;
 
-	//ID do hit, usado pra mesma hitbox não acertar várias vezes
-	private int hit_id;
+	//se o ataque já acertou o player
+	private bool has_hit;
 	private string atk_type;//tipo do ataque
 	//número de hits do ataque, hits que tinha quando o ataque começou,
 	//último hit dado e hit anterior (pra efeitos que acontecem só uma vez)
@@ -291,12 +291,13 @@ public class EnemyControl : MonoBehaviour
 			//melee
 			if(dist <= melee_atk_range)
 			{
+				if(currAtk > AtkList.Count - 1)
+					currAtk = 0;
+				
 				AnimHit(currAtk);
 				
 				//muda o próximo ataque
 				currAtk++;
-				if(currAtk > AtkList.Count)
-					currAtk = 0;
 				
 				currentState = State.Melee;
 			}
@@ -306,7 +307,7 @@ public class EnemyControl : MonoBehaviour
 				
 				
 				currSpAtk++;
-				if(currSpAtk > SpAtkList.Count)
+				if(currSpAtk > SpAtkList.Count - 1)
 					currSpAtk = 0;
 				
 				print("ranged");
@@ -517,7 +518,7 @@ public class EnemyControl : MonoBehaviour
 			//continua
 			else
 			{
-				hit_id++;
+				has_hit = false;
 
 				prev_hit = curr_hit;
 			}
@@ -529,25 +530,29 @@ public class EnemyControl : MonoBehaviour
 			//faz o ataque
 			if (atk_duration[curr_hit] > 0)
 			{
-				Vector3 pos = atk_origin[curr_hit].position;
-
-				Collider[] hitCol;
-
-				//hitbox
-				hitCol = Physics.OverlapCapsule(pos,
-						   pos + atk_origin[curr_hit].forward * atk_length[curr_hit],
-						   atk_size[curr_hit], player_layer);
-
-				//dano
-				foreach (var hit in hitCol)
+				if(!has_hit)
 				{
-					PlayerHealth P_HP = hit.GetComponent<PlayerHealth>();
-					if (P_HP.hit_id != hit_id)
+					Vector3 pos = atk_origin[curr_hit].position;
+
+					Collider[] hitCol;
+
+					//hitbox
+					hitCol = Physics.OverlapCapsule(pos,
+							   pos + atk_origin[curr_hit].forward * atk_length[curr_hit],
+							   atk_size[curr_hit], player_layer);
+
+					//dano
+					foreach (var hit in hitCol)
+					{
+						PlayerHealth P_HP = hit.GetComponent<PlayerHealth>();
 						P_HP.TakeDamage(atk_dmg[curr_hit]);
-
-					//atk_cancel = true;
+						
+						has_hit = true;
+						
+						//atk_cancel = true;
+					}
 				}
-
+				
 				atk_duration[curr_hit]--;
 			}
 			//encerra esse hit
@@ -575,7 +580,7 @@ public class EnemyControl : MonoBehaviour
 			//continua
 			else
 			{
-				//hit_id++;
+				has_hit = false;
 
 				prev_hit = curr_hit;
 			}

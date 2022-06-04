@@ -24,13 +24,15 @@ public class Shockwave : MonoBehaviour
 	[SerializeField]
 	private float atk_vReach;
 	
+	private bool has_hit;
+	
 	private void FixedUpdate()
 	{
 		//timer
 		if(atk_duration > 0)
 		{
 			//alcance
-			if(Vector3.Distance(transform.position, PlayerTransf.position) < atk_dist)
+			if(has_hit && (Vector3.Distance(transform.position, PlayerTransf.position) < atk_dist))
 			{
 				//se o jogador está perto do chão
 				RaycastHit hit;
@@ -40,8 +42,9 @@ public class Shockwave : MonoBehaviour
 					{
 						//dano
 						PlayerHealth P_HP = PlayerTransf.GetComponent<PlayerHealth>();
-						if (P_HP.hit_id != hit_id)
-							P_HP.TakeDamage(atk_dmg);
+						P_HP.TakeDamage(atk_dmg);
+						
+						has_hit = true;
 					}
 				}
 			}
