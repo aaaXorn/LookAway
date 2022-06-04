@@ -44,8 +44,8 @@ public class EnemyControl : MonoBehaviour
 	//ID do hit, usado pra mesma hitbox não acertar várias vezes
 	private int hit_id;
 	private string atk_type;//tipo do ataque
-							//número de hits do ataque, hits que tinha quando o ataque começou,
-							//último hit dado e hit anterior (pra efeitos que acontecem só uma vez)
+	//número de hits do ataque, hits que tinha quando o ataque começou,
+	//último hit dado e hit anterior (pra efeitos que acontecem só uma vez)
 	private int atk_hits, curr_hit, prev_hit;
 	//dano, duração e tamanho do ataque
 	private int[] atk_dmg = new int[5], atk_duration = new int[5], atk_delay = new int[5];
@@ -65,11 +65,6 @@ public class EnemyControl : MonoBehaviour
 	//informações dos tipos de ataque
 	public class Attack
 	{
-		/*[Tooltip("Attack's name")]
-		public string id;*/
-
-		[Tooltip("Attack properties")]
-		public string type;
 		[Tooltip("How many hits the attack has")]
 		public int hit_count;
 
@@ -96,11 +91,40 @@ public class EnemyControl : MonoBehaviour
 
 	//lista com os ataques
 	public List<Attack> AtkList;
-	//dicionário dos ataques
-	//usado para localizar os ataques por string
-	//public Dictionary<string, Attack> AtkDictionary;
+	
+	[System.Serializable]
+	public class SpAttack
+	{
+		[Tooltip("Type of special attack")]
+		public string type;
+		
+		[Tooltip("How many hits the attack has")]
+		public int hit_count;
+		
+		[Tooltip("Delay between the attacks")]
+		public int[] delay;
+		[Tooltip("When the attack ends if not canceled")]
+		public int last_frame;
+		[Tooltip("Attack point of origin")]
+		public Transform[] origin;
+		[Tooltip("The cooldown of the attack")]
+		public int cooldown;
+		
+		[Tooltip("Mid attack movement")]
+		public float movement;
+		
+		[Tooltip("The attack projectile")]
+		public GameObject[] Prefab;
+	}
+	
+	//prefab do ataque
+	private GameObject[] AtkPrefab;
+	
+	//lista com os ataques especiais
+	public List<SpAttack> SpAtkList;
+	
 	//ataque atual
-	private int currAtk;
+	private int currAtk, currSpAtk;
 	
 	[SerializeField]
 	//cooldown do ataque
@@ -267,13 +291,24 @@ public class EnemyControl : MonoBehaviour
 			//melee
 			if(dist <= melee_atk_range)
 			{
-				AnimHit(0);
+				AnimHit(currAtk);
+				
+				//muda o próximo ataque
+				currAtk++;
+				if(currAtk > AtkList.Count)
+					currAtk = 0;
 				
 				currentState = State.Melee;
 			}
 			//ranged
 			else if(dist <= ranged_atk_range)
 			{
+				
+				
+				currSpAtk++;
+				if(currSpAtk > SpAtkList.Count)
+					currSpAtk = 0;
+				
 				print("ranged");
 			}
 		}
@@ -359,7 +394,33 @@ public class EnemyControl : MonoBehaviour
 	
 	protected virtual void StateRanged()
 	{
+		if(attacking)
+		{
+			SpAttackEffect();
+		}
 		
+		if(atk_movement != 0)
+			Control.SimpleMove(transform.forward * atk_movement);
+
+		Vector3 go_to = PlayerTransf.position - transform.position;
+		//direção
+		Vector3 dir = go_to.normalized;
+
+		//rotação
+		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+		rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_atk_spd);
+
+		//encerra o ataque
+		if (atk_last_frame <= 0)
+		{
+			attacking = false;
+			atk_cancel = false;
+			
+			//RepositionStart();
+			currentState = State.Approach;
+		}
+		else atk_last_frame--;
 	}
 	
 	protected virtual void StateDead()
@@ -390,13 +451,11 @@ public class EnemyControl : MonoBehaviour
 	
 	#region attacks
 	//define o dano, duração, tamanho e tipo da hitbox por ID
-	private void AnimHit(int id)//(string id)
+	private void AnimHit(int id)
 	{
 		//propriedades do ataque
-		//Attack atk = AtkDictionary[id];
 		Attack atk = AtkList[id];
-
-		atk_type = atk.type;
+		
 		atk_hits = atk.hit_count;
 		curr_hit = 0;
 		prev_hit = -1;
@@ -408,12 +467,35 @@ public class EnemyControl : MonoBehaviour
 			atk_size[i] = atk.size[i];
 			atk_length[i] = atk.length[i];
 			atk_delay[i] = atk.delay[i];
-			atk_last_frame = atk.last_frame;
 			atk_origin[i] = atk.origin[i];
 		}
 		
 		atk_movement = atk.movement;
+		atk_last_frame = atk.last_frame;
+		atk_cd = atk.cooldown;
 		
+		//inicia o ataque
+		attacking = true;
+	}
+	
+	private void SpecialHit(int id)
+	{
+		//propriedades do ataque
+		SpAttack atk = SpAtkList[id];
+		
+		atk_type = atk.type;
+		curr_hit = 0;
+		prev_hit = -1;
+
+		for (int i = 0; i < atk_hits; i++)
+		{
+			atk_delay[i] = atk.delay[i];
+			atk_origin[i] = atk.origin[i];
+			AtkPrefab[i] = atk.Prefab[i];
+		}
+		
+		atk_movement = atk.movement;
+		atk_last_frame = atk.last_frame;
 		atk_cd = atk.cooldown;
 		
 		//inicia o ataque
@@ -477,7 +559,40 @@ public class EnemyControl : MonoBehaviour
 		//diminui 1 frame do delay
 		else atk_delay[curr_hit]--;
 	}
+	
+	private void SpAttackEffect()
+	{
+		//gera um novo ID pro ataque
+		if (prev_hit != curr_hit)
+		{
+			//encerra os ataques
+			if (curr_hit >= atk_hits)
+			{
+				attacking = false;
 
+				return;
+			}
+			//continua
+			else
+			{
+				//hit_id++;
+
+				prev_hit = curr_hit;
+			}
+		}
+		
+		//após o delay acabar, começa o hit
+		if (atk_delay[curr_hit] <= 0)
+		{
+			//cria o projétil
+			
+			
+			curr_hit++;
+		}
+		//diminui 1 frame do delay
+		else atk_delay[curr_hit]--;
+		
+	}
 	#endregion
 
 #if UNITY_EDITOR

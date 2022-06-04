@@ -71,7 +71,6 @@ public class PlayerControl : MonoBehaviour
 	
 	//ID do hit, usado pra mesma hitbox não acertar várias vezes
 	private int hit_id;
-	private string atk_type;//tipo do ataque
 	//número de hits do ataque, hits que tinha quando o ataque começou,
 	//último hit dado e hit anterior (pra efeitos que acontecem só uma vez)
 	private int atk_hits, curr_hit, prev_hit;
@@ -96,8 +95,6 @@ public class PlayerControl : MonoBehaviour
 		/*[Tooltip("Attack's name")]
 		public string id;*/
 		
-		[Tooltip("Attack properties")]
-		public string type;
 		[Tooltip("How many hits the attack has")]
 		public int hit_count;
 		
@@ -632,7 +629,6 @@ public class PlayerControl : MonoBehaviour
 		//Attack atk = AtkDictionary[id];
 		Attack atk = AtkList[id];
 		
-		atk_type = atk.type;
 		atk_hits = atk.hit_count;
 		curr_hit = 0;
 		prev_hit = -1;
