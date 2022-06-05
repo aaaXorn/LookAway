@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class EnemyControl : MonoBehaviour
 {
@@ -78,30 +77,18 @@ public class EnemyControl : MonoBehaviour
 	[System.Serializable]
 	public class SpAttack
 	{
-		[Tooltip("Type of special attack")]
-		public string type;
+		[Tooltip("Attack info")]
+		public EnemySpecialAttackSO sp_atk;
 		
-		[Tooltip("How many hits the attack has")]
-		public int hit_count;
-		
-		[Tooltip("Delay between the attacks")]
-		public int[] delay;
-		[Tooltip("When the attack ends if not canceled")]
-		public int last_frame;
 		[Tooltip("Attack point of origin")]
 		public Transform[] origin;
-		[Tooltip("The cooldown of the attack")]
-		public int cooldown;
 		
-		[Tooltip("Mid attack movement")]
-		public float movement;
-		
-		[Tooltip("The attack projectile")]
-		public GameObject[] Prefab;
+		[Tooltip("Projectile manager")]
+		public PoolManager Manager;
 	}
 	
-	//prefab do ataque
-	private GameObject[] AtkPrefab;
+	//manager de pool
+	private PoolManager atk_manager;
 	
 	//lista com os ataques especiais
 	public List<SpAttack> SpAtkList;
@@ -277,7 +264,6 @@ public class EnemyControl : MonoBehaviour
 				if(currAtk > NAtkList.Count - 1)
 					currAtk = 0;
 				
-				atk_type = "NormalAttack";
 				AnimHit(currAtk);
 				
 				//muda o próximo ataque
@@ -288,13 +274,15 @@ public class EnemyControl : MonoBehaviour
 			//ranged
 			else if(dist <= ranged_atk_range)
 			{
-				
-				
-				currSpAtk++;
 				if(currSpAtk > SpAtkList.Count - 1)
 					currSpAtk = 0;
 				
-				print("ranged");
+				SpecialHit(currAtk);
+				
+				//muda o próximo ataque
+				currSpAtk++;
+				
+				currentState = State.Ranged;
 			}
 		}
 	}
@@ -438,32 +426,27 @@ public class EnemyControl : MonoBehaviour
 	//define o dano, duração, tamanho e tipo da hitbox por ID
 	private void AnimHit(int id)
 	{
-		switch(atk_type)
-		{
-			case "NormalAttack":
-				//propriedades do ataque
-				NormalAttack atk = NAtkList[id];
-				EnemyNormalAttackSO n_atk = atk.n_atk;
-				
-				atk_hits = n_atk.hit_count;
-				curr_hit = 0;
-				prev_hit = -1;
+		//propriedades do ataque
+		NormalAttack atk = NAtkList[id];
+		EnemyNormalAttackSO n_atk = atk.n_atk;
+		
+		atk_hits = n_atk.hit_count;
+		curr_hit = 0;
+		prev_hit = -1;
 
-				for (int i = 0; i < atk_hits; i++)
-				{
-					atk_dmg[i] = n_atk.dmg[i];
-					atk_duration[i] = n_atk.duration[i];
-					atk_size[i] = n_atk.size[i];
-					atk_length[i] = n_atk.length[i];
-					atk_delay[i] = n_atk.delay[i];
-					atk_origin[i] = atk.origin[i];
-				}
-				
-				atk_movement = n_atk.movement;
-				atk_last_frame = n_atk.last_frame;
-				atk_cd = n_atk.cooldown;
-				break;
+		for (int i = 0; i < atk_hits; i++)
+		{
+			atk_dmg[i] = n_atk.dmg[i];
+			atk_duration[i] = n_atk.duration[i];
+			atk_size[i] = n_atk.size[i];
+			atk_length[i] = n_atk.length[i];
+			atk_delay[i] = n_atk.delay[i];
+			atk_origin[i] = atk.origin[i];
 		}
+		
+		atk_movement = n_atk.movement;
+		atk_last_frame = n_atk.last_frame;
+		atk_cd = n_atk.cooldown;
 		
 		//inicia o ataque
 		attacking = true;
@@ -474,20 +457,24 @@ public class EnemyControl : MonoBehaviour
 		//propriedades do ataque
 		SpAttack atk = SpAtkList[id];
 		
-		atk_type = atk.type;
+		EnemySpecialAttackSO sp_atk = atk.sp_atk;
+		
+		atk_type = sp_atk.type;
+		atk_hits = sp_atk.hit_count;
 		curr_hit = 0;
 		prev_hit = -1;
 
 		for (int i = 0; i < atk_hits; i++)
 		{
-			atk_delay[i] = atk.delay[i];
+			atk_delay[i] = sp_atk.delay[i];
 			atk_origin[i] = atk.origin[i];
-			AtkPrefab[i] = atk.Prefab[i];
 		}
 		
-		atk_movement = atk.movement;
-		atk_last_frame = atk.last_frame;
-		atk_cd = atk.cooldown;
+		atk_movement = sp_atk.movement;
+		atk_last_frame = sp_atk.last_frame;
+		atk_cd = sp_atk.cooldown;
+		
+		atk_manager = atk.Manager;
 		
 		//inicia o ataque
 		attacking = true;
@@ -580,6 +567,30 @@ public class EnemyControl : MonoBehaviour
 		if (atk_delay[curr_hit] <= 0)
 		{
 			//cria o projétil
+			GameObject obj = atk_manager.GetFromPool();
+			
+			if(obj == null)
+			{
+				print("Special attack prefab is null.");
+				
+				return;
+			}
+			
+			//configura o projétil
+			obj.SetActive(true);
+			
+			obj.transform.position = atk_origin[curr_hit].position;
+			obj.transform.rotation = atk_origin[curr_hit].rotation;
+			
+			switch(atk_type)
+			{
+				case "Shockwave":
+					
+					break;
+					
+				default:
+					break;
+			}
 			
 			
 			curr_hit++;

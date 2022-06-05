@@ -8139,7 +8139,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5346
+  m_Name: pb_Mesh-5334
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8303,7 +8303,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5362
+  m_Name: pb_Mesh-5350
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8956,10 +8956,14 @@ MonoBehaviour:
   - n_atk: {fileID: 11400000, guid: 5a618289f9dc653428fab2df3036fa68, type: 2}
     origin:
     - {fileID: 1130164745}
-  SpAtkList: []
+  SpAtkList:
+  - sp_atk: {fileID: 11400000, guid: acfb4e57349df6a47aa010aba2c9a139, type: 2}
+    origin:
+    - {fileID: 1183210967}
+    Manager: {fileID: 2011133452429415040}
   atk_cd_total: 0
   melee_atk_range: 3
-  ranged_atk_range: 0
+  ranged_atk_range: 10
   start_pos: {x: 0, y: 0, z: 0}
   base_speed: 3
   reposition_radius: 90
@@ -9384,6 +9388,7 @@ GameObject:
   - component: {fileID: 1183210967}
   - component: {fileID: 1183210966}
   - component: {fileID: 1183210965}
+  - component: {fileID: 2011133452429415040}
   m_Layer: 7
   m_Name: Aggro_EnemyTest
   m_TagString: Untagged
@@ -10172,7 +10177,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-5318
+  m_Name: pb_Mesh-5306
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11939,6 +11944,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2011133452429415040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183210964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d89e836667b830f4184f2ca5eb4729cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PoolObj: {fileID: 6614072946807632759, guid: efa7300f8dd161749a2743e9ce3d1f7b, type: 3}
+  objs_pooled: 2
 --- !u!1001 &2967842342135501770
 PrefabInstance:
   m_ObjectHideFlags: 0
