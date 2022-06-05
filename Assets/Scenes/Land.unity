@@ -6652,7 +6652,8 @@ MonoBehaviour:
   player_layer:
     serializedVersion: 2
     m_Bits: 8
-  AtkList: []
+  NAtkList: []
+  SpAtkList: []
   atk_cd_total: 0
   melee_atk_range: 0
   ranged_atk_range: 0
@@ -8138,7 +8139,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-10002
+  m_Name: pb_Mesh-5346
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8302,7 +8303,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-10018
+  m_Name: pb_Mesh-5362
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8951,21 +8952,11 @@ MonoBehaviour:
   player_layer:
     serializedVersion: 2
     m_Bits: 8
-  AtkList:
-  - type: 
-    hit_count: 1
-    dmg: 01000000
-    duration: 06000000
-    size:
-    - 1
-    length:
-    - 2
-    delay: 0c000000
-    last_frame: 24
+  NAtkList:
+  - n_atk: {fileID: 11400000, guid: 5a618289f9dc653428fab2df3036fa68, type: 2}
     origin:
     - {fileID: 1130164745}
-    cooldown: 24
-    movement: 4
+  SpAtkList: []
   atk_cd_total: 0
   melee_atk_range: 3
   ranged_atk_range: 0
@@ -10181,7 +10172,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-9974
+  m_Name: pb_Mesh-5318
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -12373,56 +12364,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3187800209657324281, guid: 67f1910acec3c97419389992804d29c4,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.006
-      objectReference: {fileID: 0}
-    - target: {fileID: 3187800209657324281, guid: 67f1910acec3c97419389992804d29c4,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.006
-      objectReference: {fileID: 0}
-    - target: {fileID: 3187800209657324281, guid: 67f1910acec3c97419389992804d29c4,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.062
-      objectReference: {fileID: 0}
-    - target: {fileID: 3187800209657324281, guid: 67f1910acec3c97419389992804d29c4,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.13931426
-      objectReference: {fileID: 0}
-    - target: {fileID: 3187800209657324281, guid: 67f1910acec3c97419389992804d29c4,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.025492024
-      objectReference: {fileID: 0}
-    - target: {fileID: 3187800209657324281, guid: 67f1910acec3c97419389992804d29c4,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.989624
-      objectReference: {fileID: 0}
-    - target: {fileID: 3187800209657324281, guid: 67f1910acec3c97419389992804d29c4,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.024206579
-      objectReference: {fileID: 0}
-    - target: {fileID: 3187800209657324281, guid: 67f1910acec3c97419389992804d29c4,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -182.339
-      objectReference: {fileID: 0}
-    - target: {fileID: 3187800209657324281, guid: 67f1910acec3c97419389992804d29c4,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 16.093002
-      objectReference: {fileID: 0}
-    - target: {fileID: 3187800209657324281, guid: 67f1910acec3c97419389992804d29c4,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: -176.718
-      objectReference: {fileID: 0}
     - target: {fileID: 5087033714714069245, guid: 67f1910acec3c97419389992804d29c4,
         type: 3}
       propertyPath: hp_img

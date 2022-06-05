@@ -63,34 +63,17 @@ public class EnemyControl : MonoBehaviour
 
 	[System.Serializable]
 	//informações dos tipos de ataque
-	public class Attack
+	public class NormalAttack
 	{
-		[Tooltip("How many hits the attack has")]
-		public int hit_count;
-
-		[Tooltip("Attack damage per hit")]
-		public int[] dmg;
-		[Tooltip("Hitbox duration in frames (24 FPS physics)")]
-		public int[] duration;
-		[Tooltip("Hitbox radius")]
-		public float[] size;
-		[Tooltip("Hitbox length, 0 makes it a sphere")]
-		public float[] length;
-		[Tooltip("Delay between the attacks")]
-		public int[] delay;
-		[Tooltip("When the attack ends if not canceled")]
-		public int last_frame;
+		[Tooltip("Attack info")]
+		public EnemyNormalAttackSO n_atk;
+		
 		[Tooltip("Attack point of origin")]
 		public Transform[] origin;
-		[Tooltip("The cooldown of the attack")]
-		public int cooldown;
-		
-		[Tooltip("Mid attack movement")]
-		public float movement;
 	}
 
 	//lista com os ataques
-	public List<Attack> AtkList;
+	public List<NormalAttack> NAtkList;
 	
 	[System.Serializable]
 	public class SpAttack
@@ -291,9 +274,10 @@ public class EnemyControl : MonoBehaviour
 			//melee
 			if(dist <= melee_atk_range)
 			{
-				if(currAtk > AtkList.Count - 1)
+				if(currAtk > NAtkList.Count - 1)
 					currAtk = 0;
 				
+				atk_type = "NormalAttack";
 				AnimHit(currAtk);
 				
 				//muda o próximo ataque
@@ -454,26 +438,32 @@ public class EnemyControl : MonoBehaviour
 	//define o dano, duração, tamanho e tipo da hitbox por ID
 	private void AnimHit(int id)
 	{
-		//propriedades do ataque
-		Attack atk = AtkList[id];
-		
-		atk_hits = atk.hit_count;
-		curr_hit = 0;
-		prev_hit = -1;
-
-		for (int i = 0; i < atk_hits; i++)
+		switch(atk_type)
 		{
-			atk_dmg[i] = atk.dmg[i];
-			atk_duration[i] = atk.duration[i];
-			atk_size[i] = atk.size[i];
-			atk_length[i] = atk.length[i];
-			atk_delay[i] = atk.delay[i];
-			atk_origin[i] = atk.origin[i];
+			case "NormalAttack":
+				//propriedades do ataque
+				NormalAttack atk = NAtkList[id];
+				EnemyNormalAttackSO n_atk = atk.n_atk;
+				
+				atk_hits = n_atk.hit_count;
+				curr_hit = 0;
+				prev_hit = -1;
+
+				for (int i = 0; i < atk_hits; i++)
+				{
+					atk_dmg[i] = n_atk.dmg[i];
+					atk_duration[i] = n_atk.duration[i];
+					atk_size[i] = n_atk.size[i];
+					atk_length[i] = n_atk.length[i];
+					atk_delay[i] = n_atk.delay[i];
+					atk_origin[i] = atk.origin[i];
+				}
+				
+				atk_movement = n_atk.movement;
+				atk_last_frame = n_atk.last_frame;
+				atk_cd = n_atk.cooldown;
+				break;
 		}
-		
-		atk_movement = atk.movement;
-		atk_last_frame = atk.last_frame;
-		atk_cd = atk.cooldown;
 		
 		//inicia o ataque
 		attacking = true;

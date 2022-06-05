@@ -4,27 +4,25 @@ using UnityEngine;
 
 public class Shockwave : MonoBehaviour
 {
-	private EnemyControl EnemyC;
-	
 	private Transform PlayerTransf;
 	
-	private int hit_id;
+	[SerializeField]
+	private ShockwaveSO s_atk;
 	
-	[Tooltip("Attack damage per hit")]
-	[SerializeField]
-    private int atk_dmg;
-	[Tooltip("Attack duration in frames (24 FPS physics)")]
-	[SerializeField]
+	//duração
 	private int atk_duration;
-	[Tooltip("Attack max range")]
-	[SerializeField]
-	private float atk_dist;
+	//distância máxima/mínima
+	private float atk_max_dist, atk_min_dist;
 	
-	[Tooltip("Attack vertical reach")]
-	[SerializeField]
-	private float atk_vReach;
-	
+	//se acertou/errou
 	private bool has_hit;
+	
+	private void Start()
+	{
+		PlayerTransf = PlayerControl.Instance.transform;
+		
+		Reset();
+	}
 	
 	private void FixedUpdate()
 	{
@@ -32,27 +30,49 @@ public class Shockwave : MonoBehaviour
 		if(atk_duration > 0)
 		{
 			//alcance
-			if(has_hit && (Vector3.Distance(transform.position, PlayerTransf.position) < atk_dist))
+			if(!has_hit)
 			{
-				//se o jogador está perto do chão
-				RaycastHit hit;
-				if (Physics.Raycast(PlayerTransf.position - (PlayerTransf.forward * 0.1f) + PlayerTransf.up * 0.3f, Vector3.down, out hit, 1000))
+				float dist = Vector3.Distance(transform.position, PlayerTransf.position);
+				
+				if(dist < atk_max_dist && dist > atk_min_dist)
 				{
-					if (hit.distance < atk_vReach)
+					//se o jogador está perto do chão
+					RaycastHit hit;
+					if (Physics.Raycast(PlayerTransf.position - (PlayerTransf.forward * 0.1f) + PlayerTransf.up * 0.3f, Vector3.down, out hit, 1000)
+						&& hit.distance < s_atk.vReach)
 					{
 						//dano
 						PlayerHealth P_HP = PlayerTransf.GetComponent<PlayerHealth>();
-						P_HP.TakeDamage(atk_dmg);
+						P_HP.TakeDamage(s_atk.dmg);
 						
 						has_hit = true;
 					}
 				}
 			}
 			
+			//movimento da shockwave
+			if(atk_min_dist > 0)
+			{
+				atk_max_dist += s_atk.spd;
+				atk_min_dist += s_atk.spd;
+			}
+			
 			atk_duration--;
 		}
 		//encerra o ataque
 		else
-			Destroy(gameObject);//mudar pra setactive
+			Reset();
+	}
+	
+	//volta pro estado inicial
+	private void Reset()
+	{
+		has_hit = false;
+		
+		atk_duration = s_atk.duration;
+		atk_max_dist = s_atk.max_dist;
+		atk_min_dist = s_atk.min_dist;
+		
+		gameObject.SetActive(false);
 	}
 }

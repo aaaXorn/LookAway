@@ -92,29 +92,11 @@ public class PlayerControl : MonoBehaviour
 	//informações dos tipos de ataque
 	public class Attack
 	{
-		/*[Tooltip("Attack's name")]
-		public string id;*/
+		[Tooltip("Attack info")]
+		public NormalAttackSO n_atk;
 		
-		[Tooltip("How many hits the attack has")]
-		public int hit_count;
-		
-		[Tooltip("Attack damage per hit")]
-		public int[] dmg;
-		[Tooltip("Hitbox duration in frames (24 FPS physics)")]
-		public int[] duration;
-		[Tooltip("Hitbox radius")]
-		public float[] size;
-		[Tooltip("Hitbox length, 0 makes it a sphere")]
-		public float[] length;
-		[Tooltip("Delay between the attacks")]
-		public int[] delay;
-		[Tooltip("When the attack ends if not canceled")]
-		public int last_frame;
 		[Tooltip("Attack point of origin")]
 		public Transform[] origin;
-		
-		[Tooltip("Mid attack movement")]
-		public float movement;
 	}
 	
 	//lista com os ataques
@@ -629,22 +611,24 @@ public class PlayerControl : MonoBehaviour
 		//Attack atk = AtkDictionary[id];
 		Attack atk = AtkList[id];
 		
-		atk_hits = atk.hit_count;
+		NormalAttackSO n_atk = atk.n_atk;
+		
+		atk_hits = n_atk.hit_count;
 		curr_hit = 0;
 		prev_hit = -1;
 		
 		for(int i = 0; i < atk_hits; i++)
 		{
-			atk_dmg[i] = atk.dmg[i];
-			atk_duration[i] = atk.duration[i];
-			atk_size[i] = atk.size[i];
-			atk_length[i] = atk.length[i];
-			atk_delay[i] = atk.delay[i];
-			atk_last_frame = atk.last_frame;
+			atk_dmg[i] = n_atk.dmg[i];
+			atk_duration[i] = n_atk.duration[i];
+			atk_size[i] = n_atk.size[i];
+			atk_length[i] = n_atk.length[i];
+			atk_delay[i] = n_atk.delay[i];
+			atk_last_frame = n_atk.last_frame;
 			atk_origin[i] = atk.origin[i];
 		}
 		
-		atk_movement = atk.movement;
+		atk_movement = n_atk.movement;
 		
 		//inicia o ataque
 		attacking = true;

@@ -1206,58 +1206,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   AtkList:
-  - type: 
-    hit_count: 1
-    dmg: 07000000
-    duration: 04000000
-    size:
-    - 0.5
-    length:
-    - 1
-    delay: 0d000000
-    last_frame: 36
+  - n_atk: {fileID: 11400000, guid: ee44de201d2f3044abec2066e5384441, type: 2}
     origin:
     - {fileID: 1082022050}
-    movement: 0
-  - type: 
-    hit_count: 1
-    dmg: 05000000
-    duration: 04000000
-    size:
-    - 0.5
-    length:
-    - 1
-    delay: 0c000000
-    last_frame: 31
+  - n_atk: {fileID: 11400000, guid: a1fd0ee0f1c8b334b8055cc7d7cc185d, type: 2}
     origin:
     - {fileID: 1082022050}
-    movement: 0
-  - type: 
-    hit_count: 1
-    dmg: 09000000
-    duration: 04000000
-    size:
-    - 0.75
-    length:
-    - 1
-    delay: 17000000
-    last_frame: 39
+  - n_atk: {fileID: 11400000, guid: e896169530305ec4d84c0cfa3a6b819c, type: 2}
     origin:
     - {fileID: 1082022050}
-    movement: 8
-  - type: 
-    hit_count: 1
-    dmg: 09000000
-    duration: 04000000
-    size:
-    - 0.5
-    length:
-    - 1
-    delay: 11000000
-    last_frame: 40
+  - n_atk: {fileID: 11400000, guid: f95a98670e54c1441b0ec238ea69a1b2, type: 2}
     origin:
     - {fileID: 1082022050}
-    movement: 0
   block_f_total: 8
   roll_f_total: 6
   roll_anim_f_total: 10
@@ -1268,25 +1228,6 @@ MonoBehaviour:
   heal_f_total: 35
   potion_healing: 5
   dead_f: 48
---- !u!114 &5087033714714069245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6035953435348010785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92a2bbc979401e747a21dc60c5ff9af6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  max_hp: 5
-  hit_id: 0
-  invul: 0
-  blocking: 0
-  block_mult: 1
-  hp_img: {fileID: 0}
-  pot_txt: {fileID: 0}
 --- !u!114 &4914450020673877303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1304,6 +1245,24 @@ MonoBehaviour:
   shield_lvl: 0
   potions: 4
   max_potions: 4
+--- !u!114 &5087033714714069245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6035953435348010785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92a2bbc979401e747a21dc60c5ff9af6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  max_hp: 5
+  invul: 0
+  blocking: 0
+  block_mult: 1
+  hp_img: {fileID: 0}
+  pot_txt: {fileID: 0}
 --- !u!1001 &3150248267744740626
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1334,52 +1293,52 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 1774007d0c1477a489e9476d2a7dcf47,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.002
+      value: -0.006
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1774007d0c1477a489e9476d2a7dcf47,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.005
+      value: -0.006
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1774007d0c1477a489e9476d2a7dcf47,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.036
+      value: -0.062
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1774007d0c1477a489e9476d2a7dcf47,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.05447388
+      value: 0.13931426
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1774007d0c1477a489e9476d2a7dcf47,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.023336574
+      value: -0.025492024
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1774007d0c1477a489e9476d2a7dcf47,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.99789625
+      value: -0.989624
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1774007d0c1477a489e9476d2a7dcf47,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.026290944
+      value: 0.024206579
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1774007d0c1477a489e9476d2a7dcf47,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -182.862
+      value: -182.339
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1774007d0c1477a489e9476d2a7dcf47,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 6.3200073
+      value: 16.093002
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1774007d0c1477a489e9476d2a7dcf47,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -177.163
+      value: -176.718
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 1774007d0c1477a489e9476d2a7dcf47,
         type: 3}
