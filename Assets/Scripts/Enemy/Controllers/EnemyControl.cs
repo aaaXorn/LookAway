@@ -5,13 +5,13 @@ using UnityEngine;
 public class EnemyControl : MonoBehaviour
 {
 	//transform do player
-	private Transform PlayerTransf;
+	protected Transform PlayerTransf;
 	
 	//componente do character controller
-	private CharacterController Control;
+	protected CharacterController Control;
 	
 	//componente de vida
-	private EnemyHealth E_HP;
+	protected EnemyHealth E_HP;
 	
 	//enum com todos os states
 	public enum State
@@ -22,8 +22,8 @@ public class EnemyControl : MonoBehaviour
 		Approach,//indo até o player
 		Retreat,//indo para longe do player
 		Reposition,//anda até uma posição pré-definida
-		Melee,//ataque melee
-		Ranged,//ataque ranged
+		Attack,//ataque normal
+		Special,//ataque especial
 		
 		Hurt,//efeito de stun / outros efeitos que se baseiam em tomar dano
 		Dead,//quando está morto
@@ -38,27 +38,27 @@ public class EnemyControl : MonoBehaviour
 	[Header("Attacks")]
 	//layer do player
 	[SerializeField]
-	private LayerMask player_layer;
+	protected LayerMask player_layer;
 
 	//se o ataque já acertou o player
-	private bool has_hit;
-	private string atk_type;//tipo do ataque
+	protected bool has_hit;
+	protected string atk_type;//tipo do ataque
 	//número de hits do ataque, hits que tinha quando o ataque começou,
 	//último hit dado e hit anterior (pra efeitos que acontecem só uma vez)
-	private int atk_hits, curr_hit, prev_hit;
+	protected int atk_hits, curr_hit, prev_hit;
 	//dano, duração e tamanho do ataque
-	private int[] atk_dmg = new int[5], atk_duration = new int[5], atk_delay = new int[5];
-	private int atk_last_frame;
-	private float[] atk_size = new float[5], atk_length = new float[5];
+	protected int[] atk_dmg = new int[5], atk_duration = new int[5], atk_delay = new int[5];
+	protected int atk_last_frame;
+	protected float[] atk_size = new float[5], atk_length = new float[5];
 	//ponto de origem do ataque
-	private Transform[] atk_origin = new Transform[5];
+	protected Transform[] atk_origin = new Transform[5];
 	//movimento durante o ataque
-	private float atk_movement;
+	protected float atk_movement;
 
 	//se o ataque pode ser cancelado (geralmente após um hit)
-	private bool atk_cancel;
+	protected bool atk_cancel;
 	//se o jogador está atacando
-	private bool attacking;
+	protected bool attacking;
 
 	[System.Serializable]
 	//informações dos tipos de ataque
@@ -88,47 +88,47 @@ public class EnemyControl : MonoBehaviour
 	}
 	
 	//manager de pool
-	private PoolManager atk_manager;
+	protected PoolManager atk_manager;
 	
 	//lista com os ataques especiais
 	public List<SpAttack> SpAtkList;
 	
 	//ataque atual
-	private int currAtk, currSpAtk;
+	protected int currAtk, currSpAtk;
 	
 	[SerializeField]
 	//cooldown do ataque
-	private int atk_cd_total;
-	private int atk_cd;
+	protected int atk_cd_total;
+	protected int atk_cd;
 	
 	[SerializeField]
 	//alcance dos ataques
-	private float melee_atk_range, ranged_atk_range;
+	protected float melee_atk_range, ranged_atk_range;
 	#endregion
 	
 	#region movement
 	[Header("Movement")]
 	//posição inicial
 	[SerializeField]
-	private Vector3 start_pos;
+	protected Vector3 start_pos;
 	
 	//velocidade padrão
 	[SerializeField]
-	private float base_speed;
-	private float speed;
+	protected float base_speed;
+	protected float speed;
 	//raio da reposição do inimigo
 	[SerializeField]
-	private int reposition_radius;
+	protected int reposition_radius;
 	Vector3 move_target, move_dir;
 	//movimento total da reposição
 	[SerializeField]
-	private float reposition_dist;
+	protected float reposition_dist;
 	//velocidade rotação e rotação durante um ataque
 	[SerializeField]
-	private float rot_spd, rot_atk_spd;
+	protected float rot_spd, rot_atk_spd;
 	#endregion
 	
-	private void Start()
+	protected void Start()
     {
 		//pega o transform do objeto do player
 		PlayerTransf = PlayerControl.Instance.transform;
@@ -176,7 +176,7 @@ public class EnemyControl : MonoBehaviour
 	}
 	
 	//state machine
-    private void FixedUpdate()
+    protected void FixedUpdate()
 	{
 		switch(currentState)
 		{
@@ -200,12 +200,12 @@ public class EnemyControl : MonoBehaviour
 				StateReposition();
 				break;
 			
-			case State.Melee:
-				StateMelee();
+			case State.Attack:
+				StateAttack();
 				break;
 			
-			case State.Ranged:
-				StateRanged();
+			case State.Special:
+				StateSpecial();
 				break;
 			
 			case State.Dead:
@@ -269,7 +269,7 @@ public class EnemyControl : MonoBehaviour
 				//muda o próximo ataque
 				currAtk++;
 				
-				currentState = State.Melee;
+				currentState = State.Attack;
 			}
 			//ranged
 			else if(dist <= ranged_atk_range)
@@ -282,7 +282,7 @@ public class EnemyControl : MonoBehaviour
 				//muda o próximo ataque
 				currSpAtk++;
 				
-				currentState = State.Ranged;
+				currentState = State.Special;
 			}
 		}
 	}
@@ -333,7 +333,7 @@ public class EnemyControl : MonoBehaviour
 		}
 	#endregion
 	
-	protected virtual void StateMelee()
+	protected virtual void StateAttack()
 	{
 		//propriedades do ataque
 		if (attacking)
@@ -365,7 +365,7 @@ public class EnemyControl : MonoBehaviour
 		else atk_last_frame--;
 	}
 	
-	protected virtual void StateRanged()
+	protected virtual void StateSpecial()
 	{
 		if(attacking)
 		{
@@ -424,7 +424,7 @@ public class EnemyControl : MonoBehaviour
 	
 	#region attacks
 	//define o dano, duração, tamanho e tipo da hitbox por ID
-	private void AnimHit(int id)
+	protected void AnimHit(int id)
 	{
 		//propriedades do ataque
 		NormalAttack atk = NAtkList[id];
@@ -452,7 +452,7 @@ public class EnemyControl : MonoBehaviour
 		attacking = true;
 	}
 	
-	private void SpecialHit(int id)
+	protected void SpecialHit(int id)
 	{
 		//propriedades do ataque
 		SpAttack atk = SpAtkList[id];
@@ -480,7 +480,7 @@ public class EnemyControl : MonoBehaviour
 		attacking = true;
 	}
 
-	private void AttackEffect()
+	protected void AttackEffect()
 	{
 		//gera um novo ID pro ataque
 		if (prev_hit != curr_hit)
@@ -542,7 +542,7 @@ public class EnemyControl : MonoBehaviour
 		else atk_delay[curr_hit]--;
 	}
 	
-	private void SpAttackEffect()
+	protected void SpAttackEffect()
 	{
 		//gera um novo ID pro ataque
 		if (prev_hit != curr_hit)
@@ -602,9 +602,9 @@ public class EnemyControl : MonoBehaviour
 	#endregion
 
 #if UNITY_EDITOR
-	private void OnDrawGizmos()
+	protected void OnDrawGizmos()
 	{
-		if(atk_origin[curr_hit] != null && currentState == State.Melee)
+		if(atk_origin[curr_hit] != null && currentState == State.Attack)
 		{
 			if(atk_delay[curr_hit] <= 0 && atk_duration[curr_hit] >= 0)
 			{
