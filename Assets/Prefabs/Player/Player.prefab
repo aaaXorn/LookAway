@@ -1226,7 +1226,7 @@ MonoBehaviour:
   hurt_anim_f_total: 24
   hurt_animations: 0
   heal_f_total: 35
-  potion_healing: 5
+  potion_healing: 50
   dead_f: 48
 --- !u!114 &4914450020673877303
 MonoBehaviour:
@@ -1257,7 +1257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92a2bbc979401e747a21dc60c5ff9af6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_hp: 5
+  max_hp: 100
   invul: 0
   blocking: 0
   block_mult: 1

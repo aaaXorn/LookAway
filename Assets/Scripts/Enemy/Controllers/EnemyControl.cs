@@ -9,7 +9,10 @@ public class EnemyControl : MonoBehaviour
 	
 	//componente do character controller
 	protected CharacterController Control;
-	
+
+	//animação
+	protected Animator anim;
+
 	//componente de vida
 	protected EnemyHealth E_HP;
 	
@@ -104,6 +107,9 @@ public class EnemyControl : MonoBehaviour
 	[SerializeField]
 	//alcance dos ataques
 	protected float melee_atk_range, ranged_atk_range;
+	[SerializeField]
+	//máximo que o inimigo se aproxima do player no approach state
+	protected float max_approach_range;
 	#endregion
 	
 	#region movement
@@ -134,7 +140,9 @@ public class EnemyControl : MonoBehaviour
 		PlayerTransf = PlayerControl.Instance.transform;
 		
 		Control = GetComponent<CharacterController>();
-		
+
+		anim = GetComponent<Animator>();
+
 		E_HP = GetComponent<EnemyHealth>();
 		
 		atk_cd = atk_cd_total;
@@ -245,9 +253,10 @@ public class EnemyControl : MonoBehaviour
 		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
 		rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_spd);
-		
-		//movimento
-		Control.SimpleMove(dir * base_speed);
+
+		if(go_to.magnitude > max_approach_range)
+			//movimento
+			Control.SimpleMove(dir * base_speed);
 		
 		//continua se movendo
 		if(atk_cd > 0)
@@ -277,7 +286,7 @@ public class EnemyControl : MonoBehaviour
 				if(currSpAtk > SpAtkList.Count - 1)
 					currSpAtk = 0;
 				
-				SpecialHit(currAtk);
+				SpecialHit(currSpAtk);
 				
 				//muda o próximo ataque
 				currSpAtk++;
@@ -340,13 +349,14 @@ public class EnemyControl : MonoBehaviour
 		{
 			AttackEffect();
 		}
-		
-		if(atk_movement != 0)
-			Control.SimpleMove(transform.forward * atk_movement);
 
 		Vector3 go_to = PlayerTransf.position - transform.position;
 		//direção
 		Vector3 dir = go_to.normalized;
+
+		//movimento
+		if (go_to.magnitude > max_approach_range && atk_movement != 0)
+			Control.SimpleMove(transform.forward * atk_movement);
 
 		//rotação
 		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
@@ -358,7 +368,9 @@ public class EnemyControl : MonoBehaviour
 		{
 			attacking = false;
 			atk_cancel = false;
-			
+
+			anim.SetTrigger("Free");
+
 			RepositionStart();
 			//currentState = State.Approach;
 		}
@@ -372,6 +384,7 @@ public class EnemyControl : MonoBehaviour
 			SpAttackEffect();
 		}
 		
+		//movimento
 		if(atk_movement != 0)
 			Control.SimpleMove(transform.forward * atk_movement);
 
@@ -389,7 +402,9 @@ public class EnemyControl : MonoBehaviour
 		{
 			attacking = false;
 			atk_cancel = false;
-			
+
+			anim.SetTrigger("Free");
+
 			//RepositionStart();
 			currentState = State.Approach;
 		}
@@ -426,6 +441,9 @@ public class EnemyControl : MonoBehaviour
 	//define o dano, duração, tamanho e tipo da hitbox por ID
 	protected void AnimHit(int id)
 	{
+		anim.SetInteger("AtkID", id);
+		anim.SetTrigger("NormalAtk");
+
 		//propriedades do ataque
 		NormalAttack atk = NAtkList[id];
 		EnemyNormalAttackSO n_atk = atk.n_atk;
@@ -454,6 +472,9 @@ public class EnemyControl : MonoBehaviour
 	
 	protected void SpecialHit(int id)
 	{
+		anim.SetInteger("AtkID", id);
+		anim.SetTrigger("SpecialAtk");
+
 		//propriedades do ataque
 		SpAttack atk = SpAtkList[id];
 		
@@ -587,7 +608,11 @@ public class EnemyControl : MonoBehaviour
 				case "Shockwave":
 					
 					break;
-					
+
+				case "Thrown":
+					obj.GetComponent<Thrown>().StartPos = atk_origin[curr_hit].position;
+					break;
+
 				default:
 					break;
 			}

@@ -53,7 +53,6 @@ public class PlayerControl : MonoBehaviour
     public Transform rightHandObj, leftHandObj;
     private bool jumpbtn = false;
     private bool jumpbtndown = false;
-    private bool jumpbtnrelease = false;
     private GameObject closeThing;
     private float weight;
 

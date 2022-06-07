@@ -17,6 +17,7 @@ public class Shockwave : MonoBehaviour
 	//se acertou/errou
 	private bool has_hit;
 	
+	//pega o transform do player e desabilita até a hora de ser usado
 	private void Start()
 	{
 		PlayerTransf = PlayerControl.Instance.transform;
@@ -75,4 +76,13 @@ public class Shockwave : MonoBehaviour
 		
 		gameObject.SetActive(false);
 	}
+	
+	#if UNITY_EDITOR
+	//efeito visual dentro do editor
+	private void OnDrawGizmos()
+	{
+		if(atk_duration > 0)
+			Gizmos.DrawSphere(transform.position, atk_max_dist);
+	}
+	#endif
 }

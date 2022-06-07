@@ -6,7 +6,32 @@ ModelImporter:
   - first:
       74: -203655887218126122
     second: mixamo.com
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MAW_MAT
+    second: {fileID: 2100000, guid: eda73e3273c70064d934997bc90f4f08, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: MAW_diffuse
+    second: {fileID: 2800000, guid: 262febacb49e46c409c3c4b34e8e4b20, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: MAW_glow
+    second: {fileID: 2800000, guid: 7fbbebd0b098e7a44af1f07e1a774636, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: MAW_normal
+    second: {fileID: 2800000, guid: 1cf50317b3353784f911dbdb28b8392f, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: maria_specular
+    second: {fileID: 2800000, guid: b75b6acb04542ab45af7c115f2ae3967, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
