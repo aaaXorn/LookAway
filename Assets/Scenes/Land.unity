@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.4435391, g: 0.49284512, b: 0.57243615, a: 1}
+  m_IndirectSpecularColor: {r: 0.4435394, g: 0.49284565, b: 0.57243705, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6153,14 +6153,15 @@ MonoBehaviour:
     Manager: {fileID: 2020973975}
   atk_cd_total: 0
   melee_atk_range: 5
-  ranged_atk_range: 12
+  ranged_atk_range: 15
   max_approach_range: 3
   start_pos: {x: 0, y: 0, z: 0}
-  base_speed: 5
+  base_speed: 4
   reposition_radius: 5
   reposition_dist: 4
   rot_spd: 7.5
   rot_atk_spd: 4.5
+  thrown_cd_total: 0
 --- !u!1001 &517724362
 PrefabInstance:
   m_ObjectHideFlags: 0

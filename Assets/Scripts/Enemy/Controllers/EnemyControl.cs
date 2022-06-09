@@ -134,6 +134,8 @@ public class EnemyControl : MonoBehaviour
 	protected float rot_spd, rot_atk_spd;
 	#endregion
 	
+	protected int pattern;
+	
 	protected void Start()
     {
 		//pega o transform do objeto do player
@@ -177,6 +179,8 @@ public class EnemyControl : MonoBehaviour
 		if(currentState != State.Inactive && currentState != State.Reset && currentState != State.Dead)
 		{
 			currentState = State.Reset;
+			
+			pattern = 0;
 			
 			//reseta o HP
 			E_HP.ResetHP();
@@ -228,7 +232,14 @@ public class EnemyControl : MonoBehaviour
 				print("Enemy state machine error.");
 				break;
 		}
+		
+		//timers, etc
+		OnFUpdate();
 	}
+		protected virtual void OnFUpdate()
+		{
+			
+		}
 	
 	#region states
 	protected virtual void StateInactive()
@@ -371,11 +382,15 @@ public class EnemyControl : MonoBehaviour
 
 			anim.SetTrigger("Free");
 
-			RepositionStart();
-			//currentState = State.Approach;
+			PostAttackState();
 		}
 		else atk_last_frame--;
 	}
+		protected virtual void PostAttackState()
+		{
+			RepositionStart();
+			//currentState = State.Approach;
+		}
 	
 	protected virtual void StateSpecial()
 	{
@@ -405,16 +420,26 @@ public class EnemyControl : MonoBehaviour
 
 			anim.SetTrigger("Free");
 
-			//RepositionStart();
-			currentState = State.Approach;
+			PostSpecialState();
 		}
 		else atk_last_frame--;
 	}
+		protected virtual void PostSpecialState()
+		{
+			//RepositionStart();
+			currentState = State.Approach;
+		}
 	
 	protected virtual void StateDead()
 	{
 		
 	}
+		public virtual void Dead()
+		{
+			anim.SetTrigger("Dead");
+			
+			currentState = State.Dead;
+		}
 	
 	protected virtual void StateReset()
 	{

@@ -27,7 +27,9 @@ public class EnemyHealth : MonoBehaviour
     public virtual void TakeDamage(int dmg)
 	{
 		//não toma dano se inativo ou resetando
-		if(EnemyC.currentState == EnemyControl.State.Inactive || EnemyC.currentState == EnemyControl.State.Reset)
+		if(EnemyC.currentState == EnemyControl.State.Inactive ||
+		   EnemyC.currentState == EnemyControl.State.Reset ||
+		   EnemyC.currentState == EnemyControl.State.Dead)
 			return;
 		
 		hp -= dmg;
@@ -35,7 +37,7 @@ public class EnemyHealth : MonoBehaviour
 		if(hp > max_hp) hp = max_hp;
 		else if(hp <= 0)
 		{
-			EnemyC.currentState = EnemyControl.State.Dead;
+			EnemyC.Dead();
 		}
 	}
 	
