@@ -53,6 +53,7 @@ public class LoadAditiveScene : MonoBehaviour
     
     private IEnumerator LoadAdd()
     {
+		print("AAAAA");
         while (asyncOperation != null)
         {
             LoadIcon.instance.LoadIconRun(asyncOperation.progress + 0.1f);
@@ -67,7 +68,7 @@ public class LoadAditiveScene : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        if(asyncOperation == null) StopCoroutine("LoadAdd");
+        if(asyncOperation == null) yield break;
         yield return new WaitForEndOfFrame();
     }
 
