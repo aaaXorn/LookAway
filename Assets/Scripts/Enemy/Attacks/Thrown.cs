@@ -12,7 +12,7 @@ public class Thrown : MonoBehaviour
 
     //layer do player
     [SerializeField]
-    protected LayerMask player_layer;
+    private LayerMask player_layer;
 
     private float time;
 
