@@ -86,7 +86,7 @@ public class SnowBossControl : EnemyControl
 	protected override void PostAttackState()
 	{
 		if(pattern == 0)
-			currentState = State.Reposition;
+			RepositionStart();
 		else
 			currentState = State.Approach;
 	}
