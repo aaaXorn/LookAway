@@ -5,7 +5,7 @@ using UnityEngine;
 public class SnowBossControl : EnemyControl
 {
 	[SerializeField]
-	float swipe_angle;
+	float swipe_angle, swipe_range, min_ranged_range, jump_range;
 	
 	protected override void StateApproach()
 	{
@@ -38,7 +38,7 @@ public class SnowBossControl : EnemyControl
 				float angle = Vector3.Angle(transform.forward, dir);
 				print(angle);
 				//se estiver na frente
-				if(Mathf.Abs(angle) < swipe_angle)
+				if(dist <= swipe_range && Mathf.Abs(angle) < swipe_angle)
 				{
 					//swipe
 					AnimHit(0);
@@ -53,9 +53,9 @@ public class SnowBossControl : EnemyControl
 				}
 			}
 			//ranged
-			else if(dist <= ranged_atk_range)
+			else if(dist >= min_ranged_range && dist <= ranged_atk_range)
 			{
-				if(currSpAtk > 0)
+				if(currSpAtk > 0 && dist <= jump_range)
 				{
 					AnimHit(1);
 					currentState = State.Attack;

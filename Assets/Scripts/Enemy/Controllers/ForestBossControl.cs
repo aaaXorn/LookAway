@@ -4,5 +4,94 @@ using UnityEngine;
 
 public class ForestBossControl : EnemyControl
 {
-    
+    [SerializeField]
+	float max_angle;
+	
+	protected override void StateApproach()
+	{
+		//vai para trás em vez de para frente
+		Vector3 go_to = transform.position - PlayerTransf.position;//PlayerTransf.position - transform.position;
+		//direção
+		Vector3 dir = go_to.normalized;
+		
+		//rotação
+		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+		rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_spd);
+		
+		//movimento
+		Control.SimpleMove(dir * base_speed);
+		
+		//continua se movendo
+		if(atk_cd > 0)
+			atk_cd--;
+		//ataca
+		else
+		{
+			//distância entre o inimigo e o player
+			float dist = go_to.magnitude;
+			
+			//AoE quando é atingido
+			if(currSpAtk == 1)
+			{
+				AnimHit(0);
+				currentState = State.Attack;
+				
+				currSpAtk = 0;
+			}
+			//ataques a distância
+			else if(currSpAtk <= ranged_atk_range)
+			{
+				//espinho
+				if(currAtk > 0)
+				{
+					SpecialHit(0);
+					currentState = State.Special;
+					
+					currAtk++;
+				}
+				//pew pew
+				else
+				{
+					SpecialHit(1);
+					currentState = State.Special;
+					
+					currAtk = 0;
+				}
+			}
+		}
+	}
+	
+	public void Hurt(int hp, int max_hp)
+	{
+		switch(pattern)
+		{
+			case 0:
+				if(hp < max_hp * 3 / 4)
+				{
+					pattern++;
+					currSpAtk = 1;
+				}
+				break;
+			
+			case 1:
+				if(hp < max_hp / 2)
+				{
+					pattern++;
+					currSpAtk = 1;
+				}
+				break;
+			
+			case 2:
+				if(hp < max_hp / 3)
+				{
+					pattern++;
+					currSpAtk = 1;
+				}
+				break;
+			
+			default:
+				break;
+		}
+	}
 }

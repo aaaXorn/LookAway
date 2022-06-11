@@ -15,6 +15,6 @@ MonoBehaviour:
   type: Shockwave
   hit_count: 1
   delay: 2b000000
-  last_frame: 111
-  cooldown: 12
+  last_frame: 72
+  cooldown: 24
   movement: 0

@@ -433,6 +433,11 @@ public class EnemyControl : MonoBehaviour
 			currentState = State.Approach;
 		}
 	
+		public virtual void Hurt(int hp, int max_hp)
+		{
+			
+		}
+	
 	protected virtual void StateDead()
 	{
 		
