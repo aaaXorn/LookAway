@@ -5,15 +5,9 @@ using UnityEngine;
 public class SnowBossControl : EnemyControl
 {
 	[SerializeField]
-	private int thrown_cd_total;
-	private int thrown_cd;
+	float swipe_angle;
 	
-	protected override void OnFUpdate()
-	{
-		if(thrown_cd > 0) thrown_cd--;
-	}
-	
-    protected override void StateApproach()
+	protected override void StateApproach()
 	{
 		Vector3 go_to = PlayerTransf.position - transform.position;
 		//direção
@@ -40,44 +34,40 @@ public class SnowBossControl : EnemyControl
 			//melee
 			if(dist <= melee_atk_range)
 			{
-				//checa o padrão atual do boss
-				if(pattern >= 5)
+				//ângulo entre o boss e o jogador
+				float angle = Vector3.Angle(transform.forward, dir);
+				print(angle);
+				//se estiver na frente
+				if(Mathf.Abs(angle) < swipe_angle)
 				{
-					//jump attack
-					AnimHit(1);
+					//swipe
+					AnimHit(0);
 					currentState = State.Attack;
-					
-					pattern = 0;
 				}
+				//se estiver do lado/atrás
 				else
 				{
-					//se a parte fracionaria de pattern / 2 = 0 (se for par)
-					if(pattern % 2 == 0)
-					{
-						//swipe
-						AnimHit(0);
-						currentState = State.Attack;
-					}
-					//se for impar
-					else
-					{
-						//shockwave
-						SpecialHit(0);
-						currentState = State.Special;
-					}
-					
-					pattern++;
+					//shockwave
+					SpecialHit(0);
+					currentState = State.Special;
 				}
 			}
 			//ranged
 			else if(dist <= ranged_atk_range)
 			{
-				if(thrown_cd <= 0)
+				if(currSpAtk > 0)
+				{
+					AnimHit(1);
+					currentState = State.Attack;
+					
+					currSpAtk = 0;
+				}
+				else
 				{
 					SpecialHit(1);
 					currentState = State.Special;
 					
-					thrown_cd = thrown_cd_total;
+					currSpAtk++;
 				}
 			}
 		}
@@ -85,9 +75,6 @@ public class SnowBossControl : EnemyControl
 	
 	protected override void PostAttackState()
 	{
-		if(pattern == 0)
-			RepositionStart();
-		else
-			currentState = State.Approach;
+		currentState = State.Approach;
 	}
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Throw_Thrown
   m_EditorClassIdentifier: 
   dmg: 15
-  h_move_time: 2
+  h_move_time: 1.5
   grav: {x: 0, y: -9.81, z: 0}
   radius: 3
   duration: 2

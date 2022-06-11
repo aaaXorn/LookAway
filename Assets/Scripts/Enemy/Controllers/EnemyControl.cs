@@ -360,20 +360,23 @@ public class EnemyControl : MonoBehaviour
 		{
 			AttackEffect();
 		}
-
-		Vector3 go_to = PlayerTransf.position - transform.position;
-		//direção
-		Vector3 dir = go_to.normalized;
-
+		
 		//movimento
-		if (go_to.magnitude > max_approach_range && atk_movement != 0)
-			Control.SimpleMove(transform.forward * atk_movement);
+		if (atk_movement != 0)
+		{
+			Vector3 go_to = PlayerTransf.position - transform.position;
+			//direção
+			Vector3 dir = go_to.normalized;
+			
+			if(atk_duration[curr_hit] > 0 && go_to.magnitude > max_approach_range)
+				Control.SimpleMove(transform.forward * atk_movement);
 
-		//rotação
-		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
-		rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
-		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_atk_spd);
-
+			//rotação
+			Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+			rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_atk_spd);
+		}
+		
 		//encerra o ataque
 		if (atk_last_frame <= 0)
 		{
