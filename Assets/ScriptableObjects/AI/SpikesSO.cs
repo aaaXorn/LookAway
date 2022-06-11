@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Spikes",
-                 menuName = "ScriptableObject/AI/SpikesSO")]
+                 menuName = "ScriptableObject/AI/Spikes")]
 public class SpikesSO : ScriptableObject
 {
     [Tooltip("Attack damage per hit")]

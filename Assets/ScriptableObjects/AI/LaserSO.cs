@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Laser",
-                 menuName = "ScriptableObject/AI/LaserSO")]
+                 menuName = "ScriptableObject/AI/Laser")]
 public class LaserSO : ScriptableObject
 {
     [Tooltip("Attack damage per hit")]

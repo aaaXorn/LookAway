@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class ForestBossControl : EnemyControl
 {
-    [SerializeField]
-	float max_angle;
+	//velocidade do reposition
+	[SerializeField]
+	private float repos_spd;
 	
-	protected override void StateApproach()
+	//quando a AI usa o padrão de reposição
+	private int repos;
+	
+    protected override void StateApproach()
 	{
 		//vai para trás em vez de para frente
 		Vector3 go_to = transform.position - PlayerTransf.position;//PlayerTransf.position - transform.position;
@@ -60,6 +64,40 @@ public class ForestBossControl : EnemyControl
 				}
 			}
 		}
+	}
+	
+	protected override void PostAttackState()
+	{
+		currentState = State.Approach;
+	}
+	
+	protected virtual void PostSpecialState()
+	{
+		if(repos < 2)
+		{
+			currentState = State.Approach;
+			repos++;
+		}
+		else
+		{
+			RepositionStart();
+			repos = 0;
+		}
+	}
+	
+	protected override void StateReposition()
+	{
+		//movimento
+		Control.SimpleMove(move_dir * repos_spd);
+
+		//rotação
+		Quaternion rot = Quaternion.LookRotation(move_dir, Vector3.up);
+		rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_spd);
+
+		//quando chega no ponto escolhido, para
+		if (Vector3.Distance(transform.position, move_target) <= 1)
+			currentState = State.Active;
 	}
 	
 	public void Hurt(int hp, int max_hp)

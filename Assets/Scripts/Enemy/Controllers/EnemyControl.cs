@@ -125,7 +125,7 @@ public class EnemyControl : MonoBehaviour
 	//raio da reposição do inimigo
 	[SerializeField]
 	protected int reposition_radius;
-	Vector3 move_target, move_dir;
+	protected Vector3 move_target, move_dir;
 	//movimento total da reposição
 	[SerializeField]
 	protected float reposition_dist;
