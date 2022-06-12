@@ -45,7 +45,7 @@ public class PlayerHealth : MonoBehaviour
 		{
 			//se dando block, diminui o dano
 			if(blocking && dmg > 0)
-				dmg = (int)Mathf.Round(dmg * block_mult);
+				dmg = (int)Mathf.Round((float)dmg * block_mult);
 			//diminui/aumenta o HP
 			if(hp > 0) hp -= dmg;
 

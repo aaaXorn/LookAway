@@ -68,6 +68,8 @@ public class PlayerControl : MonoBehaviour
 	[SerializeField]
 	private LayerMask enemy_layer;
 	
+	public float dmg_mod = 1;
+	
 	//ID do hit, usado pra mesma hitbox não acertar várias vezes
 	private int hit_id = 200;
 	//número de hits do ataque, hits que tinha quando o ataque começou,
@@ -697,7 +699,8 @@ public class PlayerControl : MonoBehaviour
 					if(E_HP.hit_id != hit_id)
 					{
 						E_HP.hit_id = hit_id;
-						E_HP.TakeDamage(atk_dmg[curr_hit]);
+						int damage = (int)Mathf.Round((float)atk_dmg[curr_hit] * dmg_mod);
+						E_HP.TakeDamage(damage);
 					}
 					
 					atk_cancel = true;

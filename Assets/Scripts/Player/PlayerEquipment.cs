@@ -19,4 +19,55 @@ public class PlayerEquipment : MonoBehaviour
         //garante que só tem um dele na cena
         else Destroy(gameObject);
     }
+	
+	private void Start()
+	{
+		SwordStats();
+	}
+	
+	public void SwordStats()
+	{
+		switch(sword_lvl)
+		{
+			case 0:
+				PlayerControl.Instance.dmg_mod = 1f;
+				break;
+			
+			case 1:
+				PlayerControl.Instance.dmg_mod = 1.25f;
+				break;
+			
+			case 2:
+				PlayerControl.Instance.dmg_mod = 1.5f;
+				break;
+			
+			default:
+				PlayerControl.Instance.dmg_mod = 1f;
+				break;
+		}
+	}
+	
+	public void ArmorStats()
+	{
+		switch(armor_lvl)
+		{
+			case 0:
+				
+				break;
+			
+			case 1:
+				
+				break;
+			
+			case 2:
+				
+				break;
+			
+			default:
+				
+				break;
+		}
+	}
+	
+	//stats do escudo em PlayerControl.AnimBlock()
 }
