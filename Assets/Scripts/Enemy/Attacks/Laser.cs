@@ -18,7 +18,8 @@ public class Laser : MonoBehaviour
 	{
 		if(duration > 0)
 		{
-			transform.Translate(transform.forward * l_atk.spd);
+			transform.Translate(Vector3.forward * l_atk.spd, Space.Self);
+			duration--;
 		}
 		else
 			Reset();
@@ -26,8 +27,18 @@ public class Laser : MonoBehaviour
 	
 	private void Reset()
 	{
-		duration = 0;
+		duration = l_atk.duration;
 		
 		gameObject.SetActive(false);
+	}
+	
+	private void OnTriggerEnter(Collider other)
+	{
+		if(other.gameObject.CompareTag("Player"))
+		{
+			PlayerHealth P_HP = other.gameObject.GetComponent<PlayerHealth>();
+			if(P_HP != null)
+				P_HP.TakeDamage(l_atk.dmg);
+		}
 	}
 }

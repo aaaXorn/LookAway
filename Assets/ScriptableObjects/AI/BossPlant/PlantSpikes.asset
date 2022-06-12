@@ -16,6 +16,6 @@ MonoBehaviour:
   number: 4
   startup: 24
   duration: 4
-  radius: 7.5
+  radius: 2.5
   height: 3
-  max_rot_mod: 30
+  max_rot_mod: 5

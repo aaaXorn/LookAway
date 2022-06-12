@@ -12,7 +12,7 @@ public class EnemyHealth : MonoBehaviour
 	
 	public int hit_id;
 	
-	protected void Start()
+	protected virtual void Start()
 	{
 		EnemyC = GetComponent<EnemyControl>();
 		

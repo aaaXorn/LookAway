@@ -18,13 +18,32 @@ public class ForestBossControl : EnemyControl
 		//direção
 		Vector3 dir = go_to.normalized;
 		
-		//rotação
-		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
-		rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
-		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_spd);
+		//distância entre o inimigo e o player
+		float dist = go_to.magnitude;
 		
-		//movimento
-		Control.SimpleMove(dir * base_speed);
+		if(dist < melee_atk_range)
+		{
+			//rotação
+			Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+			rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_spd);
+			
+			//movimento
+			Control.SimpleMove(dir * base_speed);
+		}
+		else
+		{
+			go_to = PlayerTransf.position - transform.position;
+			dir = go_to.normalized;
+			
+			//rotação
+			Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+			rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_spd);
+			
+			//movimento
+			Control.SimpleMove(dir * base_speed);
+		}
 		
 		//continua se movendo
 		if(atk_cd > 0)
@@ -32,9 +51,6 @@ public class ForestBossControl : EnemyControl
 		//ataca
 		else
 		{
-			//distância entre o inimigo e o player
-			float dist = go_to.magnitude;
-			
 			//AoE quando é atingido
 			if(currSpAtk == 1)
 			{
@@ -52,7 +68,7 @@ public class ForestBossControl : EnemyControl
 					SpecialHit(0);
 					currentState = State.Special;
 					
-					currAtk++;
+					currAtk = 0;
 				}
 				//pew pew
 				else
@@ -60,7 +76,7 @@ public class ForestBossControl : EnemyControl
 					SpecialHit(1);
 					currentState = State.Special;
 					
-					currAtk = 0;
+					currAtk++;
 				}
 			}
 		}

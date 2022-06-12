@@ -20,8 +20,16 @@ public class Spikes : MonoBehaviour
 	private int startup;
 	private int duration;
 	
-	private void Start()
+	private void Awake()
 	{
+		obj_Spikes = new GameObject[s_atk.number];
+		
+		for(int i = 0; i < s_atk.number; i++)
+		{
+			GameObject spike = Instantiate(P_Spike, transform);
+			obj_Spikes[i] = spike;
+		}
+		
 		Reset();
 	}
 	
@@ -83,7 +91,7 @@ public class Spikes : MonoBehaviour
 	
 	private void OnTriggerEnter(Collider other)
 	{
-		if(other.gameObject.CompareTag("Player"))
+		if(other.gameObject.CompareTag("Player") && startup <= 0)
 		{
 			PlayerHealth P_HP = other.gameObject.GetComponent<PlayerHealth>();
 			if(P_HP != null)

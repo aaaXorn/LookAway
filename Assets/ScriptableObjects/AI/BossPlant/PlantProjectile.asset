@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0ff01189519b0041bbdf5fa6fc0afa1, type: 3}
   m_Name: PlantProjectile
   m_EditorClassIdentifier: 
-  dmg: 25
-  duration: 120
-  spd: 4.5
+  dmg: 20
+  duration: 72
+  spd: 0.25

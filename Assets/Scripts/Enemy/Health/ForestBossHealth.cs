@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class ForestBossHealth : EnemyHealth
 {
+	private ForestBossControl ForestC;
+	
+	protected override void Start()
+	{
+		EnemyC = GetComponent<EnemyControl>();
+		ForestC = GetComponent<ForestBossControl>();
+		
+		hp = max_hp;
+	}
+	
     public override void TakeDamage(int dmg)
 	{
 		//não toma dano se inativo ou resetando
@@ -13,15 +23,12 @@ public class ForestBossHealth : EnemyHealth
 			return;
 		
 		hp -= dmg;
+		ForestC.Hurt(hp, max_hp);
 		
 		if(hp > max_hp) hp = max_hp;
 		else if(hp <= 0)
 		{
 			EnemyC.Dead();
-		}
-		else
-		{
-			EnemyC.Hurt(hp, max_hp);
 		}
 	}
 }

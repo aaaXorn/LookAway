@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: PlantAoE
   m_EditorClassIdentifier: 
   hit_count: 1
-  dmg: 14000000
-  duration: 01000000
+  dmg: 19000000
+  duration: 02000000
   size:
-  - 1.5
+  - 5
   length:
   - 0
-  delay: 17000000
-  last_frame: 24
+  delay: 24000000
+  last_frame: 48
   cooldown: 24
   movement: 0

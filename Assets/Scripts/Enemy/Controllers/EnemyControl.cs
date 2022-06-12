@@ -266,8 +266,10 @@ public class EnemyControl : MonoBehaviour
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_spd);
 
 		if(go_to.magnitude > max_approach_range)
+		{
 			//movimento
 			Control.SimpleMove(dir * base_speed);
+		}
 		
 		//continua se movendo
 		if(atk_cd > 0)
@@ -277,7 +279,6 @@ public class EnemyControl : MonoBehaviour
 		{
 			//distância entre o inimigo e o player
 			float dist = go_to.magnitude;
-			
 			//melee
 			if(dist <= melee_atk_range)
 			{
@@ -633,20 +634,31 @@ public class EnemyControl : MonoBehaviour
 			//configura o projétil
 			obj.SetActive(true);
 			
-			obj.transform.position = atk_origin[curr_hit].position;
-			obj.transform.rotation = atk_origin[curr_hit].rotation;
-			
 			switch(atk_type)
 			{
 				case "Shockwave":
-					
+					obj.transform.position = atk_origin[curr_hit].position;
+					obj.transform.rotation = atk_origin[curr_hit].rotation;
 					break;
 
 				case "Thrown":
+					obj.transform.position = atk_origin[curr_hit].position;
+					obj.transform.LookAt(PlayerControl.Instance.transform.position);
 					obj.GetComponent<Thrown>().StartPos = atk_origin[curr_hit].position;
 					break;
-
+					
+				case "Laser":
+					obj.transform.position = atk_origin[curr_hit].position;
+					obj.transform.LookAt(PlayerControl.Instance.transform.position);
+					break;
+				
+				case "Spikes":
+					
+					break;
+				
 				default:
+					obj.transform.position = atk_origin[curr_hit].position;
+					obj.transform.rotation = atk_origin[curr_hit].rotation;
 					break;
 			}
 			
