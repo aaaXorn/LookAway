@@ -35,7 +35,9 @@ public class SA_Image : MonoBehaviour
 			using(uwr = UnityWebRequestTexture.GetTexture(SA_F.FileLocation(names[i])))
 			{
 				yield return uwr.SendWebRequest();
-				
+
+				while (!uwr.isDone) yield return null;
+
 				if(uwr.isNetworkError || uwr.isHttpError)
 				{
 					Debug.Log(uwr.error);

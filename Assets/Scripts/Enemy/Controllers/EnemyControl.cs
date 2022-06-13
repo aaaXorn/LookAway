@@ -232,7 +232,11 @@ public class EnemyControl : MonoBehaviour
 				print("Enemy state machine error.");
 				break;
 		}
-		
+
+		Vector3 HVelocity = Control.velocity;
+		HVelocity = new Vector3(HVelocity.x, 0, HVelocity.z);
+		anim.SetFloat("Speed", HVelocity.magnitude);
+
 		//timers, etc
 		OnFUpdate();
 	}
