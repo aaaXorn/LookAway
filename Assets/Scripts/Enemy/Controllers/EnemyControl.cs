@@ -638,6 +638,17 @@ public class EnemyControl : MonoBehaviour
 			//configura o projétil
 			obj.SetActive(true);
 			
+			//muda a posição/rotação/etc dependendo do tipo de ataque
+			AtkTypeSwitch(obj);
+			
+			curr_hit++;
+		}
+		//diminui 1 frame do delay
+		else atk_delay[curr_hit]--;
+		
+	}
+		protected virtual void AtkTypeSwitch(GameObject obj)
+		{
 			switch(atk_type)
 			{
 				case "Shockwave":
@@ -665,14 +676,7 @@ public class EnemyControl : MonoBehaviour
 					obj.transform.rotation = atk_origin[curr_hit].rotation;
 					break;
 			}
-			
-			
-			curr_hit++;
 		}
-		//diminui 1 frame do delay
-		else atk_delay[curr_hit]--;
-		
-	}
 	#endregion
 
 #if UNITY_EDITOR

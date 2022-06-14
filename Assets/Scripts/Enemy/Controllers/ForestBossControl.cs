@@ -116,6 +116,41 @@ public class ForestBossControl : EnemyControl
 			currentState = State.Active;
 	}
 	
+	protected override void AtkTypeSwitch(GameObject obj)
+	{
+		switch(atk_type)
+		{
+			case "Shockwave":
+				obj.transform.position = atk_origin[curr_hit].position;
+				obj.transform.rotation = atk_origin[curr_hit].rotation;
+				break;
+
+			case "Thrown":
+				obj.transform.position = atk_origin[curr_hit].position;
+				obj.transform.LookAt(PlayerControl.Instance.transform.position);
+				obj.GetComponent<Thrown>().StartPos = atk_origin[curr_hit].position;
+				break;
+				
+			case "Laser":
+				obj.transform.position = atk_origin[curr_hit].position;
+				obj.transform.LookAt(PlayerControl.Instance.transform.position);
+				obj.transform.rotation = new Quaternion(0,
+														obj.transform.rotation.y,
+														obj.transform.rotation.z,
+														obj.transform.rotation.w);
+				break;
+			
+			case "Spikes":
+				
+				break;
+			
+			default:
+				obj.transform.position = atk_origin[curr_hit].position;
+				obj.transform.rotation = atk_origin[curr_hit].rotation;
+				break;
+		}
+	}
+	
 	public void Hurt(int hp, int max_hp)
 	{
 		switch(pattern)
