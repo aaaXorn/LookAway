@@ -36,11 +36,9 @@ public class SA_Image : MonoBehaviour
 			{
 				yield return uwr.SendWebRequest();
 
-				while (!uwr.isDone) yield return null;
-
 				if(uwr.isNetworkError || uwr.isHttpError)
 				{
-					Debug.Log(uwr.error);
+					Debug.LogError(uwr.error);
 				}
 				else
 				{
