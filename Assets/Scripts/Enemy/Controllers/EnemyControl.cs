@@ -142,8 +142,9 @@ public class EnemyControl : MonoBehaviour
 		PlayerTransf = PlayerControl.Instance.transform;
 		
 		Control = GetComponent<CharacterController>();
-
-		anim = GetComponent<Animator>();
+		
+		anim = (GetComponent<Animator>() != null) ? GetComponent<Animator>() :
+													GetComponentInChildren<Animator>();
 
 		E_HP = GetComponent<EnemyHealth>();
 		
