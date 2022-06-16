@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33e4f596efed7d54a87049260053794f, type: 3}
   m_Name: ShockwaveTurtle
   m_EditorClassIdentifier: 
-  dmg: 0
-  duration: 0
-  max_dist: 0
-  min_dist: 0
-  vReach: 0
-  spd: 0
+  dmg: 15
+  duration: 12
+  max_dist: 2
+  min_dist: 0.1
+  vReach: 0.5
+  spd: 2

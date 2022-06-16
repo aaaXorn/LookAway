@@ -16,4 +16,6 @@ public class ThrownSO : ScriptableObject
     public float radius;
     [Tooltip("Attack duration in frames (24 FPS physics)")]
     public int duration;
+	[Tooltip("Initial vertical force")]
+	public float v_force;
 }

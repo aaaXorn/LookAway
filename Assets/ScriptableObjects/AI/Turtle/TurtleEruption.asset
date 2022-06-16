@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: Thrown
   hit_count: 5
-  delay: 4800000048000000480000004800000048000000
+  delay: 4300000043000000430000004300000043000000
   last_frame: 360
   cooldown: 24
   movement: 0

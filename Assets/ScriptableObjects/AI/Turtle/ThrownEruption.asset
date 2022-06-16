@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcae0b559acce8b409b9e2fdf990feca, type: 3}
   m_Name: ThrownEruption
   m_EditorClassIdentifier: 
-  dmg: 0
-  h_move_time: 0
-  grav: {x: 0, y: 0, z: 0}
-  radius: 0
-  duration: 0
+  dmg: 15
+  h_move_time: 4
+  grav: {x: 0, y: -9.9, z: 0}
+  radius: 5
+  duration: 1
+  v_force: 15

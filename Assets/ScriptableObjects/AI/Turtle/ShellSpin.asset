@@ -22,4 +22,4 @@ MonoBehaviour:
   delay: 18000000
   last_frame: 240
   cooldown: 24
-  movement: -2.5
+  movement: -4

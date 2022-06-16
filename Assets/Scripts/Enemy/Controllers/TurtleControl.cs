@@ -4,16 +4,27 @@ using UnityEngine;
 
 public class TurtleControl : EnemyControl
 {
+	[SerializeField]
+	private int hurt_frames;
+	private int hurt_f;
+	
     protected override void StateApproach()
 	{
+		Vector3 go_to = PlayerTransf.position - transform.position;
+		//direção
+		Vector3 dir = go_to.normalized;
+		
+		//rotação
+		Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+		rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rot_spd);
+		
 		//espera
 		if(atk_cd > 0)
 			atk_cd--;
 		//ataca
 		else
 		{
-			Vector3 go_to = PlayerTransf.position - transform.position;
-			
 			//distância entre o inimigo e o player
 			float dist = go_to.magnitude;
 			
@@ -57,6 +68,26 @@ public class TurtleControl : EnemyControl
 		}
 	}
 	
+	protected override void StateSpecial()
+	{
+		if(attacking)
+		{
+			SpAttackEffect();
+		}
+
+		//encerra o ataque
+		if (atk_last_frame <= 0)
+		{
+			attacking = false;
+			atk_cancel = false;
+
+			anim.SetTrigger("Free");
+
+			PostSpecialState();
+		}
+		else atk_last_frame--;
+	}
+	
 	public void Hurt(int hp, int max_hp)
 	{
 		switch(pattern)
@@ -66,6 +97,7 @@ public class TurtleControl : EnemyControl
 				{
 					pattern++;
 					currAtk = 1;
+					hurt_f = hurt_frames;
 				}
 				break;
 			
@@ -74,6 +106,7 @@ public class TurtleControl : EnemyControl
 				{
 					pattern++;
 					currAtk = 1;
+					hurt_f = hurt_frames;
 				}
 				break;
 			
@@ -82,11 +115,22 @@ public class TurtleControl : EnemyControl
 				{
 					pattern++;
 					currAtk = 1;
+					hurt_f = hurt_frames;
 				}
 				break;
 			
 			default:
 				break;
+		}
+	}
+	protected override void StateHurt()
+	{
+		if(hurt_f > 0) hurt_f--;
+		else
+		{
+			anim.SetTrigger("Free");
+			
+			currentState = State.Approach;
 		}
 	}
 	

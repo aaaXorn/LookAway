@@ -33,6 +33,9 @@ public class Thrown : MonoBehaviour
     {
         if (!collision_start)
         {
+			StartPos = new Vector3(StartPos.x,
+								   transform.position.y,
+								   StartPos.z);
             Vector3 MovePos = new Vector3(LandPos.x,
                                           transform.position.y,
                                           LandPos.z);
@@ -40,7 +43,7 @@ public class Thrown : MonoBehaviour
             //movimento horizontal
             transform.position = Vector3.Lerp(StartPos, MovePos, time / t_atk.h_move_time);
 
-            rigid.AddForce(t_atk.grav);
+            rigid.AddForce(t_atk.grav, ForceMode.Acceleration);
 
             //progride o timer com base no tempo desde o último fixed update
             time += Time.fixedDeltaTime;
@@ -97,6 +100,8 @@ public class Thrown : MonoBehaviour
     {
         //pega a posição atual do jogador
         LandPos = PlayerControl.Instance.transform.position;
+		
+		if(rigid != null) rigid.AddForce(Vector3.up * t_atk.v_force, ForceMode.Impulse);
     }
 
     //colocar layer do objeto como Thrown pra colidir só com Player e Default
@@ -106,6 +111,7 @@ public class Thrown : MonoBehaviour
         {
             collision_start = true;
 
+			rigid.velocity = Vector3.zero;
             rigid.isKinematic = true;
         }
     }

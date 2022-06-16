@@ -221,6 +221,10 @@ public class EnemyControl : MonoBehaviour
 				StateSpecial();
 				break;
 			
+			case State.Hurt:
+				StateHurt();
+				break;
+			
 			case State.Dead:
 				StateDead();
 				break;
@@ -439,6 +443,10 @@ public class EnemyControl : MonoBehaviour
 			currentState = State.Approach;
 		}
 	
+	protected virtual void StateHurt()
+	{
+		
+	}
 		public virtual void Hurt(int hp, int max_hp)
 		{
 			
