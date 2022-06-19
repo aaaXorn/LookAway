@@ -129,6 +129,11 @@ public class SaveSystem
 		{
 			PlayerEquipment.Instance.shield_lvl = PlayerPrefs.GetInt("ShieldLevel");
 		}
+		
+		//atualiza os stats
+		PlayerEquipment.Instance.SwordStats();
+		PlayerEquipment.Instance.ArmorStats();
+		
 		//poção
 		if (PlayerPrefs.HasKey("MaxPotions"))
 		{

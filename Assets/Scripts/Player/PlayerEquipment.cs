@@ -20,11 +20,6 @@ public class PlayerEquipment : MonoBehaviour
         else Destroy(gameObject);
     }
 	
-	private void Start()
-	{
-		SwordStats();
-	}
-	
 	public void SwordStats()
 	{
 		switch(sword_lvl)
@@ -52,15 +47,17 @@ public class PlayerEquipment : MonoBehaviour
 		switch(armor_lvl)
 		{
 			case 0:
-				
+				PlayerHealth.Instance.max_hp = 100;
 				break;
 			
 			case 1:
-				
+				PlayerHealth.Instance.max_hp = 125;
+				PlayerHealth.Instance.UpdateHealth(25);
 				break;
 			
 			case 2:
-				
+				PlayerHealth.Instance.max_hp = 150;
+				PlayerHealth.Instance.UpdateHealth(25);
 				break;
 			
 			default:

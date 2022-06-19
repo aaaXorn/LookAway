@@ -461,6 +461,23 @@ public class EnemyControl : MonoBehaviour
 			anim.SetTrigger("Dead");
 			
 			currentState = State.Dead;
+			
+			/*
+			if(PlayerEquipment.Instance.sword_lvl < 1)
+			{
+				PlayerEquipment.Instance.sword_lvl = 1;
+				PlayerEquipment.Instance.SwordStats();
+			}
+			if(PlayerEquipment.Instance.armor_lvl < 1)
+			{
+				PlayerEquipment.Instance.armor_lvl = 1;
+				PlayerEquipment.Instance.ArmorStats();
+			}
+			if(PlayerEquipment.Instance.shield_lvl < 1)
+			{
+				PlayerEquipment.Instance.shield_lvl = 1;
+			}
+			*/
 		}
 	
 	protected virtual void StateReset()

@@ -8,8 +8,7 @@ public class PlayerHealth : MonoBehaviour
 	//referência global do código do personagem
 	public static PlayerHealth Instance {get; set;}
 	
-	[SerializeField]
-	private int max_hp;//vida máxima
+	public int max_hp;//vida máxima
 	private int hp;//vida atual
 
 	//se o jogador tem invincibility frames
@@ -75,17 +74,24 @@ public class PlayerHealth : MonoBehaviour
 	
 	public void ReceiveHealing(int heal)
 	{
-		//aumenta o HP
-		if (hp > 0) hp += heal;
-
-		//limita o HP pra não ultrapassar max_hp
-		if (hp > max_hp) hp = max_hp;
+		UpdateHealth(heal);
 
 		//diminui as poções restantes por 1
 		PlayerEquipment.Instance.potions--;
 
 		//UI
-		hp_img.fillAmount = (float)hp / max_hp;
 		pot_txt.text = "" + PlayerEquipment.Instance.potions;
+	}
+	
+	public void UpdateHealth(int heal)
+	{
+		//aumenta o HP
+		if (hp > 0) hp += heal;
+
+		//limita o HP pra não ultrapassar max_hp
+		if (hp > max_hp) hp = max_hp;
+		
+		//UI
+		hp_img.fillAmount = (float)hp / max_hp;
 	}
 }
