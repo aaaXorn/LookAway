@@ -10,7 +10,7 @@ public class Shockwave : MonoBehaviour
 	private ShockwaveSO s_atk;
 	
 	//duração
-	private int atk_duration;
+	private int atk_duration, sfx_duration;
 	//distância máxima/mínima
 	private float atk_max_dist, atk_min_dist;
 	
@@ -62,7 +62,12 @@ public class Shockwave : MonoBehaviour
 		}
 		//encerra o ataque
 		else
-			Reset();
+		{
+			if(sfx_duration > 0)
+				sfx_duration--;
+			else
+				Reset();
+		}
 	}
 	
 	//volta pro estado inicial
@@ -73,6 +78,7 @@ public class Shockwave : MonoBehaviour
 		atk_duration = s_atk.duration;
 		atk_max_dist = s_atk.max_dist;
 		atk_min_dist = s_atk.min_dist;
+		sfx_duration = s_atk.sfx_duration;
 		
 		gameObject.SetActive(false);
 	}

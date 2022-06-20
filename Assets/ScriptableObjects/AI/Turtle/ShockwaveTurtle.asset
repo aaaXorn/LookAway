@@ -18,3 +18,4 @@ MonoBehaviour:
   min_dist: 0.1
   vReach: 0.5
   spd: 2
+  sfx_duration: 5

@@ -77,4 +77,38 @@ public class SnowBossControl : EnemyControl
 	{
 		currentState = State.Approach;
 	}
+	
+	protected override void AtkTypeSwitch(GameObject obj)
+	{
+		switch(atk_type)
+		{
+			case "Shockwave":
+				obj.transform.position = atk_origin[curr_hit].position;
+				obj.transform.rotation = atk_origin[curr_hit].rotation;
+				break;
+
+			case "Thrown":
+				obj.transform.position = atk_origin[curr_hit].position;
+				obj.transform.LookAt(PlayerControl.Instance.transform.position);
+				obj.GetComponent<Thrown>().StartPos = atk_origin[curr_hit].position;
+				break;
+				
+			case "Laser":
+				obj.transform.position = atk_origin[curr_hit].position;
+				obj.transform.LookAt(PlayerControl.Instance.transform.position);
+				obj.transform.eulerAngles = new Vector3(4,
+														obj.transform.eulerAngles.y,
+														0);
+				break;
+			
+			case "Spikes":
+				
+				break;
+			
+			default:
+				obj.transform.position = atk_origin[curr_hit].position;
+				obj.transform.rotation = atk_origin[curr_hit].rotation;
+				break;
+		}
+	}
 }

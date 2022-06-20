@@ -20,4 +20,7 @@ public class ShockwaveSO : ScriptableObject
 	
 	[Tooltip("Shockwave speed")]
 	public float spd;
+	
+	[Tooltip("SFX end, continues after duration timer ends")]
+	public int sfx_duration;
 }
