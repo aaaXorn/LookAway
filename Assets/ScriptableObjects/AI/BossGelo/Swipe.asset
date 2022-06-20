@@ -19,7 +19,7 @@ MonoBehaviour:
   - 1.5
   length:
   - 1.25
-  delay: 1e000000
+  delay: 1f000000
   last_frame: 64
   cooldown: 18
   movement: 0

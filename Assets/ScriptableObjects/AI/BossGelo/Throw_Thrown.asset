@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dmg: 15
   h_move_time: 1.5
-  grav: {x: 0, y: -7.35, z: 0}
+  grav: {x: 0, y: -14.5, z: 0}
   radius: 3
-  duration: 2
-  v_force: 5
+  duration: 1
+  v_force: 7.5

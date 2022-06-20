@@ -6657,7 +6657,7 @@ MonoBehaviour:
   - {fileID: 32515301}
   - {fileID: 2020821825}
   - {fileID: 1651297363}
-  total_startup: 46
+  total_startup: 33
   total_duration: 6
   height: 3
 --- !u!4 &520725572
@@ -7565,7 +7565,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639064089}
-  m_LocalRotation: {x: 0.15469481, y: 0.43721095, z: -0.07662769, w: 0.8826349}
+  m_LocalRotation: {x: 0.15469481, y: 0.43721092, z: -0.07662767, w: 0.8826349}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
