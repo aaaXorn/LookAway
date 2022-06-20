@@ -46,6 +46,10 @@ public class SaveSystem
 		//poção
 		PlayerPrefs.SetInt("MaxPotions", PlayerEquipment.Instance.max_potions);
 		PlayerPrefs.SetInt("CurrPotions", PlayerEquipment.Instance.potions);
+		//xp
+		PlayerPrefs.SetInt("SwordXP", PlayerEquipment.Instance.sword_xp);
+		PlayerPrefs.SetInt("ArmorXP", PlayerEquipment.Instance.armor_xp);
+		PlayerPrefs.SetInt("ShieldXP", PlayerEquipment.Instance.shield_xp);
 	}
 	
 	//carrega as configs
@@ -146,6 +150,20 @@ public class SaveSystem
 			if (PlayerPrefs.GetInt("CurrPotions") < 0)
 				PlayerPrefs.SetInt("CurrPotions", PlayerEquipment.Instance.max_potions);
 			 PlayerEquipment.Instance.potions = PlayerPrefs.GetInt("CurrPotions");
+		}
+
+		//xp
+		if (PlayerPrefs.HasKey("SwordXP"))
+		{
+			PlayerEquipment.Instance.sword_xp = PlayerPrefs.GetInt("SwordXP");
+		}
+		if (PlayerPrefs.HasKey("ArmorXP"))
+		{
+			PlayerEquipment.Instance.armor_xp = PlayerPrefs.GetInt("ArmorXP");
+		}
+		if (PlayerPrefs.HasKey("ShieldXP"))
+		{
+			PlayerEquipment.Instance.shield_xp = PlayerPrefs.GetInt("ShieldXP");
 		}
 	}
 }

@@ -463,20 +463,9 @@ public class EnemyControl : MonoBehaviour
 			currentState = State.Dead;
 			
 			/*
-			if(PlayerEquipment.Instance.sword_lvl < 1)
-			{
-				PlayerEquipment.Instance.sword_lvl = 1;
-				PlayerEquipment.Instance.SwordStats();
-			}
-			if(PlayerEquipment.Instance.armor_lvl < 1)
-			{
-				PlayerEquipment.Instance.armor_lvl = 1;
-				PlayerEquipment.Instance.ArmorStats();
-			}
-			if(PlayerEquipment.Instance.shield_lvl < 1)
-			{
-				PlayerEquipment.Instance.shield_lvl = 1;
-			}
+			PlayerEquipment.Instance.SwordXP(1);
+			PlayerEquipment.Instance.ArmorXP(1);
+			PlayerEquipment.Instance.ShieldXP(1);
 			*/
 		}
 	

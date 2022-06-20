@@ -1205,6 +1205,7 @@ MonoBehaviour:
   enemy_layer:
     serializedVersion: 2
     m_Bits: 64
+  dmg_mod: 1
   AtkList:
   - n_atk: {fileID: 11400000, guid: ee44de201d2f3044abec2066e5384441, type: 2}
     origin:
@@ -1240,6 +1241,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f3c8d64c1d99804b87c3dc64015b61f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  xp_l1: 5
+  xp_l2: 10
+  xp_l3: 15
+  sword_xp: 0
+  armor_xp: 0
+  shield_xp: 0
   sword_lvl: 0
   armor_lvl: 0
   shield_lvl: 0

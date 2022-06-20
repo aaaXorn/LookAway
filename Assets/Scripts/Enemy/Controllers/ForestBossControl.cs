@@ -7,6 +7,10 @@ public class ForestBossControl : EnemyControl
 	//velocidade do reposition
 	[SerializeField]
 	private float repos_spd;
+
+	[Tooltip("Special Effect AoE")]
+	[SerializeField]
+	private GameObject obj_AoE;
 	
 	//quando a AI usa o padrão de reposição
 	private int repos;
@@ -58,9 +62,12 @@ public class ForestBossControl : EnemyControl
 				currentState = State.Attack;
 				
 				currSpAtk = 0;
+				
+				obj_AoE.SetActive(true);
+				obj_AoE.transform.position = transform.position;
 			}
 			//ataques a distância
-			else if(currSpAtk <= ranged_atk_range)
+			else if(dist <= ranged_atk_range)
 			{
 				//espinho
 				if(currAtk > 0)
@@ -81,7 +88,7 @@ public class ForestBossControl : EnemyControl
 			}
 		}
 	}
-	
+
 	protected override void PostAttackState()
 	{
 		currentState = State.Approach;
@@ -134,10 +141,9 @@ public class ForestBossControl : EnemyControl
 			case "Laser":
 				obj.transform.position = atk_origin[curr_hit].position;
 				obj.transform.LookAt(PlayerControl.Instance.transform.position);
-				obj.transform.rotation = new Quaternion(0,
-														obj.transform.rotation.y,
-														obj.transform.rotation.z,
-														obj.transform.rotation.w);
+				obj.transform.eulerAngles = new Vector3(4,
+														obj.transform.eulerAngles.y,
+														0);
 				break;
 			
 			case "Spikes":
