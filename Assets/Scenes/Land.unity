@@ -7408,12 +7408,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 615852530}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &615852539 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 366175167995203695, guid: f21d62652fc522b4185e1bdbe3a7c346,
-    type: 3}
-  m_PrefabInstance: {fileID: 615852530}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &615852540 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1082271958561512970, guid: f21d62652fc522b4185e1bdbe3a7c346,
@@ -10180,13 +10174,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 903887907}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0, z: 0.333}
+  m_LocalRotation: {x: 0.08715578, y: 0, z: 0, w: 0.9961947}
+  m_LocalPosition: {x: -0, y: 0.01, z: 0.01}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 615852539}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 1254931879}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 10, y: 0, z: 0}
 --- !u!43 &959919144
 Mesh:
   m_ObjectHideFlags: 0
@@ -12087,6 +12081,12 @@ MonoBehaviour:
   - ui_handleplain.png
   - ui_handleplain.png
   pxs: 640000006400000064000000640000006400000064000000640000006400000064000000640000006400000064000000
+--- !u!4 &1254931879 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3480699329000672020, guid: f21d62652fc522b4185e1bdbe3a7c346,
+    type: 3}
+  m_PrefabInstance: {fileID: 615852530}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1290048978 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6298341392466490718, guid: 88f03e1c7f46469458858ae5988d224b,
