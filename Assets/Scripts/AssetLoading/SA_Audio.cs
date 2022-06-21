@@ -38,8 +38,10 @@ public class SA_Audio : MonoBehaviour
 				{
 					//muda o audio clip do audio source
 					AudioClip clip = DownloadHandlerAudioClip.GetContent(uwr);
-
+					clip.name = names[i];
+					
 					audio[i].clip = clip;
+					audio[i].Play();
 				}
 			}
 
