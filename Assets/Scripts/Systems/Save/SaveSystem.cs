@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 settings de PlayerPrefs:
 GameQuality (int): qualidade gráfica
 CameraSensivity (int): sensividade da camera
+DynamicQuality (bool): se o jogo tem ou não qualidade dinâmica
 OldPlayerPosition (Vector3): última posição do player na Scene Land
 SwordLevel, ArmorLevel, ShieldLevel (int): níveis de equipamento
 CurrPotions (int): poções que o jogador tem atualmente
@@ -19,10 +20,11 @@ public class SaveSystem
 	public static string NextScene;
 	
 	//salva as configs do player
-	public static void SaveConfig(int quality, int sensivity)
+	public static void SaveConfig(int quality, int sensivity, bool dynamic_qual)
 	{
 		PlayerPrefs.SetInt("GameQuality", quality);
 		PlayerPrefs.SetInt("CameraSensivity", sensivity);
+		PlayerPrefsX.SetBool("DynamicQuality", dynamic_qual);
 	}
 	
 	//salva os dados do player
