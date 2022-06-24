@@ -10,6 +10,8 @@ public class Menu : MonoBehaviour
 	private int quality_level;
 	//sensividade da camera
 	private int cam_sensivity;
+	//qualidade dinamica
+	private bool dyn_qual;
 	
 	//painéis do menu
 	[SerializeField]
@@ -22,6 +24,7 @@ public class Menu : MonoBehaviour
 		//texto que mostra quanto % de sensibilidade a camera tem
 		[SerializeField]
 		private Text Sld_CSens_txt;
+	private Toggle Tg_DynQual;
 	
     private void Start()
     {
@@ -42,6 +45,14 @@ public class Menu : MonoBehaviour
 		}
 		else cam_sensivity = 100;
 		
+		if(PlayerPrefs.HasKey("DynamicQuality"))
+		{
+			dyn_qual = PlayerPrefsX.GetBool("DynamicQuality");
+			
+			Tg_DynQual.isOn = dyn_qual;
+		}
+		else dyn_qual = false;
+		
 		//desativa o painel de opções
 		OptionsPanel.SetActive(false);
     }
@@ -49,7 +60,7 @@ public class Menu : MonoBehaviour
 	#region main menu
     public void StartGame()
     {
-		SaveSystem.SaveConfig(quality_level, cam_sensivity);
+		SaveSystem.SaveConfig(quality_level, cam_sensivity, dyn_qual);
 		
 		SaveSystem.NextScene = "Land";
 		SceneManager.LoadScene("LoadScene");
@@ -66,7 +77,7 @@ public class Menu : MonoBehaviour
 
     public void Quit()
     {
-		SaveSystem.SaveConfig(quality_level, cam_sensivity);
+		SaveSystem.SaveConfig(quality_level, cam_sensivity, dyn_qual);
 		
         Application.Quit();
     }
@@ -90,6 +101,14 @@ public class Menu : MonoBehaviour
 	public void Volume()
 	{
 		
+	}
+	
+	//qualidade dinâmica
+	public void DynamicQual(bool dq)
+	{
+		dyn_qual = dq;
+		
+		Tg_DynQual.isOn = dyn_qual;
 	}
 	#endregion
 }
