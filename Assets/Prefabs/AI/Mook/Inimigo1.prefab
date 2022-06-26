@@ -1858,7 +1858,7 @@ GameObject:
   - component: {fileID: 2211618986971942683}
   - component: {fileID: 530832092226639128}
   m_Layer: 0
-  m_Name: skeletonzombie_t_avelange
+  m_Name: Inimigo1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1955,7 +1955,7 @@ MonoBehaviour:
   atk_cd_total: 0
   melee_atk_range: 3
   ranged_atk_range: 0
-  max_approach_range: 0
+  max_approach_range: 1.5
   start_pos: {x: 0, y: 0, z: 0}
   base_speed: 3
   reposition_radius: 0

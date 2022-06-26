@@ -1698,7 +1698,7 @@ GameObject:
   - component: {fileID: 3185299268960415210}
   - component: {fileID: 3503511575129496458}
   m_Layer: 0
-  m_Name: Demon T Wiezzorek
+  m_Name: Inimigo2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1805,7 +1805,7 @@ MonoBehaviour:
   atk_cd_total: 0
   melee_atk_range: 3
   ranged_atk_range: 6
-  max_approach_range: 0
+  max_approach_range: 1.5
   start_pos: {x: 0, y: 0, z: 0}
   base_speed: 3
   reposition_radius: 0
