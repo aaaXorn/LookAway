@@ -17,7 +17,10 @@ public class PlayerEquipment : MonoBehaviour
     public int sword_lvl, armor_lvl, shield_lvl;
     //poções que o jogador tem agora
     public int potions, max_potions;
-
+	
+	[SerializeField]
+	private GameObject[] Swords, Armors, Shields;
+	
     private void Awake()
     {
         //setta a referência global desse script
@@ -29,6 +32,8 @@ public class PlayerEquipment : MonoBehaviour
 	#region xp
 	public void SwordXP(int xp)
     {
+		if(sword_lvl >= 3) return;
+		
 		//aumenta o xp
 		sword_xp += xp;
 		if(sword_xp > xp_l3) sword_xp = xp_l3;
@@ -68,6 +73,8 @@ public class PlayerEquipment : MonoBehaviour
 
 	public void ArmorXP(int xp)
 	{
+		if(armor_lvl >= 3) return;
+		
 		armor_xp += xp;
 		if (armor_xp > xp_l3) armor_xp = xp_l3;
 
@@ -105,6 +112,8 @@ public class PlayerEquipment : MonoBehaviour
 
 	public void ShieldXP(int xp)
 	{
+		if(shield_lvl >= 3) return;
+		
 		shield_xp += xp;
 		if (shield_xp > xp_l3) shield_xp = xp_l3;
 
@@ -121,7 +130,7 @@ public class PlayerEquipment : MonoBehaviour
 			case 2:
 				if (shield_xp > xp_l3) shield_lvl++;
 				break;
-
+			
 			default:
 				shield_lvl = 0;
 				break;
@@ -150,6 +159,14 @@ public class PlayerEquipment : MonoBehaviour
 			default:
 				PlayerControl.Instance.dmg_mod = 1f;
 				break;
+		}
+		
+		for(int i = 0; i < 3; i++)
+		{
+			if(i == sword_lvl)
+				Swords[i].SetActive(true);
+			else
+				Swords[i].SetActive(false);
 		}
 	}
 	
