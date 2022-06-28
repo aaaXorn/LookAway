@@ -53,6 +53,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CidadeGelo_Additive/CG_4.unity
     guid: beca70461616a4643a4950c31da36bcd
+  - enabled: 1
+    path: Assets/Scenes/BossGelo/BossGelo.unity
+    guid: 373781aa8cadbd74ba97214fde449d14
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: eb9392a1d0474a24dbad3e49ad2d436e,
       type: 2}
