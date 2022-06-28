@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SwordEnemy : EnemyControl
 {
-    protected virtual void StateApproach()
+    protected override void StateApproach()
 	{
 		Vector3 go_to = PlayerTransf.position - transform.position;
 		//direção
@@ -39,7 +39,7 @@ public class SwordEnemy : EnemyControl
 		}
 	}
 	
-	protected virtual void PostAttackState()
+	protected override void PostAttackState()
 	{
 		currentState = State.Approach;
 	}

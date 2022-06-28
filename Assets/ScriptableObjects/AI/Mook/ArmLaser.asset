@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dmg: 5
   duration: 36
-  spd: 12
+  spd: 0.5
