@@ -38,7 +38,7 @@ public class SnowBossControl : EnemyControl
 				float angle = Vector3.Angle(transform.forward, dir);
 				print(angle);
 				//se estiver na frente
-				if(dist <= swipe_range && Mathf.Abs(angle) < swipe_angle)
+				if(dist <= swipe_range && angle < swipe_angle)
 				{
 					//swipe
 					AnimHit(0);

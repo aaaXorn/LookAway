@@ -15,6 +15,6 @@ MonoBehaviour:
   dmg: 15
   h_move_time: 4
   grav: {x: 0, y: -9.9, z: 0}
-  radius: 5
+  radius: 3.5
   duration: 1
   v_force: 15

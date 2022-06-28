@@ -90,6 +90,8 @@ GameObject:
   - component: {fileID: 6984770801226327430}
   - component: {fileID: 6984770801226327431}
   - component: {fileID: 6984770801226327429}
+  - component: {fileID: 1065750223}
+  - component: {fileID: 1065750222}
   m_Layer: 6
   m_Name: TartarugaBoss
   m_TagString: Untagged
@@ -104,7 +106,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6984770801226327448}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 135.4, y: 37.93, z: -138.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -150,17 +152,18 @@ MonoBehaviour:
     - {fileID: 6984770801226327424}
     - {fileID: 6984770801226327424}
     Manager: {fileID: 6984770801226327429}
-  atk_cd_total: 0
+  atk_cd_total: 12
   melee_atk_range: 5
   ranged_atk_range: 25
   max_approach_range: 3
   start_pos: {x: 0, y: 0, z: 0}
-  base_speed: 0
+  base_speed: 0.2
   reposition_radius: 0
   reposition_dist: 0
-  rot_spd: 0.1
-  rot_atk_spd: 5
+  rot_spd: 0.2
+  rot_atk_spd: 4
   hurt_frames: 32
+  sp_rot_spd: 0.5
 --- !u!114 &6984770801226327426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,7 +193,7 @@ CharacterController:
   m_Radius: 2
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 2, z: 0}
 --- !u!136 &6984770801226327430
@@ -206,7 +209,7 @@ CapsuleCollider:
   m_Radius: 2.3
   m_Height: 6
   m_Direction: 2
-  m_Center: {x: 0, y: 2.3, z: 0.1}
+  m_Center: {x: 0, y: 2.5, z: 0.1}
 --- !u!65 &6984770801226327431
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -234,6 +237,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PoolObj: {fileID: 6756691135320552016, guid: 1390efedd8869ec448c1716e6d03118a, type: 3}
   objs_pooled: 5
+--- !u!136 &1065750223
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6984770801226327448}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2.5
+  m_Direction: 2
+  m_Center: {x: 0, y: 1.25, z: -3.5}
+--- !u!136 &1065750222
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6984770801226327448}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.7
+  m_Height: 2.25
+  m_Direction: 2
+  m_Center: {x: 0, y: 1.5, z: 4}
 --- !u!1001 &6984770799531474082
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -874,21 +905,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6984770799531474082}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &6275956059266904674 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -5190881523157938496, guid: 28a47df8951f5f64b81c415b35b3e135,
-    type: 3}
-  m_PrefabInstance: {fileID: 6984770799531474082}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3596634893968673395 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -3384678972081097007, guid: 28a47df8951f5f64b81c415b35b3e135,
-    type: 3}
-  m_PrefabInstance: {fileID: 6984770799531474082}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2721475914770331385 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4983932165062560347, guid: 28a47df8951f5f64b81c415b35b3e135,
     type: 3}
   m_PrefabInstance: {fileID: 6984770799531474082}
   m_PrefabAsset: {fileID: 0}
@@ -898,31 +917,3 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6984770799531474082}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &6984770799531474094
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2721475914770331385}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.007
-  m_Height: 0.03
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.006, z: 0}
---- !u!136 &6984770799531474093
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6275956059266904674}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.0075
-  m_Height: 0.025
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}

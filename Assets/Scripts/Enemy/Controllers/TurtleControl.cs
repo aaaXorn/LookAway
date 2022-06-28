@@ -7,7 +7,10 @@ public class TurtleControl : EnemyControl
 	[SerializeField]
 	private int hurt_frames;
 	private int hurt_f;
-	
+
+	[SerializeField]
+	private float sp_rot_spd;
+
     protected override void StateApproach()
 	{
 		Vector3 go_to = PlayerTransf.position - transform.position;
@@ -21,7 +24,11 @@ public class TurtleControl : EnemyControl
 		
 		//espera
 		if(atk_cd > 0)
+		{
 			atk_cd--;
+
+			Control.SimpleMove(dir * base_speed);
+		}
 		//ataca
 		else
 		{
@@ -73,6 +80,18 @@ public class TurtleControl : EnemyControl
 		if(attacking)
 		{
 			SpAttackEffect();
+		}
+
+		if (atk_movement != 0)
+		{
+			Vector3 go_to = PlayerTransf.position - transform.position;
+			//direção
+			Vector3 dir = go_to.normalized;
+
+			//rotação
+			Quaternion rot = Quaternion.LookRotation(dir, Vector3.up);
+			rot = new Quaternion(transform.rotation.x, rot.y, transform.rotation.z, rot.w);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, sp_rot_spd);
 		}
 
 		//encerra o ataque
