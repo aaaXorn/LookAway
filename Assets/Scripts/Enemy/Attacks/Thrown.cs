@@ -22,11 +22,22 @@ public class Thrown : MonoBehaviour
 
     private bool has_hit, collision_start;
 
+    [SerializeField]
+    private GameObject SFX;
+
+    [SerializeField]
+    private float disable_time = 1;
+
     private void Start()
     {
         rigid = GetComponent<Rigidbody>();
 
         Reset();
+        if (SFX != null)
+        {
+            SFX.transform.parent = null;
+            SFX.SetActive(false);
+        }
     }
 
     private void FixedUpdate()
@@ -111,9 +122,21 @@ public class Thrown : MonoBehaviour
         {
             collision_start = true;
 
-			rigid.velocity = Vector3.zero;
+            if (SFX != null)
+            {
+                SFX.transform.position = transform.position;
+                SFX.SetActive(true);
+                Invoke("DisableSFX", disable_time);
+            }
+
+            rigid.velocity = Vector3.zero;
             rigid.isKinematic = true;
         }
+    }
+
+    private void DisableSFX()
+    {
+        SFX.SetActive(false);
     }
 
     #if UNITY_EDITOR
