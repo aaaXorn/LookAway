@@ -57,5 +57,12 @@ public class ShieldEnemy : EnemyControl
 		currentState = State.Dead;
 		
 		PlayerEquipment.Instance.ShieldXP(1);
+		
+		Invoke("Deactivate", 5f);
+	}
+	
+	private void Deactivate()
+	{
+		gameObject.SetActive(false);
 	}
 }

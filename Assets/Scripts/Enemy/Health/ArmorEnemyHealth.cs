@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ArmorEnemyHealth : EnemyHealth
 {
-    private ArmorEnemy MookC;
+	private ArmorEnemy MookC;
 	
 	protected override void Start()
 	{

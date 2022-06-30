@@ -7,7 +7,7 @@ public class Spikes : MonoBehaviour
 	[SerializeField]
 	private SpikesSO s_atk;
 	
-	//layer do player
+	//layer do chao
     [SerializeField]
     private LayerMask ground_layer;
 	

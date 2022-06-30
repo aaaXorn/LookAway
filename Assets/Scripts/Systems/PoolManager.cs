@@ -15,6 +15,9 @@ public class PoolManager : MonoBehaviour
 	[SerializeField]
 	private int objs_pooled;
 	
+	[SerializeField]
+	private bool activeFalse;
+	
 	//inicializa a pool
 	private void Start()
 	{
@@ -24,7 +27,7 @@ public class PoolManager : MonoBehaviour
 		for(int i = 0; i < objs_pooled; i++)
 		{
 			obj = Instantiate(PoolObj);
-			//obj.SetActive(false);
+			if(activeFalse) obj.SetActive(false);
 			PoolList.Add(obj);
 		}
 	}

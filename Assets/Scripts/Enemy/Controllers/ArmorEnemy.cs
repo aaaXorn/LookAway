@@ -63,6 +63,13 @@ public class ArmorEnemy : EnemyControl
 		currentState = State.Dead;
 		
 		PlayerEquipment.Instance.ArmorXP(1);
+		
+		Invoke("Deactivate", 5f);
+	}
+	
+	private void Deactivate()
+	{
+		gameObject.SetActive(false);
 	}
 
 	protected override void AtkTypeSwitch(GameObject obj)

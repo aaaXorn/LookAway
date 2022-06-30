@@ -51,5 +51,12 @@ public class SwordEnemy : EnemyControl
 		currentState = State.Dead;
 		
 		PlayerEquipment.Instance.SwordXP(1);
+		
+		Invoke("Deactivate", 5f);
+	}
+	
+	private void Deactivate()
+	{
+		gameObject.SetActive(false);
 	}
 }
