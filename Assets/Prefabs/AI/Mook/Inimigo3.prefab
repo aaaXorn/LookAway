@@ -303,7 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f321ee8e215dce48a15e7be7b52234b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_hp: 20
+  max_hp: 10
   hit_id: 0
 --- !u!95 &842728390556456979
 Animator:
@@ -338,6 +338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PoolObj: {fileID: 7900395177270051571, guid: 31a0eb775edbbb54a8ee958386fd5395, type: 3}
   objs_pooled: 1
+  activeFalse: 0
 --- !u!1 &1963798287918015429
 GameObject:
   m_ObjectHideFlags: 0
