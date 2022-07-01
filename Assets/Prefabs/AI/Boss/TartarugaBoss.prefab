@@ -75,6 +75,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PoolObj: {fileID: 5146270036579214039, guid: e4b9c8819608e2741944343df6f093ba, type: 3}
   objs_pooled: 7
+  activeFalse: 0
 --- !u!1 &6984770801226327448
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,6 +238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PoolObj: {fileID: 6756691135320552016, guid: 1390efedd8869ec448c1716e6d03118a, type: 3}
   objs_pooled: 5
+  activeFalse: 0
 --- !u!136 &1065750223
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -897,6 +899,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -0.33116934
       objectReference: {fileID: 0}
+    - target: {fileID: 9173078291042267164, guid: 28a47df8951f5f64b81c415b35b3e135,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: edeab8e42f6355b4aadeff551a5ee923, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 28a47df8951f5f64b81c415b35b3e135, type: 3}
 --- !u!4 &7450182438407723849 stripped
