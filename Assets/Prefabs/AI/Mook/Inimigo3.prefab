@@ -286,7 +286,7 @@ MonoBehaviour:
   ranged_atk_range: 10
   max_approach_range: 10
   start_pos: {x: 0, y: 0, z: 0}
-  base_speed: 3
+  base_speed: 2
   reposition_radius: 0
   reposition_dist: 0
   rot_spd: 5
