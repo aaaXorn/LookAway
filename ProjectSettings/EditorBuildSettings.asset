@@ -54,8 +54,17 @@ EditorBuildSettings:
     path: Assets/Scenes/CidadeGelo_Additive/CG_4.unity
     guid: beca70461616a4643a4950c31da36bcd
   - enabled: 1
-    path: Assets/Scenes/BossGelo/BossGelo.unity
+    path: Assets/Scenes/BossGelo.unity
     guid: 373781aa8cadbd74ba97214fde449d14
+  - enabled: 1
+    path: Assets/Scenes/Beni.unity
+    guid: 7b7017532276b3f4bb40140ed517eb0c
+  - enabled: 1
+    path: Assets/Scenes/BossFloresta.unity
+    guid: 381410164bd898f4db21429d247fe7eb
+  - enabled: 1
+    path: Assets/Scenes/E_Lago_C1.unity
+    guid: 09d063d6874c83841b47a294974bc68b
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: eb9392a1d0474a24dbad3e49ad2d436e,
       type: 2}

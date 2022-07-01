@@ -9,8 +9,9 @@ public class LockButton : MonoBehaviour, IPointerDownHandler
 	//referência global do código do botão
 	public static LockButton Instance {get; set;}
 	
+	[Tooltip("ta como txt pq eu tava com preguica de mudar")]
 	[SerializeField]
-	private Text txt;
+	private Image txt;
 	[SerializeField]
 	private Color color_off, color_on;
 	
@@ -40,6 +41,8 @@ public class LockButton : MonoBehaviour, IPointerDownHandler
 	
 	public void SetColor(bool on)
 	{
+		if(txt == null) txt = GetComponent<Image>();
+		
 		if(on)
 			txt.color = color_on;
 		else
