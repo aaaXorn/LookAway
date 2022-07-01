@@ -139,6 +139,7 @@ public class SaveSystem
 		//atualiza os stats
 		PlayerEquipment.Instance.SwordStats();
 		PlayerEquipment.Instance.ArmorStats();
+		PlayerEquipment.Instance.ShieldChange();
 		
 		//poção
 		if (PlayerPrefs.HasKey("MaxPotions"))

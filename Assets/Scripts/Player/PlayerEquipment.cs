@@ -120,15 +120,27 @@ public class PlayerEquipment : MonoBehaviour
 		switch (shield_lvl)
 		{
 			case 0:
-				if (shield_xp >= xp_l1) shield_lvl++;
+				if (shield_xp >= xp_l1)
+				{
+					shield_lvl++;
+					ShieldChange();
+				}
 				break;
 
 			case 1:
-				if (shield_xp >= xp_l2) shield_lvl++;
+				if (shield_xp >= xp_l2)
+				{
+					shield_lvl++;
+					ShieldChange();
+				}
 				break;
 
 			case 2:
-				if (shield_xp >= xp_l3) shield_lvl++;
+				if (shield_xp >= xp_l3)
+				{
+					shield_lvl++;
+					ShieldChange();
+				}
 				break;
 			
 			default:
@@ -192,8 +204,26 @@ public class PlayerEquipment : MonoBehaviour
 				
 				break;
 		}
+		
+		for(int i = 0; i < 3; i++)
+		{
+			if(i == armor_lvl)
+				Armors[i].SetActive(true);
+			else
+				Armors[i].SetActive(false);
+		}
 	}
 
 	//stats do escudo em PlayerControl.AnimBlock()
+	public void ShieldChange()
+	{
+		for(int i = 0; i < 3; i++)
+		{
+			if(i == shield_lvl)
+				Shields[i].SetActive(true);
+			else
+				Shields[i].SetActive(false);
+		}
+	}
 	#endregion
 }
