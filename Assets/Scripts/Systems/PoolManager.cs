@@ -28,6 +28,7 @@ public class PoolManager : MonoBehaviour
 		{
 			obj = Instantiate(PoolObj);
 			if(activeFalse) obj.SetActive(false);
+			obj.transform.parent = transform;
 			PoolList.Add(obj);
 		}
 	}
