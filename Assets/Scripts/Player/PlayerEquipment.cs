@@ -42,7 +42,7 @@ public class PlayerEquipment : MonoBehaviour
 		switch(sword_lvl)
         {
 			case 0:
-				if (sword_xp > xp_l1)
+				if (sword_xp >= xp_l1)
 				{
 					sword_lvl++;
 					SwordStats();
@@ -50,7 +50,7 @@ public class PlayerEquipment : MonoBehaviour
 				break;
 
 			case 1:
-				if (sword_xp > xp_l2)
+				if (sword_xp >= xp_l2)
 				{
 					sword_lvl++;
 					SwordStats();
@@ -58,7 +58,7 @@ public class PlayerEquipment : MonoBehaviour
 				break;
 
 			case 2:
-				if (sword_xp > xp_l3)
+				if (sword_xp >= xp_l3)
 				{
 					sword_lvl++;
 					SwordStats();
@@ -81,7 +81,7 @@ public class PlayerEquipment : MonoBehaviour
 		switch (armor_lvl)
 		{
 			case 0:
-				if (armor_xp > xp_l1)
+				if (armor_xp >= xp_l1)
 				{
 					armor_lvl++;
 					ArmorStats();
@@ -89,7 +89,7 @@ public class PlayerEquipment : MonoBehaviour
 				break;
 
 			case 1:
-				if (armor_xp > xp_l2)
+				if (armor_xp >= xp_l2)
 				{
 					armor_lvl++;
 					ArmorStats();
@@ -97,7 +97,7 @@ public class PlayerEquipment : MonoBehaviour
 				break;
 
 			case 2:
-				if (armor_xp > xp_l3)
+				if (armor_xp >= xp_l3)
 				{
 					armor_lvl++;
 					ArmorStats();
@@ -120,15 +120,15 @@ public class PlayerEquipment : MonoBehaviour
 		switch (shield_lvl)
 		{
 			case 0:
-				if (shield_xp > xp_l1) shield_lvl++;
+				if (shield_xp >= xp_l1) shield_lvl++;
 				break;
 
 			case 1:
-				if (shield_xp > xp_l2) shield_lvl++;
+				if (shield_xp >= xp_l2) shield_lvl++;
 				break;
 
 			case 2:
-				if (shield_xp > xp_l3) shield_lvl++;
+				if (shield_xp >= xp_l3) shield_lvl++;
 				break;
 			
 			default:
